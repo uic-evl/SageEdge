@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pedestrian Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { background: #191f59; color: white; font-family: sans-serif; padding: 20px; }
+    .card { background: white; color: black; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+    button, select { padding: 6px 12px; margin-left: 10px; }
+  </style>
+</head>
+<body>
+
+  <h1>EVL Educational Waggle</h1>
+  <p>Curriculum using SAGE/Waggle for HS and undergrad</p>
+
+  <div class="card">
+    <h2>Live Directional Flow</h2>
+    <p>Real-time pedestrian tracking</p>
+
+    <div>
+      <select id="monthSelect" onchange="handleChange()">All Data</select>
+      <select id="viewSelect" onchange="handleChange()">
+        <option>Month View</option>
+        <option>Week View</option>
+      </select>
+      <button onclick="prevWeek()">←</button>
+      <span id="weekInfo">Week 1</span>
+      <button onclick="nextWeek()">→</button>
+    </div>
+
+    <canvas id="lineChart" height="100"></canvas>
+    <div id="custom-tooltip" style="margin-top: 16px; font-size: 16px; text-align: center;"></div>
+    <div class="grid" id="statGrid"></div>
+  </div>
+
+  <div class="grid" id="summaryGrid"></div>
+
+  <script>
+    let data = [], filteredData = [], selectedMonth = "All Data", viewFormat = "Month View", currentWeekIndex = 0, lineChart
+
+    // options for the month select dropdown
+    const months = ['All Data','January','February','March','April','May','June','July','August','September','October','November','December']
+    window.onload = () => {
+      const monthSelect = document.getElementById("monthSelect")
+      months.forEach(m => {
+        const opt = document.createElement("option")
+        opt.text = m
+        monthSelect.add(opt)
+      })
+
+      // API call to fetch data
+      fetch("http://192.168.1.157:5000/api/data")
+        .then(res => res.json())
+        .then(json => {
+          data = json.data.map(entry => ({
+            date: entry.Date.trim(),
+            displayDate: new Date(entry.Date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            left: entry.direction_left,
+            right: entry.direction_right,
+            cpu_temp: entry.CPU_temp,
+            cpu_usage: entry.CPU_usage
+          }))
+          filterAndRender()
+        })
+    }
+
+    // hover line on graph
+    const verticalLinePlugin = {
+      id: 'verticalLineOnHover',
+      afterDraw(chart) {
+        if (chart.tooltip._active?.length) {
+          const ctx = chart.ctx
+          const x = chart.tooltip._active[0].element.x
+          const { top, bottom } = chart.scales.y
+          ctx.save()
+          ctx.beginPath()
+          ctx.moveTo(x, top)
+          ctx.lineTo(x, bottom)
+          ctx.lineWidth = 1
+          ctx.strokeStyle = 'gray'
+          ctx.stroke()
+          ctx.restore()
+        }
+      }
+    }
+
+    function handleChange() {
+      selectedMonth = document.getElementById("monthSelect").value
+      viewFormat = document.getElementById("viewSelect").value
+      currentWeekIndex = 0
+      filterAndRender()
+    }
+
+    // Get month index from name
+    function getMonthIndex(month) {
+      return months.indexOf(month) - 1
+    }
+
+    // Split month data into weeks
+    function splitIntoWeeks(monthData) {
+      return [...monthData].sort((a, b) => new Date(a.date) - new Date(b.date))
+                          .reduce((weeks, val, i) => {
+                            const weekIndex = Math.floor(i / 7)
+                            if (!weeks[weekIndex]) weeks[weekIndex] = []
+                            weeks[weekIndex].push(val)
+                            return weeks
+                          }, [])
+    }
+
+    // Filter data by month and week, then render chart
+    function filterAndRender() {
+        let monthData = (selectedMonth === "All Data")
+            ? data
+            : data.filter(d => new Date(d.date).getMonth() === getMonthIndex(selectedMonth));
+
+        const weekInfo = document.getElementById("weekInfo");
+        const prevBtn = document.querySelector('button[onclick="prevWeek()"]');
+        const nextBtn = document.querySelector('button[onclick="nextWeek()"]');
+        const viewSelect = document.getElementById("viewSelect");
+
+        if (!monthData.length) {
+            filteredData = [];
+            weekInfo.textContent = "";
+            prevBtn.disabled = true;
+            nextBtn.disabled = true;
+            viewSelect.disabled = true; // disable week/month toggle if there is no data for that month 
+            renderChart();
+            return;
+        }
+
+        viewSelect.disabled = false; // add week view if data exist for the month 
+
+        if (viewFormat === "Week View" && selectedMonth !== "All Data") {
+            const weeks = splitIntoWeeks(monthData);
+            filteredData = weeks[currentWeekIndex] || [];
+            weekInfo.textContent = `Week ${currentWeekIndex + 1}`;
+            prevBtn.disabled = currentWeekIndex === 0;
+            nextBtn.disabled = currentWeekIndex === weeks.length - 1;
+        } else {
+            filteredData = monthData;
+            weekInfo.textContent = "";
+            prevBtn.disabled = true;
+            nextBtn.disabled = true;
+        }
+
+        renderChart();
+    }
+
+    // Render the chart with filtered data
+    function renderChart() {
+        const ctx = document.getElementById('lineChart').getContext('2d');
+
+        // Destroy previous chart if it exists
+        if (lineChart) {
+            lineChart.destroy();
+        }
+
+        // Handle empty data case
+        if (!filteredData.length) {
+            lineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: []
+            },
+            options: {
+                plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false }
+                },
+                scales: {
+                x: { display: false },
+                y: { display: false }
+                },
+                animation: false
+            },
+            plugins: [{
+                id: 'noData',
+                afterDraw(chart) {
+                const { width, height } = chart;
+                const ctx = chart.ctx;
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.font = 'bold 18px sans-serif';
+                ctx.fillStyle = 'gray';
+                ctx.fillText('No data available for this month', width / 2, height / 2);
+                ctx.restore();
+                }
+            }]
+            });
+
+            // Also clear the tooltip if no data
+            document.getElementById('custom-tooltip').innerHTML = "";
+            return;
+        }
+
+        // Regular chart rendering logic
+        const labels = filteredData.map(d => d.displayDate);
+
+        const chartData = {
+            labels,
+            datasets: [
+            {
+                label: 'Left',
+                data: filteredData.map(d => d.left),
+                borderColor: 'blue',
+                borderWidth: 2,
+                tension: 0.4
+            },
+            {
+                label: 'Right',
+                data: filteredData.map(d => d.right),
+                borderColor: 'red',
+                borderWidth: 2,
+                tension: 0.4
+            }
+            ]
+        };
+        
+        // Create the chart
+        lineChart = new Chart(ctx, {
+            type: 'line',
+            data: chartData,
+            options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            plugins: {
+                tooltip: {
+                enabled: false, // disable default tooltip
+                external: customTooltip
+                },
+                legend: {
+                labels: {
+                    color: 'white'
+                }
+                }
+            },
+            hover: {
+                mode: 'index',
+                intersect: false
+            },
+            scales: {
+                x: {
+                grid: { display: true },
+                ticks: { color: 'white' }
+                },
+                y: {
+                grid: { display: true },
+                ticks: { color: 'white' }
+                }
+            }
+            },
+            plugins: [{
+            id: 'hoverLine',
+            afterDraw(chart) {
+                if (chart.tooltip?._active?.length) {
+                const ctx = chart.ctx;
+                const x = chart.tooltip._active[0].element.x;
+                const topY = chart.scales.y.top;
+                const bottomY = chart.scales.y.bottom;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(x, topY);
+                ctx.lineTo(x, bottomY);
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'gray';
+                ctx.stroke();
+                ctx.restore();
+                }
+            }
+            }]
+        });
+    }
+
+    // Update grid stats
+    function customTooltip(ctx) {
+      const index = ctx.tooltip.dataPoints?.[0]?.dataIndex
+      const tooltipEl = document.getElementById('custom-tooltip')
+      if (index == null) return
+
+      const point = filteredData[index]
+      const totalLeft = filteredData.reduce((sum, d) => sum + d.left, 0)
+      const totalRight = filteredData.reduce((sum, d) => sum + d.right, 0)
+      const avgLeft = Math.round(totalLeft / filteredData.length)
+      const peak = filteredData.reduce((a, b) => (a.left + a.right > b.left + b.right ? a : b))
+
+      tooltipEl.innerHTML = `
+        <strong>Date:</strong> ${point.displayDate} |
+        <strong>Left:</strong> ${point.left} |
+        <strong>Right:</strong> ${point.right}<br/>
+        <br/>
+        <strong>Month Averages:</strong>
+        <br/>
+        <strong>Total Left:</strong> ${totalLeft} |
+        <strong>Total Right:</strong> ${totalRight}<br/>
+        <strong>Peak Day:</strong> ${peak.displayDate} |
+        <strong>Avg Per Day:</strong> ${avgLeft}
+      `
+    }
+
+    // Navigation functions for week view
+    function prevWeek() {
+      if (currentWeekIndex > 0) {
+        currentWeekIndex--
+        filterAndRender()
+      }
+    }
+
+    // Function to go to next week
+    function nextWeek() {
+      currentWeekIndex++
+      filterAndRender()
+    }
+  </script>
+</body>
+</html>
