@@ -1,7 +1,7 @@
 # AI Programs
 This AI programs folder hosts the different AI projects worked on specifically for Nvidia Jetson Orins.
 
-**To get started on using your Jetson Orins please make sure to complete the setup guide [here](uic-evl/SageEdge/Setup).**
+**To get started on using your Jetson Orins please make sure to complete the setup guide [here](https://github.com/uic-evl/SageEdge/tree/main/Devices_Setup).**
 
 ---
 ## Setup
@@ -10,6 +10,6 @@ This AI programs folder hosts the different AI projects worked on specifically f
 
 There are two main projects hosted on this GitHub, select either one to get started!
 
-### [Movement Tracking](uic-evl/SageEdge/AI_Programs/Movement_Tracking)
+### [Movement Tracking](https://github.com/uic-evl/SageEdge/tree/main/AI_Programs/Movement_Tracking)
 
-### [Weather Detection](uic-evl/SageEdge/AI_Programs/Weather_detection)
+### [Weather Detection](https://github.com/uic-evl/SageEdge/tree/main/AI_Programs/Weather_detection)
