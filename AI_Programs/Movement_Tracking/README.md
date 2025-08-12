@@ -17,7 +17,7 @@ This program creates a csv file of data from the video inputed. The data include
 
 ## Dependencies
 (Need to finalize dependencies)
-z
+
 ## Prerequisites
 (Will talk about how you need to have the universal AI dependencies and other files)
 
