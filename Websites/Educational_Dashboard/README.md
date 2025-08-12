@@ -14,3 +14,5 @@ The **Educational Dashboard** is developed using HTML and CSS, with JavaScript s
 **Technology Stack:** HTML, CSS, JavaScript
 
 **Data Source:** Data is being collected from a Nvidia Jetson Developer Kit which is set up to follow the Directional AI structure. The data is then stored in a server where we can use an API to access it.
+
+**To run on VScode:** Open the file sin VS code and select "Go Live" on the bottom right side of the screen bar. This will open a new webrowser with the website on your local machine. You're now able to view any changes made to the code.
