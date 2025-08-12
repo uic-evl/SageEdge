@@ -40,12 +40,8 @@ def log_stats():
     data_file.write("CPU usage: " + str(psutil.cpu_percent(interval=None)) + "%\n")
     data_file.write("Mem usage: " + str(psutil.virtual_memory().percent) + "%\n")
     data_file.write("Swp usage: " + str(psutil.swap_memory().percent) + "%\n")
-    try:
-        # Read CPU and GPU temperature from system thermal zones
-        data_file.write("cpu temp: " + str(int(open('/sys/devices/virtual/thermal/thermal_zone1/temp').read()) / 1000.0) + "C\n")
-        data_file.write("gpu temp: " + str(int(open('/sys/devices/virtual/thermal/thermal_zone2/temp').read()) / 1000.0) + "C\n")
-    except:
-        pass
+    data_file.write("cpu temp: " + str(int(open('/sys/devices/virtual/thermal/thermal_zone1/temp').read()) / 1000.0) + "C\n")
+    data_file.write("gpu temp: " + str(int(open('/sys/devices/virtual/thermal/thermal_zone2/temp').read()) / 1000.0) + "C\n")
     data_file.flush()
 
 # -------------------------------
