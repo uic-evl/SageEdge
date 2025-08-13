@@ -1,8 +1,8 @@
 ## Dependencies
-(Need to finalize dependencies)
+(TODO)
 
 ## Prerequisites
-(Will talk about how you need to have the universal AI dependencies and other files)
+(TODO)
 
 ## Setup
-(Have the setup scripts here and any manual installations/configurations)
+(TODO)

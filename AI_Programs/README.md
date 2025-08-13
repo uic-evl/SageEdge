@@ -5,7 +5,7 @@ This AI programs folder hosts the different AI projects worked on specifically f
 
 ---
 ## Setup
-(Add setup instructions for univeral AI dependencies)
+(TODO)
 ---
 
 There are two main projects hosted on this GitHub, select either one to get started!
