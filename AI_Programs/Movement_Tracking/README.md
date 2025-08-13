@@ -28,7 +28,12 @@ This program creates a csv file of data from the video inputed. The data include
 (TODO)
 
 ## Prerequisites
-(TODO)
+- Orin [device setup](https://github.com/uic-evl/SageEdge/tree/main/Devices_Setup)
 
-## Setup
+## Movement AI Setup
+1. Clone this repository to your Jetson Nano and run `cd uic-evl/SageEdge/AI_Programs/Movement_Tracking`
+2. Run the following command to start the setup script `. ./setup.sh`
+>Note: This script is **NOT** autonomous and will require user input during installation.
+
+## How to run program
 (TODO)
