@@ -29,8 +29,8 @@ The Sage team will also extend the current educational curriculum used in Chicag
 Instructions for working with older developer kits can be found [here](https://github.com/waggle-sensor/node-platforms/tree/main/nvidia_jetson).
 
 ### Setup Instructions
-1. [Hardware Needed](./hardware_needed.md)
-2. [Initial Configuration](./EDU/initial_configuration.md)
+1. [Hardware Needed](/EDU/hardware_needed.md)
+2. [Initial Configuration](/EDU/initial_configuration.md)
 3. [Installing Ansible](./installing_ansible.md)
 4. [Configuring Ansible](./configuring_ansible.md)
 5. [Running the Ansible Playbook](./running_ansible.md)
