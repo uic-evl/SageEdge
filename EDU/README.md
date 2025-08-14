@@ -1,4 +1,10 @@
 
+# SAGE Grande Testbed (SGT) Set Up
+
+The **SAGE Grande Testbed (SGT)** is a platform for real-time AI-enabled edge computing and sensing.This Project supports advanced research in ecological monitoring, hazard detection, and environmental science. We are able to do this with NVIDIA Jetson devices and Raspberry Pi systems devices which integrate AI models with diverse sensors such as infrared/RGB cameras, LiDAR, air quality monitors, and LoRaWAN instruments. This enables full-resolution, on-site data analysis, dynamic automation, and rapid-response reporting in urban, rural, and natural environments. 
+
+The following setup instructions guide you through preparing supported developer kits, configuring hardware and software with Ansible, and connecting environmental sensors, ensuring your node is ready to participate in the SGT network for sustained observation and research.
+
 ### NVIDIA Jetson Node Platform     
 **PLEASE NOTE: As of mid-2025, the following setup instructions and curriculum support the following developer kits:**
 
