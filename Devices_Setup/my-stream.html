@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Video Stream</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+            color: #2c3e50;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(52, 73, 94, 0.1), 
+                        0 1px 8px rgba(52, 73, 94, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        
+        .header {
+            padding: 2rem;
+            border-bottom: 1px solid #e1e8f0;
+            background: #e8f4fd;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+        
+        .section {
+            padding: 2rem;
+            border-bottom: 1px solid #e1e8f0;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+        
+        .info-grid {
+            display: grid;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+        }
+        
+        .info-label {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .info-value {
+            font-family: 'Roboto', Consolas, monospace;
+            color: #2c3e50;
+            background: #f8f9fa;
+            padding: 0.125rem 0.375rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            border: 1px solid #e1e8f0;
+        }
+        
+        .url-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .url-label {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+        
+        .url-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: #ffffff;
+            border: 2px solid #e1e8f0;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .url-text {
+            flex: 1;
+            font-family: 'Roboto', Consolas, monospace;
+            font-size: 0.875rem;
+            color: #555;
+            word-break: break-all;
+        }
+        
+        .copy-btn {
+            background: #74b3e2;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            border: 1px solid #5a9bd4;
+            box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
+        }
+        
+        .copy-btn:hover {
+            background: #5a9bd4;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+        
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+        
+        .url-description {
+            font-size: 0.875rem;
+            color: #555;
+            margin-top: 0.25rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .video-preview {
+            text-align: center;
+        }
+        
+        .video-preview img {
+            max-width: 100%;
+            border-radius: 12px;
+            border: 2px solid #b8e6d3;
+            box-shadow: 0 4px 15px rgba(172, 182, 229, 0.2);
+        }
+        
+        .code-example {
+            margin-bottom: 1.5rem;
+        }
+        
+        .code-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 2px solid #e1e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Roboto', Consolas, monospace;
+            font-size: 0.875rem;
+            color: #555;
+            white-space: pre;
+            overflow-x: auto;
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #74b3e2;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #5a9bd4;
+            transform: translateX(-2px);
+        }
+        
+        /* Cookie Consent Popup */
+        .cookie-consent {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border-top: 1px solid #e1e8f0;
+            padding: 1.5rem;
+            box-shadow: 0 -10px 30px rgba(172, 182, 229, 0.2);
+            z-index: 1000;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(20px);
+        }
+        
+        .cookie-consent.show {
+            transform: translateY(0);
+        }
+        
+        .cookie-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        
+        .cookie-text {
+            flex: 1;
+            font-size: 0.875rem;
+            color: #555;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .cookie-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .cookie-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .cookie-btn.primary {
+            background: #74b3e2;
+            color: white;
+            border: 1px solid #5a9bd4;
+            box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
+        }
+        
+        .cookie-btn.primary:hover {
+            background: #5a9bd4;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+        
+        .cookie-btn.secondary {
+            background: #f0ebf8;
+            color: #555;
+            border: 1px solid #d4c5e8;
+        }
+        
+        .cookie-btn.secondary:hover {
+            background: #e8ddf0;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(172, 182, 229, 0.2);
+        }
+        
+        .toast {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: #10b981;
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            z-index: 1001;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 15px;
+            background-color: #74b3e2;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            z-index: 1001;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
+            transition: all 0.3s ease;
+        }
+        .home-button:hover {
+            background: #5a9bd4;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .cookie-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .cookie-actions {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="home-button">Home</a>
+    <!-- Cookie Consent Popup -->
+    <div class="cookie-consent" id="cookieConsent">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                This application uses cookies to maintain your session and provide personalized video streams. 
+                By continuing to use this service, you consent to our use of cookies.
+            </div>
+            <div class="cookie-actions">
+                <button class="cookie-btn secondary" onclick="declineCookies()">Decline</button>
+                <button class="cookie-btn primary" onclick="acceptCookies()">Accept</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Personal Video Stream</h1>
+            <p>Access your individual video feed and session information</p>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Session Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Session ID</span>
+                    <span class="info-value" id="sessionId">Loading...</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Current Camera</span>
+                    <span class="info-value" id="currentCamera">Loading...</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Status</span>
+                    <span class="info-value" id="playbackStatus">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Video Stream URLs</h2>
+            
+            <div class="url-group">
+                <div class="url-label">Automatic Session URL (Recommended)</div>
+                <div class="url-container">
+                    <span class="url-text" id="automaticUrl">Loading...</span>
+                    <button class="copy-btn" onclick="copyToClipboard(document.getElementById('automaticUrl').textContent)">Copy</button>
+                </div>
+                <div class="url-description">Uses your browser session automatically</div>
+            </div>
+            
+            <div class="url-group">
+                <div class="url-label">Direct Session URL</div>
+                <div class="url-container">
+                    <span class="url-text" id="directUrl">Loading...</span>
+                    <button class="copy-btn" onclick="copyToClipboard(document.getElementById('directUrl').textContent)">Copy</button>
+                </div>
+                <div class="url-description">Direct link without requiring cookies</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Live Preview</h2>
+            <div class="video-preview">
+                <img src="/video_feed" alt="Personal Video Stream">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Integration Examples</h2>
+            
+            <div class="code-example">
+                <div class="code-title">Python with OpenCV</div>
+                <div class="code-block" id="pythonCode">Loading...</div>
+            </div>
+            
+            <div class="code-example">
+                <div class="code-title">JavaScript</div>
+                <div class="code-block" id="jsCode">Loading...</div>
+            </div>
+            
+            <a href="/" class="back-link">← Back to Main Interface</a>
+        </div>
+    </div>
+
+    <script>
+        // Cookie consent functionality
+        function showCookieConsent() {
+            const consent = localStorage.getItem('cookieConsent');
+            if (!consent) {
+                document.getElementById('cookieConsent').classList.add('show');
+            }
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('cookieConsent', 'accepted');
+            document.getElementById('cookieConsent').classList.remove('show');
+        }
+
+        function declineCookies() {
+            localStorage.setItem('cookieConsent', 'declined');
+            document.getElementById('cookieConsent').classList.remove('show');
+            alert('Some features may not work properly without cookies. You can change your preference in browser settings.');
+        }
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Copy to clipboard functionality
+        function copyToClipboard(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('URL copied to clipboard!');
+                }, () => {
+                    fallbackCopyTextToClipboard(text);
+                });
+            } else {
+                fallbackCopyTextToClipboard(text);
+            }
+        }
+
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast('URL copied to clipboard!');
+                } else {
+                    showToast('Failed to copy URL');
+                }
+            } catch (err) {
+                showToast('Failed to copy URL');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // Load session information
+        async function loadSessionInfo() {
+            try {
+                const response = await fetch('/api/session');
+                const data = await response.json();
+                
+                // Update session info
+                document.getElementById('sessionId').textContent = data.session_id;
+                document.getElementById('currentCamera').textContent = data.current_camera;
+                document.getElementById('playbackStatus').textContent = data.is_playing ? 'Playing' : 'Paused';
+                
+                // Update URLs
+                document.getElementById('automaticUrl').textContent = data.video_feed_url;
+                document.getElementById('directUrl').textContent = data.direct_video_feed_url;
+                
+                // Update code examples
+                const serverHost = window.location.host;
+                document.getElementById('pythonCode').textContent = `import cv2
+
+cap = cv2.VideoCapture('http://${serverHost}/video_feed')
+while True:
+    ret, frame = cap.read()
+    if ret:
+        cv2.imshow('Stream', frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+cap.release()
+cv2.destroyAllWindows()`;
+
+                document.getElementById('jsCode').textContent = `const video = document.createElement('video');
+video.src = 'http://${serverHost}/video_feed';
+video.autoplay = true;
+document.body.appendChild(video);`;
+                
+            } catch (error) {
+                console.error('Failed to load session info:', error);
+                showToast('Failed to load session information');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            showCookieConsent();
+            loadSessionInfo();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+env/
+venv/
+.venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+.pip/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Environments
+.env
+.env.*
+.venv
+ENV/
+env.bak/
+venv.bak/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+logs/
+server_errors.log
+
+# Data & databases
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Docker local
+.docker/
+docker-compose.override.yml
+*.py[cod]
+*.egg-info/
+.Python
+.venv/
+venv/
+env/
+.env
+.env.*
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
+
+# Logs & runtime files
+*.log
+logs/
+server_errors.log
+
+# Data/cache
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+data/**/*.db
+data/**/*.sqlite*
+data/tmp/
+cache/
+
+# Docker
+*.pid
+*.tar
+
+# Node/web build (if any in future)
+dist/
+build/
+node_modules/

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIU Time-lapse Stream Controller</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        .home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 15px;
+            background-color: #74b3e2;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            z-index: 1001;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
+            transition: all 0.3s ease;
+        }
+        .home-button:hover {
+            background: #5a9bd4;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="home-button">Home</a>
+    <!-- Cookie Consent Popup -->
+    <div class="cookie-consent" id="cookieConsent">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                This application uses cookies to maintain your session and provide personalized video streams. 
+                By continuing to use this service, you consent to our use of cookies.
+            </div>
+            <div class="cookie-actions">
+                <button class="cookie-btn secondary" onclick="declineCookies()">Decline</button>
+                <button class="cookie-btn primary" onclick="acceptCookies()">Accept</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- Header Section -->
+        <header class="header">
+            <h1>NIU Multi-Camera Time-lapse Stream Controller</h1>
+            <p>2-Year Weather Dataset Visualization (2021-2023) | Top & Bottom Camera Views</p>
+            <div class="header-links">
+                <a href="/my-stream" class="stream-link">Get My Video Stream URL</a>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Video Section -->
+            <section class="video-section">
+                <div class="video-container">
+                    <img id="video" src="/video_feed" alt="NIU Time-lapse Stream" 
+                         onload="this.style.opacity=1" style="opacity:0; transition: opacity 0.5s;">
+                    <div class="video-overlay" id="videoOverlay">
+                        <div class="loading-spinner"></div>
+                        <p>Loading video stream...</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Controls Section -->
+            <section class="controls-section">
+                <h2 class="section-title">
+                    Playback Controls
+                </h2>
+                
+                <div class="controls-grid">
+                    <!-- Camera Selection Control -->
+                    <div class="control-item camera-control">
+                        <label for="cameraSelect">Select Camera View</label>
+                        <select id="cameraSelect">
+                            <option value="top">Top Camera (Overhead View)</option>
+                            <option value="bottom">Bottom Camera (Ground Level)</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Date Control -->
+                    <div class="control-item">
+                        <label for="dateInput">Select Date</label>
+                        <input type="date" id="dateInput" min="2021-07-25" max="2023-07-11" value="2021-07-25">
+                    </div>
+                    
+                    <!-- Hour Control -->
+                    <div class="control-item">
+                        <label for="hourSelect">Select Hour</label>
+                        <select id="hourSelect">
+                            <option value="0">00:00 - Midnight</option>
+                            <option value="1">01:00 - 1 AM</option>
+                            <option value="2">02:00 - 2 AM</option>
+                            <option value="3">03:00 - 3 AM</option>
+                            <option value="4">04:00 - 4 AM</option>
+                            <option value="5">05:00 - 5 AM</option>
+                            <option value="6">06:00 - 6 AM</option>
+                            <option value="7">07:00 - 7 AM</option>
+                            <option value="8">08:00 - 8 AM</option>
+                            <option value="9">09:00 - 9 AM</option>
+                            <option value="10">10:00 - 10 AM</option>
+                            <option value="11">11:00 - 11 AM</option>
+                            <option value="12">12:00 - Noon</option>
+                            <option value="13">13:00 - 1 PM</option>
+                            <option value="14">14:00 - 2 PM</option>
+                            <option value="15">15:00 - 3 PM</option>
+                            <option value="16">16:00 - 4 PM</option>
+                            <option value="17">17:00 - 5 PM</option>
+                            <option value="18">18:00 - 6 PM</option>
+                            <option value="19">19:00 - 7 PM</option>
+                            <option value="20">20:00 - 8 PM</option>
+                            <option value="21">21:00 - 9 PM</option>
+                            <option value="22">22:00 - 10 PM</option>
+                            <option value="23">23:00 - 11 PM</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Minute Control -->
+                    <div class="control-item minute-control">
+                        <label for="minuteSelect">Select Minute</label>
+                        <select id="minuteSelect">
+                            <option value="0">00 minutes</option>
+                            <option value="5">05 minutes</option>
+                            <option value="10">10 minutes</option>
+                            <option value="15">15 minutes</option>
+                            <option value="20">20 minutes</option>
+                            <option value="25">25 minutes</option>
+                            <option value="30">30 minutes</option>
+                            <option value="35">35 minutes</option>
+                            <option value="40">40 minutes</option>
+                            <option value="45">45 minutes</option>
+                            <option value="50">50 minutes</option>
+                            <option value="55">55 minutes</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Speed Control -->
+                    <div class="control-item speed-control">
+                        <label for="speedSelect">Frames Per Second</label>
+                        <select id="speedSelect">
+                            <option value="0.1">1 frame every 10 seconds (Ultra Slow - Best for AI)</option>
+                            <option value="0.2">1 frame every 5 seconds (Very Slow - AI Analysis)</option>
+                            <option value="0.5">1 frame every 2 seconds (Slow - AI Analysis)</option>
+                            <option value="1.0" selected>1 frame per second (Moderate - AI Friendly)</option>
+                            <option value="2.0">2 frames per second (Normal)</option>
+                            <option value="4.0">4 frames per second (Default - Smooth)</option>
+                            <option value="8.0">8 frames per second (Fast)</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Loop Mode Control - HIGHLIGHTED -->
+                    <div class="control-item loop-control">
+                        <label for="loopSelect">LOOP MODE</label>
+                        <select id="loopSelect">
+                            <option value="full" selected>Full Dataset (2 Years)</option>
+                            <option value="day">Current Day (24 Hours)</option>
+                            <option value="hour">Current Hour Only</option>
+                            <option value="none">No Loop (Play Once)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Camera & Loop Mode Explanation -->
+                <div class="highlight-box">
+                    <strong>Camera Selection:</strong> Switch between Top (overhead) and Bottom (ground level) camera views<br>
+                    <strong>Loop Mode:</strong> Controls how the video repeats when it reaches the end of the selected time period<br>
+                    <strong>NEW:</strong> You can now jump to specific minutes for precise navigation!<br>
+                    <strong>AI ANALYSIS:</strong> Use slower frame rates (0.1-1 fps) for better AI object detection and analysis
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="button-grid">
+                    <button class="btn btn-primary" onclick="jumpToDateTime()">
+                        Jump to Date/Time
+                    </button>
+                    <button class="btn btn-secondary" onclick="togglePlayback()" id="playPauseBtn">
+                        Play/Pause
+                    </button>
+                    <button class="btn btn-secondary" onclick="toggleTimestamp()" id="timestampBtn">
+                        Toggle Timestamp
+                    </button>
+                    <button class="btn btn-secondary" onclick="updateStatus()">
+                        Refresh Status
+                    </button>
+                </div>
+            </section>
+            
+            <!-- Status Section -->
+            <section class="status-section">
+                <h2 class="section-title">
+                    System Status
+                </h2>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <strong>System Status</strong>
+                        <div class="status-value" id="statusValue">Loading...</div>
+                    </div>
+                    <div class="status-item">
+                        <strong>Current Camera</strong>
+                        <div class="status-value" id="cameraValue">-</div>
+                    </div>
+                    <div class="status-item">
+                        <strong>Playback State</strong>
+                        <div class="status-value" id="playingValue">-</div>
+                    </div>
+                    <div class="status-item">
+                        <strong>Current Time</strong>
+                        <div class="status-value" id="currentTimeValue">-</div>
+                    </div>
+                    <div class="status-item">
+                        <strong>Frame Rate</strong>
+                        <div class="status-value" id="speedValue">-</div>
+                    </div>
+                    <div class="status-item">
+                        <strong>Loop Mode</strong>
+                        <div class="status-value" id="loopModeValue">-</div>
+                    </div>
+                    <div class="status-item">
+                        <strong>Buffer Size</strong>
+                        <div class="status-value" id="bufferValue">-</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- AI Analysis Section -->
+            <section class="ai-analysis-section">
+                <h2 class="section-title">
+                    AI Analysis Dashboard
+                </h2>
+                
+                <!-- Analysis Stats -->
+                <div class="analysis-stats" id="analysisStats">
+                    <div class="stat-card">
+                        <div class="stat-icon">STATS</div>
+                        <div class="stat-content">
+                            <h3 id="totalAnalyzed">Loading...</h3>
+                            <p>Photos Analyzed</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">WEATHER</div>
+                        <div class="stat-content">
+                            <h3 id="weatherDistribution">Loading...</h3>
+                            <p>Weather Categories</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">PEOPLE</div>
+                        <div class="stat-content">
+                            <h3 id="peopleDistribution">Loading...</h3>
+                            <p>People Categories</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">TIME</div>
+                        <div class="stat-content">
+                            <h3 id="timeDistribution">Loading...</h3>
+                            <p>Time Categories</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Photo Search -->
+                <div class="photo-search">
+                    <h3>Search Photos by AI Categories</h3>
+                    <div class="search-filters">
+                        <div class="filter-group">
+                            <label for="weatherFilter">Weather:</label>
+                            <select id="weatherFilter">
+                                <option value="">Any Weather</option>
+                                <option value="sunny">Sunny</option>
+                                <option value="cloudy">Cloudy</option>
+                                <option value="overcast">Overcast</option>
+                                <option value="rain">Rain</option>
+                                <option value="snow">Snow</option>
+                                <option value="fog">Fog</option>
+                                <option value="stormy">Stormy</option>
+                                <option value="unclear">Unclear</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="peopleFilter">People:</label>
+                            <select id="peopleFilter">
+                                <option value="">Any Amount</option>
+                                <option value="no_people">No People</option>
+                                <option value="few_people">Few People</option>
+                                <option value="moderate_crowd">Moderate Crowd</option>
+                                <option value="crowded">Crowded</option>
+                                <option value="very_crowded">Very Crowded</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="visibilityFilter">Visibility:</label>
+                            <select id="visibilityFilter">
+                                <option value="">Any Visibility</option>
+                                <option value="excellent">Excellent</option>
+                                <option value="good">Good</option>
+                                <option value="moderate">Moderate</option>
+                                <option value="poor">Poor</option>
+                                <option value="very_poor">Very Poor</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="timeFilter">Time of Day:</label>
+                            <select id="timeFilter">
+                                <option value="">Any Time</option>
+                                <option value="dawn">Dawn</option>
+                                <option value="morning">Morning</option>
+                                <option value="midday">Midday</option>
+                                <option value="afternoon">Afternoon</option>
+                                <option value="evening">Evening</option>
+                                <option value="night">Night</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="search-actions">
+                        <button class="btn btn-primary" onclick="searchPhotos()">
+                            Search Photos
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearFilters()">
+                            Clear Filters
+                        </button>
+                        <button class="btn btn-secondary" onclick="loadAnalysisDashboard()">
+                            Refresh Dashboard
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Search Results -->
+                <div class="search-results" id="searchResults" style="display: none;">
+                    <h3>Search Results</h3>
+                    <div class="results-grid" id="resultsGrid">
+                        <!-- Results will be populated here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 NIU Time-lapse Viewer with AI Analysis | Server: 131.193.183.176:8080</p>
+            <p>Enhanced with Weather, People & Scene Detection | Real-time Analysis Dashboard | Multi-Camera Support</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
