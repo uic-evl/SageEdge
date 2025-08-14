@@ -31,12 +31,12 @@ Instructions for working with older developer kits can be found [here](https://g
 ### Setup Instructions
 1. [Hardware Needed](/EDU/hardware_needed.md)
 2. [Initial Configuration](/EDU/initial_configuration.md)
-3. [Installing Ansible](./installing_ansible.md)
-4. [Configuring Ansible](./configuring_ansible.md)
-5. [Running the Ansible Playbook](./running_ansible.md)
-6. [Configuring the Environmental Sensor](./configuring_env_sensor.md)
+3. [Installing Ansible](/EDU/installing_ansible.md)
+4. [Configuring Ansible](/EDU/configuring_ansible.md)
+5. [Running the Ansible Playbook](/EDU/running_ansible.md)
+6. [Configuring the Environmental Sensor](/EDU/configuring_env_sensor.md)
 
 ### Curriculum
-[Essential Questions and Big Ideas](./questions_and_ideas.md)   
-[Key Terminology](./key_terminology.md)   
+[Essential Questions and Big Ideas](/EDU/questions_and_ideas.md)   
+[Key Terminology](/EDU/key_terminology.md)   
 
