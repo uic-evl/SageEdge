@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     libxext6 \
     libxrender-dev \
     libgomp1 \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
@@ -26,5 +27,9 @@ COPY *.js .
 # Expose port
 EXPOSE 8080
 
-# Run the Flask server
-CMD ["python", "server.py"]
+# Healthcheck to verify server is up
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+    CMD curl -fsS http://localhost:8080/api/health || exit 1
+
+# Run with Gunicorn for production
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "2", "--threads", "4", "--timeout", "120", "server:app"]

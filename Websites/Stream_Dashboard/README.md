@@ -8,6 +8,8 @@ This app exposes a browser UI and API to browse/“play back” time-lapse image
 - Multiple users get isolated sessions (own speed, time, camera, loop mode).
 - Top/Bottom camera switching when dataset is available; otherwise demo mode synthesizes frames.
 - Smooth playback with buffering, interpolation fallback, and timestamp overlays.
+   - Default frame rate is 1.0 fps for new sessions.
+   - Timestamp overlay is shown in the top-left of the video by default.
 
 ## Installation Instructions
 
@@ -39,6 +41,10 @@ docker run -d --name mjpeg-server \
 docker stop mjpeg-server && docker rm mjpeg-server
 ```
 
+Container runtime notes
+- The image includes a Docker HEALTHCHECK that probes /api/health.
+- The server runs with gunicorn (2 workers, 4 threads) bound to 0.0.0.0:8080.
+
 Option B — Local Python
 1) Install system deps (Linux)
 ```bash
@@ -51,7 +57,7 @@ python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
-3) Run
+3) Run (dev)
 ```bash
 python server.py
 ```

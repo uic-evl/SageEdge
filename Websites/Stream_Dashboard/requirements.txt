@@ -5,3 +5,4 @@ Jinja2==3.1.2
 Pillow==10.0.0
 requests==2.31.0
 scikit-image==0.21.0
+gunicorn==21.2.0
