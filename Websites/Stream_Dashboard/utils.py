@@ -129,10 +129,19 @@ def add_timestamp_to_frame(frame, timestamp, show=True, position="bottom"):
     text_size = cv2.getTextSize(text, font, font_scale, thickness)[0]
     
     # Position the text
-    if position == "top":
+    if position == "top-left":
+        x = 10
+        y = text_size[1] + 10
+    elif position == "top":
         x = (width - text_size[0]) // 2
         y = text_size[1] + 10
-    else:  # bottom
+    elif position == "bottom-left":
+        x = 10
+        y = height - 10
+    elif position == "bottom-right":
+        x = max(10, width - text_size[0] - 10)
+        y = height - 10
+    else:  # bottom (center)
         x = (width - text_size[0]) // 2
         y = height - 10
     

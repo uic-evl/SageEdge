@@ -3,22 +3,16 @@ NIU Image Stream Server - Main Server Module
 Handles HTTP requests and video streaming
 """
 
-from flask import Flask, Response, request, jsonify, render_template_string, session
+from flask import Flask, Response, request, jsonify, session
 import cv2
 import time
 import numpy as np
-from datetime import datetime, timedelta
+from datetime import datetime
 import os
-from glob import glob
 import threading
-from queue import Queue
-import json
 from concurrent.futures import ThreadPoolExecutor
 import logging
-import re
-import sqlite3
-from collections import defaultdict
-import uuid  # Added missing import
+import uuid
 
 # Import our modular components
 from config import (
@@ -31,14 +25,9 @@ from session_manager import (
     user_sessions, user_frame_queues, user_frame_caches, user_last_frames
 )
 from image_processor import (
-    extract_timestamp_from_filename, generate_demo_frame,
-    get_images_for_timerange, load_and_process_image, list_images_in_range
+    generate_demo_frame
 )
-from utils import (
-    encode_frame_to_jpeg, format_datetime, parse_iso_datetime, 
-    get_date_bounds, get_hour_bounds, get_month_bounds,
-    add_timestamp_to_frame, create_info_frame, RateLimiter
-)
+from utils import add_timestamp_to_frame
 from api_routes import register_api_routes
 
 # Configure logging
@@ -50,428 +39,29 @@ app = Flask(__name__, static_folder='.', static_url_path='/static')
 app.secret_key = SECRET_KEY  # For session management
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SECURE'] = False  # Set to False for HTTP, True for HTTPS
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Allows cookies to be sent in cross-origin requests
-
-CURRENT_CAMERA = DEFAULT_CAMERA
-
-# Session-based storage for multiple users
-user_sessions = {}
-session_locks = defaultdict(threading.RLock)
-user_frame_queues = {}
-user_frame_caches = {}
-user_last_activity = defaultdict(lambda: time.time())
-user_last_frames = {}
-cleanup_threads = {}
-
-# Global cleanup thread control
-stop_cleanup = False
-
- # FRAMES_PER_SECOND_OPTIONS imported from config
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 # Thread pool for parallel processing
-executor = ThreadPoolExecutor(max_workers=6)
+executor = ThreadPoolExecutor(max_workers=MAX_WORKERS or 4)
 
-def get_or_create_session_id():
-    """Get existing session ID or create a new one"""
-    if 'session_id' not in session:
-        session['session_id'] = str(uuid.uuid4())
-        logger.info(f"Created new session: {session['session_id']}")
-    return session['session_id']
+## Controller class is provided by session_manager.StreamController
 
-def get_user_controller(session_id):
-    """Get or create a controller for the user session"""
-    if session_id not in user_sessions:
-        user_sessions[session_id] = StreamController(session_id)
-        user_frame_queues[session_id] = Queue(maxsize=BUFFER_SIZE)
-        user_frame_caches[session_id] = {}
-        user_last_frames[session_id] = None
-        
-        # Start producer thread for this user
-        producer_thread = threading.Thread(
-            target=producer_thread_for_user, 
-            args=(session_id,), 
-            daemon=True
-        )
-        producer_thread.start()
-        
-        logger.info(f"Created new user session: {session_id}")
-    
-    return user_sessions[session_id]
-
-def cleanup_inactive_sessions():
-    """Clean up sessions that haven't been accessed recently"""
-    while not stop_cleanup:
-        try:
-            current_time = time.time()
-            sessions_to_remove = []
-            
-            for session_id, controller in user_sessions.items():
-                if current_time - controller.last_activity > 3600:  # 1 hour timeout
-                    sessions_to_remove.append(session_id)
-            
-            for session_id in sessions_to_remove:
-                logger.info(f"Cleaning up inactive session: {session_id}")
-                if session_id in user_sessions:
-                    user_sessions[session_id].stop_thread = True
-                    del user_sessions[session_id]
-                if session_id in user_frame_queues:
-                    del user_frame_queues[session_id]
-                if session_id in user_frame_caches:
-                    del user_frame_caches[session_id]
-                if session_id in user_last_frames:
-                    del user_last_frames[session_id]
-            
-            time.sleep(300)  # Check every 5 minutes
-        except Exception as e:
-            logger.error(f"Error in session cleanup: {e}")
-            time.sleep(60)
-
-def extract_timestamp_from_filename(img_path):
-    """Extract timestamp from filename format: 2022-07-07T06:00:02+0000.jpg"""
-    try:
-        filename = os.path.basename(img_path)
-        # Remove the .jpg extension
-        timestamp_str = filename.replace('.jpg', '')
-        
-        # Parse the ISO format timestamp (remove timezone for now)
-        if '+' in timestamp_str:
-            timestamp_str = timestamp_str.split('+')[0]
-        elif '-' in timestamp_str[-5:]:  # Handle negative timezone
-            timestamp_str = timestamp_str[:-5]
-            
-        # Parse the datetime
-        timestamp = datetime.strptime(timestamp_str, '%Y-%m-%dT%H:%M:%S')
-        return timestamp
-    except Exception as e:
-        logger.warning(f"Could not parse timestamp from {img_path}: {e}")
-        return None
-
-def generate_demo_frame(timestamp, frame_number=0):
-    """Generate a demo frame with timestamp and frame info"""
-    # Create a frame with gradient background
-    frame = np.zeros((720, 1280, 3), dtype=np.uint8)
-    
-    # Create gradient background
-    for y in range(720):
-        for x in range(1280):
-            frame[y, x] = [
-                int(128 + 127 * np.sin(x * 0.01 + frame_number * 0.1)),  # Red
-                int(128 + 127 * np.sin(y * 0.01 + frame_number * 0.1)),  # Green
-                int(128 + 127 * np.sin((x + y) * 0.005 + frame_number * 0.1))  # Blue
-            ]
-    
-    # Add demo text
-    cv2.putText(frame, "DEMO MODE - NIU Video Stream", (400, 200), 
-                cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 3)
-    
-    # Add timestamp
-    time_str = timestamp.strftime("%Y-%m-%d %H:%M:%S")
-    cv2.putText(frame, f"Time: {time_str}", (400, 300), 
-                cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
-    
-    # Add frame counter
-    cv2.putText(frame, f"Frame: {frame_number}", (400, 350), 
-                cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
-    
-    # Add camera info
-    cv2.putText(frame, "No image data available - showing generated demo", (300, 450), 
-                cv2.FONT_HERSHEY_SIMPLEX, 0.8, (200, 200, 200), 2)
-    
-    return frame
-
-class StreamController:
-    def __init__(self, session_id):
-        self.session_id = session_id
-        self.current_datetime = START_DATE
-        self.frames_per_second = 1.0  # Default: 1 frame per second (slower by default)
-        self.is_playing = True
-        self.show_timestamp = True
-        self.current_images = []  # Current loaded images with timestamps
-        self.current_image_index = 0
-        self.loop_mode = "full"  # "full", "day", "hour", "none"
-        self.loop_start_date = START_DATE
-        self.loop_end_date = END_DATE
-        self.last_load_time = None
-        self.frame_skip_counter = 0  # Counter for frame skipping
-        self.current_camera = CURRENT_CAMERA  # Current camera selection
-        self.base_dir = BASE_DIR  # User's current base directory
-        self.last_activity = time.time()  # Track last activity for cleanup
-        self.stop_thread = False  # Control producer thread
-        
-    def update_activity(self):
-        """Update last activity timestamp"""
-        self.last_activity = time.time()
-        
-    def set_camera(self, camera_name):
-        """Switch between top and bottom cameras"""
-        if camera_name in CAMERA_OPTIONS:
-            self.current_camera = camera_name
-            self.base_dir = CAMERA_OPTIONS[camera_name]
-            
-            # Clear current images to force reload from new camera
-            self.current_images = []
-            self.current_image_index = 0
-            
-            # Clear the frame queue for this user
-            user_queue = user_frame_queues.get(self.session_id)
-            if user_queue:
-                while not user_queue.empty():
-                    try:
-                        user_queue.get_nowait()
-                    except:
-                        break
-            
-            # Reload images from new camera location
-            self.load_images_around_time(self.current_datetime)
-            self.update_activity()
-            logger.info(f"Session {self.session_id}: Switched to {camera_name} camera")
-            return True
-        return False
-        
-    def set_frames_per_second(self, fps):
-        """Set how many frames to show per second"""
-        self.frames_per_second = max(0.1, min(8.0, fps))
-        self.update_activity()
-        logger.info(f"Session {self.session_id}: Frame rate set to {self.frames_per_second} fps")
-        
-    def set_datetime(self, target_datetime):
-        """Jump to specific date/time with improved error handling"""
-        try:
-            # Ensure the base directory is correct for the current camera
-            self.base_dir = CAMERA_OPTIONS.get(self.current_camera, self.base_dir)
-            
-            # Validate the target datetime is within our data range
-            if target_datetime < START_DATE or target_datetime > END_DATE:
-                logger.warning(f"Session {self.session_id}: Target datetime {target_datetime} outside valid range")
-                # Clamp to valid range
-                if target_datetime < START_DATE:
-                    target_datetime = START_DATE
-                elif target_datetime > END_DATE:
-                    target_datetime = END_DATE
-            
-            self.current_datetime = target_datetime
-            self.load_images_around_time(target_datetime)
-            
-            # Find the closest actual image timestamp
-            closest_timestamp = target_datetime
-            time_difference = 0
-            
-            if self.current_images:
-                closest_index = 0
-                min_diff = float('inf')
-                
-                for i, (img_time, _) in enumerate(self.current_images):
-                    diff = abs((img_time - target_datetime).total_seconds())
-                    if diff < min_diff:
-                        min_diff = diff
-                        closest_index = i
-                        closest_timestamp = img_time
-                        time_difference = (img_time - target_datetime).total_seconds()
-                        
-                self.current_image_index = closest_index
-            else:
-                # No images found, stay at target time
-                self.current_image_index = 0
-            
-            # Clear the frame queue for immediate response
-            user_queue = user_frame_queues.get(self.session_id)
-            if user_queue:
-                while not user_queue.empty():
-                    try:
-                        user_queue.get_nowait()
-                    except:
-                        break
-                    
-            self.update_activity()
-            logger.info(f"Session {self.session_id}: Jumped to {target_datetime}, closest image: {closest_timestamp}")
-            
-            return {
-                "requested_time": target_datetime,
-                "actual_time": closest_timestamp,
-                "time_difference": time_difference,
-                "images_found": len(self.current_images)
-            }
-            
-        except ValueError as e:
-            logger.error(f"Session {self.session_id}: Error setting datetime: {e}")
-            return {
-                "requested_time": target_datetime,
-                "actual_time": self.current_datetime,
-                "time_difference": 0,
-                "error": str(e)
-            }
-        
-    def load_images_around_time(self, center_time, minutes_range=30):
-        """Load images around a specific time for smoother playback"""
-        # Ensure we are using the correct base directory for the current camera
-        current_base_dir = CAMERA_OPTIONS.get(self.current_camera)
-        if not current_base_dir:
-            logger.error(f"Session {self.session_id}: Invalid camera '{self.current_camera}' selected.")
-            self.current_images = []
-            return
-
-        start_time = center_time - timedelta(minutes=minutes_range//2)
-        end_time = center_time + timedelta(minutes=minutes_range)
-
-        # Use shared listing function for consistency
-        if DEMO_MODE:
-            self.current_images = get_images_for_timerange(start_time, end_time, camera=self.current_camera)
-        else:
-            self.current_images = list_images_in_range(current_base_dir, start_time, end_time)
-        
-        # If nothing found, broaden search window intelligently
-        if not self.current_images and not DEMO_MODE:
-            try:
-                # 1) Try the entire day
-                day_start = center_time.replace(hour=0, minute=0, second=0, microsecond=0)
-                day_end = day_start + timedelta(days=1) - timedelta(seconds=1)
-                day_imgs = list_images_in_range(current_base_dir, day_start, day_end)
-                if day_imgs:
-                    self.current_images = day_imgs
-                    self.current_image_index = 0
-                    self.current_datetime = day_imgs[0][0]
-                else:
-                    # 2) Walk outward day-by-day to find nearest day with images (up to 30 days)
-                    found = False
-                    for offset in range(1, 31):
-                        for candidate in (center_time + timedelta(days=offset), center_time - timedelta(days=offset)):
-                            cand_start = candidate.replace(hour=0, minute=0, second=0, microsecond=0)
-                            cand_end = cand_start + timedelta(days=1) - timedelta(seconds=1)
-                            cand_imgs = list_images_in_range(current_base_dir, cand_start, cand_end)
-                            if cand_imgs:
-                                self.current_images = cand_imgs
-                                self.current_image_index = 0
-                                self.current_datetime = cand_imgs[0][0]
-                                logger.info(
-                                    f"Session {self.session_id}: No images at {center_time.date()}, switched to nearest date with data: {cand_start.date()}"
-                                )
-                                found = True
-                                break
-                        if found:
-                            break
-            except Exception as e:
-                logger.warning(f"Session {self.session_id}: Fallback search for images failed: {e}")
-
-        # Find the closest image to our target time
-        if self.current_images:
-            closest_index = 0
-            min_diff = abs((self.current_images[0][0] - center_time).total_seconds())
-            
-            for i, (img_time, _) in enumerate(self.current_images):
-                diff = abs((img_time - center_time).total_seconds())
-                if diff < min_diff:
-                    min_diff = diff
-                    closest_index = i
-            
-            self.current_image_index = closest_index
-            
-        logger.info(f"Session {self.session_id}: Loaded {len(self.current_images)} images around {center_time}")
-    
-    def get_next_image_path(self):
-        """Get the next image path based on current position"""
-        # Check if we need to load more images
-        if not self.current_images or self.current_image_index >= len(self.current_images) - 10:
-            # Load more images ahead
-            if self.current_images and self.current_image_index < len(self.current_images):
-                # Load from the current position
-                current_time = self.current_images[self.current_image_index][0]
-            else:
-                current_time = self.current_datetime
-                
-            self.load_images_around_time(current_time + timedelta(minutes=PRELOAD_MINUTES//2))
-            
-        if self.current_image_index >= len(self.current_images):
-            # Handle loop modes
-            if self.loop_mode == "full":
-                self.current_datetime = self.loop_start_date
-                self.load_images_around_time(self.current_datetime)
-                self.current_image_index = 0
-                logger.info("Looping back to start of dataset")
-            elif self.loop_mode == "day":
-                day_start = self.current_datetime.replace(hour=0, minute=0, second=0)
-                self.current_datetime = day_start
-                self.load_images_around_time(self.current_datetime)
-                self.current_image_index = 0
-                logger.info("Looping back to start of day")
-            elif self.loop_mode == "hour":
-                hour_start = self.current_datetime.replace(minute=0, second=0)
-                self.current_datetime = hour_start
-                self.load_images_around_time(self.current_datetime)
-                self.current_image_index = 0
-                logger.info("Looping back to start of hour")
-            elif self.loop_mode == "none":
-                self.is_playing = False
-                logger.info("Reached end of dataset, stopping playback")
-                return None, None
-                
-        if self.current_images and self.current_image_index < len(self.current_images):
-            img_timestamp, img_path = self.current_images[self.current_image_index]
-            self.current_image_index += 1
-            self.current_datetime = img_timestamp  # Update current datetime to actual image time
-            return img_timestamp, img_path
-            
-        return None, None
-    
-    def set_loop_mode(self, mode, start_date=None, end_date=None):
-        """Set loop mode: 'full', 'day', 'hour', 'none'"""
-        self.loop_mode = mode
-        if start_date:
-            self.loop_start_date = start_date
-        if end_date:
-            self.loop_end_date = end_date
-        logger.info(f"Loop mode set to: {mode}")
-    
-    def set_custom_loop_range(self, start_date, end_date):
-        """Set custom date range for looping"""
-        self.loop_start_date = start_date
-        self.loop_end_date = end_date
-        self.loop_mode = "full"
-        logger.info(f"Custom loop range set: {start_date} to {end_date}")
-
-def add_timestamp_overlay(frame, timestamp):
-    """Add timestamp overlay to frame"""
-    if frame is None:
-        return frame
-        
-    # Create a copy to avoid modifying original
-    overlay_frame = frame.copy()
-    
-    # Format timestamp
-    time_str = timestamp.strftime("%Y-%m-%d %H:%M:%S")
-    
-    # Add semi-transparent background
-    overlay = overlay_frame.copy()
-    cv2.rectangle(overlay, (10, 10), (400, 60), (0, 0, 0), -1)
-    cv2.addWeighted(overlay, 0.7, overlay_frame, 0.3, 0, overlay_frame)
-    
-    # Add text
-    cv2.putText(overlay_frame, time_str, (20, 40), 
-                cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
-    
-    return overlay_frame
 
 def preprocess_frame(frame, timestamp=None, add_overlay=True, session_controller=None):
     """Resize, add overlay, and encode frame to JPEG"""
     if frame is None:
         return None
-
     try:
-        # Resize frame
         frame = cv2.resize(frame, (1280, 720))
-        
-        # Add timestamp overlay if requested
         if add_overlay and timestamp and session_controller and session_controller.show_timestamp:
-            frame = add_timestamp_overlay(frame, timestamp)
-        
-        # Encode to JPEG with optimized settings for smooth streaming
+            frame = add_timestamp_to_frame(frame, timestamp, show=True, position="top-left")
         encode_params = [
-            cv2.IMWRITE_JPEG_QUALITY, 90,  # Higher quality for smoother appearance
+            cv2.IMWRITE_JPEG_QUALITY, 90,
             cv2.IMWRITE_JPEG_OPTIMIZE, 1,
-            cv2.IMWRITE_JPEG_PROGRESSIVE, 0,  # Disable progressive for faster decode
+            cv2.IMWRITE_JPEG_PROGRESSIVE, 0,
             cv2.IMWRITE_JPEG_LUMA_QUALITY, 90,
-            cv2.IMWRITE_JPEG_CHROMA_QUALITY, 90
+            cv2.IMWRITE_JPEG_CHROMA_QUALITY, 90,
         ]
-        
         _, buffer = cv2.imencode('.jpg', frame, encode_params)
         return buffer.tobytes()
     except Exception as e:
@@ -479,54 +69,22 @@ def preprocess_frame(frame, timestamp=None, add_overlay=True, session_controller
         return None
 
 def ensure_session():
-    """Ensure a session exists and return session ID"""
-    if 'session_id' not in session:
-        session['session_id'] = str(uuid.uuid4())
-        logger.info(f"New session created: {session['session_id']}")
-    
-    session_id = session['session_id']
-    
-    # Create session data if it doesn't exist
+    """Ensure a session exists and return session ID; start producer thread if new"""
+    session_id = get_or_create_session_id()
     if session_id not in user_sessions:
+        # Create controller and queue/caches
         get_user_controller(session_id)
-    
+        # Start producer thread for this user
+        producer_thread = threading.Thread(
+            target=producer_thread_for_user,
+            args=(session_id,),
+            daemon=True,
+        )
+        producer_thread.start()
+        logger.info(f"Created new user session and started producer: {session_id}")
     return session_id
 
-def start_session_cleanup():
-    """Start the session cleanup thread"""
-    def cleanup_sessions_thread():
-        while True:
-            try:
-                current_time = time.time()
-                inactive_sessions = []
-                
-                for session_id, last_activity in list(user_last_activity.items()):
-                    if current_time - last_activity > SESSION_TIMEOUT:
-                        inactive_sessions.append(session_id)
-                
-                for session_id in inactive_sessions:
-                    logger.info(f"Cleaning up inactive session: {session_id}")
-                    # Use existing cleanup logic
-                    if session_id in user_sessions:
-                        user_sessions[session_id].stop_thread = True
-                        del user_sessions[session_id]
-                    if session_id in user_frame_queues:
-                        del user_frame_queues[session_id]
-                    if session_id in user_frame_caches:
-                        del user_frame_caches[session_id]
-                    if session_id in user_last_frames:
-                        del user_last_frames[session_id]
-                    if session_id in user_last_activity:
-                        del user_last_activity[session_id]
-                
-                time.sleep(60)  # Check every minute
-            except Exception as e:
-                logger.error(f"Error in session cleanup: {e}")
-                time.sleep(60)
-    
-    cleanup_thread = threading.Thread(target=cleanup_sessions_thread, daemon=True)
-    cleanup_thread.start()
-    logger.info("Session cleanup thread started")
+## session cleanup handled by session_manager.start_cleanup_thread()
 
 def load_and_process_image(img_data, session_id):
     """Load and process a single image for a specific user session"""
@@ -658,7 +216,7 @@ def generate_frames(session_id):
     
     controller = user_sessions.get(session_id)
     if controller and controller.show_timestamp:
-        black = add_timestamp_overlay(black, controller.current_datetime)
+        black = add_timestamp_to_frame(black, controller.current_datetime, show=True, position="top-left")
     _, fallback_buffer = cv2.imencode('.jpg', black, [cv2.IMWRITE_JPEG_QUALITY, 90])
     fallback_frame = fallback_buffer.tobytes()
     
@@ -766,6 +324,21 @@ def video_feed_for_session(session_id):
     except Exception as e:
         logger.error(f"Error in direct video feed: {e}", exc_info=True)
         return "Error accessing video feed. Please try refreshing the page.", 500
+
+@app.route('/api/session')
+def api_session_info():
+    """Return the session id and video feed URLs for the client"""
+    try:
+        sid = ensure_session()
+        server_host = request.host
+        return jsonify({
+            "session_id": sid,
+            "video_feed_url": f"http://{server_host}/video_feed",
+            "direct_video_feed_url": f"http://{server_host}/video_feed/{sid}",
+        })
+    except Exception as e:
+        logger.error(f"Session info error: {e}")
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/control', methods=['POST'])
 def control():
@@ -986,39 +559,6 @@ def status():
             "server_time": datetime.now().isoformat()
         }), 500
 
-@app.route('/api/cameras')
-def get_cameras():
-    """Get available camera options"""
-    session_id = ensure_session()
-    controller = user_sessions.get(session_id)
-    
-    return jsonify({
-        "cameras": CAMERA_OPTIONS,
-        "current": controller.current_camera if controller else "top",
-        "base_directory": BASE_DIR
-    })
-
-@app.route('/api/session')
-def get_session_info():
-    """Get current session information including video feed URLs"""
-    session_id = ensure_session()
-    controller = user_sessions.get(session_id)
-    
-    # Get server info from request
-    server_host = request.host
-    
-    return jsonify({
-        "session_id": session_id,
-        "video_feed_url": f"http://{server_host}/video_feed",
-        "direct_video_feed_url": f"http://{server_host}/video_feed/{session_id}",
-        "current_camera": controller.current_camera if controller else "top",
-        "is_playing": controller.is_playing if controller else False,
-        "instructions": {
-            "automatic": "Use the 'video_feed_url' in your code - it will automatically use your session",
-            "direct": "Use the 'direct_video_feed_url' for a permanent link to this specific session",
-            "note": "Both URLs provide the same video stream, but the direct URL doesn't require cookies"
-        }
-    })
 
 @app.route('/api/health')
 def health_check():
@@ -1054,7 +594,7 @@ if __name__ == '__main__':
     logger.info("Server starting...")
     
     # Start session cleanup thread
-    start_session_cleanup()
+    start_cleanup_thread()
 
     # Register additional API routes (status/camera controls) if desired
     try:

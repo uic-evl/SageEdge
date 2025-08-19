@@ -44,7 +44,7 @@ def register_api_routes(app):
                 "base_dir_accessible": base_dir_accessible,
                 "analysis_database": analysis_available,
                 "current_time": controller.current_datetime.isoformat() if controller else None,
-                "playback_speed": controller.frames_per_second if controller else None,
+                "frames_per_second": controller.frames_per_second if controller else None,
                 "is_playing": controller.is_playing if controller else None,
                 "buffer_size": user_queue.qsize() if user_queue else 0,
                 "active_sessions": len(user_sessions)
@@ -167,7 +167,7 @@ def register_api_routes(app):
     def api_set_camera():
         """Set the current camera"""
         try:
-            from session_manager import get_user_controller
+            from session_manager import get_user_controller, get_or_create_session_id
             
             data = request.get_json()
             camera = data.get('camera', DEFAULT_CAMERA)
@@ -175,10 +175,18 @@ def register_api_routes(app):
             if camera not in CAMERA_OPTIONS:
                 return jsonify({"status": "error", "message": "Invalid camera selection"}), 400
             
-            controller = get_user_controller()
+            # Ensure session
+            _sid = get_or_create_session_id()
+            controller = get_user_controller(_sid)
             if controller:
-                controller.current_camera = camera
-                return jsonify({"status": "success", "camera": camera})
+                ok = False
+                try:
+                    ok = controller.set_camera(camera)
+                except Exception:
+                    ok = False
+                if ok:
+                    return jsonify({"status": "success", "camera": camera})
+                return jsonify({"status": "error", "message": "Failed to switch camera"}), 500
             else:
                 return jsonify({"status": "error", "message": "No active session"}), 400
         except Exception as e:
@@ -189,7 +197,7 @@ def register_api_routes(app):
     def api_set_playback_state():
         """Set playback state (play/pause)"""
         try:
-            from session_manager import get_user_controller
+            from session_manager import get_user_controller, get_or_create_session_id
             
             data = request.get_json()
             playing = data.get('playing')
@@ -197,7 +205,8 @@ def register_api_routes(app):
             if playing is None:
                 return jsonify({"status": "error", "message": "Missing 'playing' parameter"}), 400
             
-            controller = get_user_controller()
+            _sid = get_or_create_session_id()
+            controller = get_user_controller(_sid)
             if controller:
                 controller.is_playing = bool(playing)
                 return jsonify({"status": "success", "is_playing": controller.is_playing})
@@ -211,7 +220,7 @@ def register_api_routes(app):
     def api_set_playback_speed():
         """Set playback speed"""
         try:
-            from session_manager import get_user_controller
+            from session_manager import get_user_controller, get_or_create_session_id
             
             data = request.get_json()
             speed = data.get('speed')
@@ -224,10 +233,11 @@ def register_api_routes(app):
             except ValueError:
                 return jsonify({"status": "error", "message": "Speed must be a number"}), 400
             
-            controller = get_user_controller()
+            _sid = get_or_create_session_id()
+            controller = get_user_controller(_sid)
             if controller:
                 controller.frames_per_second = speed
-                return jsonify({"status": "success", "speed": controller.frames_per_second})
+                return jsonify({"status": "success", "frames_per_second": controller.frames_per_second})
             else:
                 return jsonify({"status": "error", "message": "No active session"}), 400
         except Exception as e:
@@ -238,7 +248,7 @@ def register_api_routes(app):
     def api_set_loop_mode():
         """Set loop mode (full, hour, none)"""
         try:
-            from session_manager import get_user_controller
+            from session_manager import get_user_controller, get_or_create_session_id
             
             data = request.get_json()
             mode = data.get('mode', 'full')
@@ -246,7 +256,8 @@ def register_api_routes(app):
             if mode not in ['full', 'hour', 'none']:
                 return jsonify({"status": "error", "message": "Invalid loop mode"}), 400
             
-            controller = get_user_controller()
+            _sid = get_or_create_session_id()
+            controller = get_user_controller(_sid)
             if controller:
                 controller.loop_mode = mode
                 return jsonify({"status": "success", "loop_mode": controller.loop_mode})
@@ -260,7 +271,7 @@ def register_api_routes(app):
     def api_set_datetime():
         """Set current playback datetime"""
         try:
-            from session_manager import get_user_controller
+            from session_manager import get_user_controller, get_or_create_session_id
             
             data = request.get_json()
             datetime_str = data.get('datetime')
@@ -274,7 +285,8 @@ def register_api_routes(app):
             except ValueError:
                 return jsonify({"status": "error", "message": "Invalid datetime format"}), 400
             
-            controller = get_user_controller()
+            _sid = get_or_create_session_id()
+            controller = get_user_controller(_sid)
             if controller:
                 controller.current_datetime = new_datetime
                 return jsonify({
@@ -291,7 +303,7 @@ def register_api_routes(app):
     def api_toggle_timestamp():
         """Toggle timestamp display"""
         try:
-            from session_manager import get_user_controller
+            from session_manager import get_user_controller, get_or_create_session_id
             
             data = request.get_json()
             show = data.get('show')
@@ -299,7 +311,8 @@ def register_api_routes(app):
             if show is None:
                 return jsonify({"status": "error", "message": "Missing 'show' parameter"}), 400
             
-            controller = get_user_controller()
+            _sid = get_or_create_session_id()
+            controller = get_user_controller(_sid)
             if controller:
                 controller.show_timestamp = bool(show)
                 return jsonify({
