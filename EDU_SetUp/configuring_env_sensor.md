@@ -48,9 +48,10 @@
     CONFIG_BME680=m
     CONFIG_BME680_I2C=m
     ```
-7. **This line is only to be ran on seeed studio orin**
+7. **This line is only to be ran on seeed studio orin**.
 This command creates a symbolic link (a shortcut) to the kernel headers. The command points the standard kernel build location (/lib/modules/$(uname -r)/build) to the specific location where the kernel source files are stored on this device.
-'sudo ln -sfT /usr/src/linux-headers-5.15.148-tegra-ubuntu22.04_aarch64/3rdparty/canonical/linux-jammy/kernel-source /lib/modules/$(uname -r)/build'
+
+`sudo ln -sfT /usr/src/linux-headers-5.15.148-tegra-ubuntu22.04_aarch64/3rdparty/canonical/linux-jammy/kernel-source /lib/modules/$(uname -r)/build`
 8.  Afterwards build the kernel module and install the binaries to the modules folder by running the following commands:
 
     1. `make -C /lib/modules/$(uname -r)/build M=$PWD`
