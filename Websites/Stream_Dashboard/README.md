@@ -39,11 +39,8 @@ docker run -d --name mjpeg-server \
 4) Stop/remove
 ```bash
 docker stop mjpeg-server && docker rm mjpeg-server
-```
-
 Container runtime notes
 - The image includes a Docker HEALTHCHECK that probes /api/health.
-- The server runs with gunicorn (2 workers, 4 threads) bound to 0.0.0.0:8080.
 
 Option B — Local Python
 1) Install system deps (Linux)
@@ -53,25 +50,11 @@ sudo apt-get update && sudo apt-get install -y \
 ```
 2) Create venv and install
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-3) Run (dev)
-```bash
 python server.py
-```
-
-Open http://localhost:8080
 
 ## Usage
 
 Web UI
-- Visit / to view the stream and controls.
-- Use camera, date/hour/minute, FPS, and loop mode controls. Buttons let you pause/play, toggle timestamp, and refresh status.
-
-Programmatic stream access
-- Session-based: GET /video_feed (cookie session required)
 - Direct URL: GET /video_feed/{session_id} (no cookies; see /my-stream for your URL)
 
 Control API (single endpoint)

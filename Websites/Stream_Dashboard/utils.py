@@ -33,6 +33,11 @@ class RateLimiter:
         
         return False
 
+    # Convenience alias used by newer code paths
+    def allow(self):  # noqa: D401
+        """Return True if another call is allowed (alias)."""
+        return self.check_rate_limit()
+
 def encode_frame_to_jpeg(frame, quality=90):
     """Encode a frame to JPEG format for streaming"""
     try:

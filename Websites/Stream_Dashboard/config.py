@@ -6,8 +6,13 @@ Contains all configuration settings for the application
 import os
 from datetime import datetime
 
-# Demo mode configuration
-DEMO_MODE = not os.path.exists("/home/sage/nfs/NIU/top")
+# Data root (can be overridden to point at a mounted remote dataset)
+DATA_ROOT = os.environ.get("DATA_ROOT", "/home/sage/nfs/NIU")
+TOP_SUBDIR = os.environ.get("TOP_SUBDIR", "top")
+BOTTOM_SUBDIR = os.environ.get("BOTTOM_SUBDIR", "bottom")
+
+# Demo mode configuration (true if expected top camera path not present)
+DEMO_MODE = not os.path.exists(os.path.join(DATA_ROOT, TOP_SUBDIR))
 
 # Camera options - user can select between top and bottom cameras
 if DEMO_MODE:
@@ -15,24 +20,45 @@ if DEMO_MODE:
         "demo_top": "./data",
         "demo_bottom": "./data"
     }
-    BASE_DIR = "./data"  # Use local data directory
+    BASE_DIR = "./data"
     DEFAULT_CAMERA = "demo_top"
 else:
     CAMERA_OPTIONS = {
-        "top": "/home/sage/nfs/NIU/top",
-        "bottom": "/home/sage/nfs/NIU/bottom"
+        "top": os.path.join(DATA_ROOT, TOP_SUBDIR),
+        "bottom": os.path.join(DATA_ROOT, BOTTOM_SUBDIR)
     }
-    BASE_DIR = "/home/sage/nfs/NIU/top"  # Default camera
-    DEFAULT_CAMERA = "top"  # Default camera selection
+    BASE_DIR = CAMERA_OPTIONS["top"]
+    DEFAULT_CAMERA = "top"
 
-# Date range configuration
-START_DATE = datetime(2021, 7, 25)
-END_DATE = datetime(2023, 7, 11, 3)
+# Date range configuration (updated for new dataset span)
+# New data starts 2021-07-23 21:00:00 and ends 2024-09-04 18:00:00
+START_DATE = datetime(2021, 7, 23, 21, 0, 0)
+END_DATE = datetime(2024, 9, 4, 18, 0, 0)
+
+# Optional environment overrides (format: YYYY-MM-DD or YYYY-MM-DD HH:MM:SS)
+_env_start = os.environ.get("START_DATE")
+_env_end = os.environ.get("END_DATE")
+def _parse_dt(val: str):
+    try:
+        return datetime.fromisoformat(val)
+    except Exception:
+        try:
+            return datetime.strptime(val, "%Y-%m-%d")
+        except Exception:
+            return None
+if _env_start:
+    _p = _parse_dt(_env_start)
+    if _p:
+        START_DATE = _p
+if _env_end:
+    _p = _parse_dt(_env_end)
+    if _p:
+        END_DATE = _p
 
 # Video stream settings
 TARGET_FPS = 4  # Base FPS for frame delivery
 BUFFER_SIZE = 150  # Larger buffer for smoother streaming
-MIN_BUFFER = 30
+# MIN_BUFFER removed (unused)
 PRELOAD_MINUTES = 30  # Load 30 minutes worth of images for smoother playback
 FRAME_INTERPOLATION = True  # Add frame interpolation for missing frames
 
@@ -49,18 +75,15 @@ MAX_WORKERS = 4  # Number of worker threads for the thread pool executor
 
 # Frame rate options for speed control
 FRAMES_PER_SECOND_OPTIONS = {
-    "1_frame_per_10s": 0.1,    # 1 frame every 10 seconds (very slow for AI analysis)
-    "1_frame_per_5s": 0.2,     # 1 frame every 5 seconds (slow for AI analysis)
-    "1_frame_per_2s": 0.5,     # 1 frame every 2 seconds (slow)
-    "1_frame_per_second": 1,   # 1 frame per second (normal)
-    "2_frames_per_second": 2,  # 2 frames per second (medium)
-    "4_frames_per_second": 4,  # 4 frames per second (default)
-    "6_frames_per_second": 6,  # 6 frames per second (fast)
-    "8_frames_per_second": 8,  # 8 frames per second (faster)
-    "10_frames_per_second": 10, # 10 frames per second (very fast)
-    "30_frames_per_second": 30  # 30 frames per second (super fast time-lapse)
+    # Trimmed to enforced clamp (<= 8 fps)
+    "1_frame_per_10s": 0.1,
+    "1_frame_per_5s": 0.2,
+    "1_frame_per_2s": 0.5,
+    "1_frame_per_second": 1,
+    "2_frames_per_second": 2,
+    "4_frames_per_second": 4,
+    "6_frames_per_second": 6,
+    "8_frames_per_second": 8,
 }
 
-# Data exclusions (dates to skip entirely across cameras)
-from datetime import date as _date
-EXCLUDED_DATES = { _date(2021, 7, 21) }
+# Data exclusions removed (previous EXCLUDED_DATES feature deprecated)

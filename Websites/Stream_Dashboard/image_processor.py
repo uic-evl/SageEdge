@@ -14,9 +14,8 @@ from glob import glob
 import threading
 
 # Import configuration
-from config import DEMO_MODE, BASE_DIR, PRELOAD_MINUTES, CAMERA_OPTIONS, EXCLUDED_DATES
+from config import DEMO_MODE, BASE_DIR, PRELOAD_MINUTES, CAMERA_OPTIONS
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
 # Regex pattern for extracting timestamps from filenames
@@ -115,8 +114,7 @@ def get_images_for_timerange(start_time, end_time, camera="top"):
         current = start_time
         results = []
         while current <= end_time:
-            if current.date() not in EXCLUDED_DATES:
-                results.append((current, f"demo_{current.strftime('%Y%m%d_%H%M%S')}.jpg"))
+            results.append((current, f"demo_{current.strftime('%Y%m%d_%H%M%S')}.jpg"))
             current += timedelta(seconds=1)
         return results
     
@@ -132,7 +130,7 @@ def get_images_for_timerange(start_time, end_time, camera="top"):
         image_files = glob(os.path.join(search_dir, f"{camera}_*.jpg"))
         for image_file in image_files:
             ts = extract_timestamp_from_filename(os.path.basename(image_file))
-            if ts and start_time <= ts <= end_time and ts.date() not in EXCLUDED_DATES:
+            if ts and start_time <= ts <= end_time:
                 results.append((ts, image_file))
 
     # Sort by timestamp
@@ -163,7 +161,7 @@ def list_images_in_range(base_dir: str, start_time: datetime, end_time: datetime
         if os.path.exists(hour_path):
             for img_path in glob(os.path.join(hour_path, "*.jpg")):
                 ts = extract_timestamp_from_filename(os.path.basename(img_path))
-                if ts and start_time <= ts <= end_time and ts.date() not in EXCLUDED_DATES:
+                if ts and start_time <= ts <= end_time:
                     results.append((ts, img_path))
         current_hour += timedelta(hours=1)
 
@@ -176,7 +174,7 @@ def list_images_in_range(base_dir: str, start_time: datetime, end_time: datetime
             if os.path.exists(day_path):
                 for img_path in glob(os.path.join(day_path, "*.jpg")):
                     ts = extract_timestamp_from_filename(os.path.basename(img_path))
-                    if ts and start_time <= ts <= end_time and ts.date() not in EXCLUDED_DATES:
+                    if ts and start_time <= ts <= end_time:
                         results.append((ts, img_path))
             current_day += timedelta(days=1)
 

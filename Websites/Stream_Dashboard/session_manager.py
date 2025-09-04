@@ -48,8 +48,6 @@ class StreamController:
         self.loop_mode = "full"  # "full", "day", "hour", "none"
         self.loop_start_date = START_DATE
         self.loop_end_date = END_DATE
-        self.last_load_time = None
-        self.frame_skip_counter = 0
         self.current_camera = DEFAULT_CAMERA
         self.base_dir = CAMERA_OPTIONS.get(self.current_camera, BASE_DIR)
         self.last_activity = time.time()

@@ -44,19 +44,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const dateInput = document.getElementById('dateInput');
     // Fetch status to get dynamic constraints
     makeAPICall('/status').then((data) => {
-        const DEFAULT_START = (data && data.data_range && data.data_range.start_date) ? data.data_range.start_date.slice(0,10) : '2021-07-25';
-        const END_DATE = (data && data.data_range && data.data_range.end_date) ? data.data_range.end_date.slice(0,10) : '2023-07-11';
-        const EXCLUDED = new Set((data && data.excluded_dates) ? data.excluded_dates : []);
+        const DEFAULT_START = (data && data.data_range && data.data_range.start_date) ? data.data_range.start_date.slice(0,10) : '2021-07-23';
+        const END_DATE = (data && data.data_range && data.data_range.end_date) ? data.data_range.end_date.slice(0,10) : '2024-09-04';
+    // excluded_dates removed from backend
         dateInput.min = DEFAULT_START;
         dateInput.max = END_DATE;
         dateInput.value = DEFAULT_START;
         dateInput.addEventListener('change', () => {
             const v = dateInput.value;
             if (!v) return;
-            if (EXCLUDED.has(v)) {
-                showNotification('This date is unavailable. Selecting the nearest valid date.', 'warning');
-                dateInput.value = DEFAULT_START;
-            }
             if (v < DEFAULT_START) {
                 dateInput.value = DEFAULT_START;
             }
@@ -65,10 +61,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }).catch(() => {
-        // Fallback defaults if status fails
-        dateInput.value = '2021-07-25';
-        dateInput.min = '2021-07-25';
-        dateInput.max = '2023-07-11';
+        // Fallback defaults if status fails (updated range)
+        dateInput.value = '2021-07-23';
+        dateInput.min = '2021-07-23';
+        dateInput.max = '2024-09-04';
     });
     
     // Initialize video

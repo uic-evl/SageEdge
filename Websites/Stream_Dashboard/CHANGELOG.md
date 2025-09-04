@@ -42,3 +42,21 @@ All notable changes to the NIU Weather Dataset Stream Server will be documented 
 
 ### Fixed
 - Eliminated 500s from /status by importing missing config; corrected image listing edge case in producer.
+
+## [1.2.0] - 2025-09-02
+
+### Added
+- Unified status builder module (`status_builder.py`) used by /status, /api/session, and deprecated /api/health.
+- In-process rate limiting (session creation 10/min, control actions 60/min).
+
+### Changed
+- /api/session now returns the full unified status payload plus feed URLs.
+- /status simplified to delegate to builder; consistent keys across endpoints.
+- /api/health marked deprecated (returns { status, session }).
+- FPS options trimmed to a max of 8fps (higher unused values removed).
+
+### Removed
+- Unused MIN_BUFFER constant and unused controller tracking fields.
+
+### Fixed
+- Eliminated redundant status construction logic and reduced risk of field drift across endpoints.
