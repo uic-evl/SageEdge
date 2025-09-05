@@ -36,34 +36,38 @@
     ```
 > Note: **The sensor can either be on 0x76 or 0x77**. Based on what address it's on the number will change in the documentation
 
-4.  The kernel supplied by nvidia doesn't support the BME680 sensor, so we just have to get the kernel source of a kernel version supporting the sensor (4.19)
-`wget http://www.kernel.org/pub/linux/kernel/v4.x/linux-4.19.116.tar.gz`
+4.  The kernel supplied by nvidia doesn't support the BME680 sensor, so we just have to get the kernel source of a kernel version supporting the sensor (5.15.148)
+`wget https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.15.148.tar.gz`
 
 5.  Extract the drivers/iio/chemical subtree of the kernel source for building the bme680 sensors kernel module
-`tar --strip-components=3 -xzf linux-4.19.116.tar.gz linux-4.19.116/drivers/iio/chemical`
+`tar --strip-components=3 -xvzf linux-5.15.148.tar.gz linux-5.15.148/drivers/iio/chemical`
 
-6.  After extracting, we have to configure the build. To do so, prepend the following lines to the Makefile in this subtree `vim chemical/Makefile`
+6.  After extracting, we have to configure the build. To do so, prepend the following lines to the Makefile in this subtree `vim linux-5.15.148/drivers/iio/chemical/Makefile`
 
     ```
     CONFIG_BME680=m
     CONFIG_BME680_I2C=m
     ```
+7. **This line is only to be ran on seeed studio orin**.
+This command creates a symbolic link (a shortcut) to the kernel headers. The command points the standard kernel build location (/lib/modules/$(uname -r)/build) to the specific location where the kernel source files are stored on this device.
 
-7.  Afterwards build the kernel module and install the binaries to the modules folder by running the following commands:
+   `sudo ln -sfT /usr/src/linux-headers-5.15.148-tegra-ubuntu22.04_aarch64/3rdparty/canonical/linux-jammy/kernel-source /lib/modules/$(uname -r)/build`
+
+8.  Afterwards build the kernel module and install the binaries to the modules folder by running the following commands:
 
     1. `make -C /lib/modules/$(uname -r)/build M=$PWD`
 
-    2. `make -C /lib/modules/$(uname -r)/build M=$PWD modules_install`
+    2. `sudo make -C /lib/modules/$(uname -r)/build M=$PWD modules_install`
 
-8.  Build the module's dependency list by running the command `depmod -a`
+9.  Build the module's dependency list by running the command `depmod -a`
 
-9.  Run command `modprobe bme680_i2c` to see if the module was successfully installed
+10.  Run command `modprobe bme680_i2c` to see if the module was successfully installed
 > Note: If there is no output then the module was installed correctly
 
-10.  To use the sensor we have to register it with the kernels i2c subsystem so run this command `echo bme680 0x76 | sudo tee /sys/bus/i2c/devices/i2c-7/new_device`
+11.  To use the sensor we have to register it with the kernels i2c subsystem so run this command `echo bme680 0x76 | sudo tee /sys/bus/i2c/devices/i2c-7/new_device`
 > Note: change number to 77 if that's the address the sensor is on
 
-11. Check if the BME680 sensor is registered by running the command `cat /sys/bus/iio/devices/*/name`
+12. Check if the BME680 sensor is registered by running the command `cat /sys/bus/iio/devices/*/name`
 
     ```bash
     waggle@<id>:~# cat /sys/bus/iio/devices/*/name
@@ -72,7 +76,7 @@
     bme680
     ```
 
-12.  Once the sensor is registered, the sensors readings can be acquired using the `sysfs` interface:
+13.  Once the sensor is registered, the sensors readings can be acquired using the `sysfs` interface:
 
         ```bash
         waggle@<id>:~#  grep ^ /dev/null /sys/bus/i2c/devices/i2c-7/1-0076/iio:device1/*input*
@@ -84,7 +88,7 @@
         ```
 > Note: If your sensor is on 0x77 the relative path will be `/sys/bus/i2c/devices/i2c-7/1-0077/iio:device1/*input*`
 
-13. If your outputs in steps 11 & 12 are similar then configure the nano to set bme680 on boot
+14. If your outputs in steps 11 & 12 are similar then configure the nano to set bme680 on boot
 
     1. To load the bme680_i2c kernel module on startup add it to the modules.conf file by running this command `echo bme680_i2c >> /etc/modules-load.d/modules.conf`
 
@@ -116,7 +120,7 @@
 
         3. Give execution permission to the file `chmod +x /etc/rc.local`
 
-14. Reboot and on startup run steps 11 & 12 again to see if the BME680 sensor is set up on boot
+15. Reboot and on startup run steps 11 & 12 again to see if the BME680 sensor is set up on boot
 
 ---
 
