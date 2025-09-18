@@ -25,7 +25,9 @@ This program creates a csv file of data from the video inputed. The data include
 ![](database_preview.png)
 
 ## Dependencies
-(TODO)
+- DeepSORT
+- YOLOv8
+>Other dependencies are in the setup script
 
 ## Prerequisites
 - Orin [device setup](https://github.com/uic-evl/SageEdge/tree/main/Devices_Setup)
@@ -36,4 +38,12 @@ This program creates a csv file of data from the video inputed. The data include
 >Note: This script is **NOT** autonomous and will require user input during installation.
 
 ## How to run program
-(TODO)
+
+To run the program simply input the command `python left_right_tracking.py`
+
+You will be prompted during the initialization of the program whether you would like live output and to save the output as a video.
+
+Make sure to have the exact file location for the video or live stream you would like to be processed for example:
+- video file: `/media/waggle/New Volume/park_walking.mp4`
+- live stream: `http://11.222.33.44:8080/live/live.mp4`
+>Note: Make sure you are in the same directory as the Python script.
