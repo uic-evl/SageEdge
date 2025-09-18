@@ -31,20 +31,31 @@ else:
 
 print("You can choose to either to input a video file path or a live camera feed link.")
 video_input_file = input("Please enter the exact path to your video file to be processed: ")
+print()
 
 # -------------------------------
 # Paths and Initialization
 # -------------------------------
 # video_path = "/media/waggle/New Volume/park_walking.mp4"  # Path to input video
 video_path = video_input_file
+if not os.path.isfile(video_path):
+    print(f"Error: Video file '{video_path}' not found. Please check the path and try again.")
+    exit(1)
 # video_path = "http://77.222.181.11:8080/mjpg/video.mjpg"  # Alternative: live camera feed (enter your live link)
 
 # -------------------------------
 # Initialize YOLO model and DeepSORT tracker
 # -------------------------------
+print("There are 5 different yolo models to choose from, n(nano), s(small), m(medium), l(large),and x(extra large). The larger the model the more accurate but slower it will be. The smaller the model the faster but less accurate it will be.")
+AI_model = input("Please enter the YOLOv8 modle to use: ")
+if AI_model not in ['n', 's', 'm', 'l', 'x']:
+    print("Invalid model choice, defaulting to 'm' (medium)")
+    AI_model = 'm'
+print()
+
 print("Loading YOLO model...")
 # Pretrained YOLOv8 models. Switch between yolov8n.pt, yolov8s.pt, yolov8m.pt, yolov8l.pt, yolov8x.pt
-model = YOLO('yolov8m.pt')
+model = YOLO('yolov8' + AI_model + '.pt')
 tracker = DeepSort(
     max_age=15, # How long a detection ID stays after losing object
     n_init=2, # Number of consecutive detections for an object to receive ID 
