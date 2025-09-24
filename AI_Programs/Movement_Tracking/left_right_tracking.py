@@ -202,17 +202,8 @@ try:
         # Read next frame, retry if failed
         ret, frame = cap.read()
         if not ret:
-            # Check if we've reached the end of the video
-            if total_frames > 0 and frame_idx >= total_frames:
-                print(f"Reached end of video ({total_frames} frames processed)")
-                break
-            else:
-                print("Frame read failed, attempting to reconnect...")
-                cap.release()
-                cap = cv2.VideoCapture(video_path)
-                # Wait a bit before trying again
-                cv2.waitKey(1000)
-                continue
+            print("End of video reached or failed to grab frame.")
+            break
         
         frame_idx += 1
         display_frame = frame.copy()
@@ -323,3 +314,4 @@ finally:
     data_file.close()
     print(f"Total Left: {numLeft}, Right: {numRight}")
     print("Processing complete")
+
