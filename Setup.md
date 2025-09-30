@@ -4,7 +4,7 @@
          1. Connect the microphone to the Jetson via USB. Make sure the light on the microphone lights up.
    2. Camera:
         1.  Connect the camera via Ethernet cable to the Jetson. Once connected go to wired connection in settings find the device that is 100/mb speed and go into the setting. Click on IPv4 and choose
-        2.  To find IP of the Jetson use `arp -a` inside the terminal once you connected the camera. This should find the IP of the camera, look at the terminal to find the IP.
+        2.  To find IP of the Jetson use `arp -a` inside the terminal once you connected the camera. This should find the IP of the camera, look at the terminal to find the IP of ethernet. (ex. `? (10.42.0.211) at 9c:8e:cd:31:e3:6f [ether] on eno1`) 
         3.  Copy and paste the IP of the camera to a search browser (such as firefox) and if an Amcrest page pops up the camera is connected!
    3. BME Sensor:
         1.  Please follow the BME sensor setup guide on [sensor setup github](https://github.com/uic-evl/SageEdge/blob/main/EDU_SetUp/configuring_env_sensor.md).
