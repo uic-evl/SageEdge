@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Exit on error and print commands
-set -e
-set -x
 
 # Sets up the environment variables
 export OPENBLAS_CORETYPE=ARMV8
