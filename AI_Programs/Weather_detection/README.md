@@ -13,7 +13,7 @@ For best results use a clear and smooth video/image. The less clear and laggy th
 - transformers 
 - accelerate
 - timm 
-- opencv-python 
+- opencv-python
 - Pillow 
 - numpy 
 - requests 
