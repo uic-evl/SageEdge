@@ -1,9 +1,10 @@
 1. Flash the NVIDIA Jetson with Jetpack 6.2.1 using NVIDIA SDK manager on an Ubunut device (for us its the Intel NUC). Follow the steps [here](https://developer.nvidia.com/embedded/learn/jetson-agx-orin-devkit-user-guide/two_ways_to_set_up_software.html).
    1. Make sure the power cable is connected to the side with all the ports.
    <img src="orin_power.jpg" width="600" height="400">
+   
    2. When connecting the usb-c that is connected to the Ubuntu device for flashing connect it into the type-c port on the side with the pins.
    <img src="orin_flash.jpg" width="600" height="400">
-   
+
    3. When flashing you will have options on what components to flash the Jetson device with. The first section will be selected by default, but you need to select the `Jetson SDK Components` section as well.
      <img src="SDK_selection.jpg" width="600" height="400">
    
