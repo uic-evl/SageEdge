@@ -3,6 +3,7 @@
    <img src="orin_power.jpg" width="600" height="400">
    2. When connecting the usb-c that is connected to the Ubuntu device for flashing connect it into the type-c port on the side with the pins.
    <img src="orin_flash.jpg" width="600" height="400">
+   
    3. When flashing you will have options on what components to flash the Jetson device with. The first section will be selected by default, but you need to select the `Jetson SDK Components` section as well.
      <img src="SDK_selection.jpg" width="600" height="400">
    
