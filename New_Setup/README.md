@@ -1,8 +1,12 @@
 1. Flash the NVIDIA Jetson with Jetpack 6.2.1 using NVIDIA SDK manager on an Ubunut device (for us its the Intel NUC). Follow the steps [here](https://developer.nvidia.com/embedded/learn/jetson-agx-orin-devkit-user-guide/two_ways_to_set_up_software.html).
-   1. When flashing you will have options on what components to flash the Jetson device with. The first section will be selected by default, but you need to select the `Jetson SDK Components` section as well.
+   1. Make sure the power cable is connected to the side with all the ports.
+   <img src="orin_power.jpg" width="600" height="400">
+   2. When connecting the usb-c that is connected to the Ubuntu device for flashing connect it into the type-c port on the side with the pins.
+   <img src="orin_flash.jpg" width="600" height="400">
+   3. When flashing you will have options on what components to flash the Jetson device with. The first section will be selected by default, but you need to select the `Jetson SDK Components` section as well.
      <img src="SDK_selection.jpg" width="600" height="400">
    
-   2. Once you start flashing the Jetson you will get a screen that looks like this:
+   4. Once you start flashing the Jetson you will get a screen that looks like this:
      <img src="SDK_setup.png" width="600" height="400">
      
      1. This screen will ask you to input the IP Address, Username, and Password.
@@ -16,7 +20,7 @@
 
      5. If you get an error `Could not detect a board` go on the Jetson and reboot it or connect to it via ethernet cable using the USB adapter.
 
-3. Connect the external hardware and setup:
+2. Connect the external hardware and setup:
    1. Once you setup on the Jetson go on it and in the terminal run the command `sudo apt update` then `sudo apt upgrade`
          1. To download a browser go on the software store and download a broswer (ex. FireFox).
          2. If the browser does not run when it downloads you will need to downgrade snapd. Follow these commands.
@@ -40,4 +44,4 @@
         3.  Copy and paste the IP of the camera to a search browser (such as firefox) and if an Amcrest page pops up the camera is connected!
    4. BME Sensor:
         1.  Please follow the BME sensor setup guide on [sensor setup github](https://github.com/uic-evl/SageEdge/blob/main/EDU_SetUp/configuring_env_sensor.md).
-4. Set up the AI program by following the steps from the [setup github](https://github.com/uic-evl/SageEdge/tree/main/AI_Programs/Movement_Tracking).
+3. Set up the AI program by following the steps from the [setup github](https://github.com/uic-evl/SageEdge/tree/main/AI_Programs/Movement_Tracking).
