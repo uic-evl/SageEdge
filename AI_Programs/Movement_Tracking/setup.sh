@@ -28,7 +28,9 @@ sudo apt -y install \
 rm -rf tracking || true
 
 # Create and activate virtual environment
-python3 -m venv tracking
+sudo apt install python3-pip python3-dev
+sudo -H pip3 install virtualenv
+virtualenv ./tracking
 source tracking/bin/activate
 pip install --upgrade pip setuptools wheel
 
