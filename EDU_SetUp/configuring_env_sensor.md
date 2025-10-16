@@ -40,13 +40,20 @@
 `wget https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.15.148.tar.gz`
 
 5.  Extract the drivers/iio/chemical subtree of the kernel source for building the bme680 sensors kernel module
-`tar --strip-components=3 -xvzf linux-5.15.148.tar.gz linux-5.15.148/drivers/iio/chemical`
+`tar -xvf linux-5.15.148.tar.gz`
 
-6.  After extracting, we have to configure the build. To do so, prepend the following lines to the Makefile in this subtree `vim linux-5.15.148/drivers/iio/chemical/Makefile`
+6.  After extracting, we have to configure the build. To do so, prepend the following lines to the Makefile in using the following command:
 
     ```
-    CONFIG_BME680=m
-    CONFIG_BME680_I2C=m
+    cd linux-5.15.148/drivers/iio/chemical
+
+    # avoid duplicates if you already added them
+    grep -q '^CONFIG_BME680=m$' Makefile || \
+    ( printf "CONFIG_BME680=m\nCONFIG_BME680_I2C=m\n" ; cat Makefile ) > Makefile.new && mv Makefile.new Makefile
+
+    # verify
+    head -n 5 Makefile
+
     ```
 7. **This line is only to be ran on seeed studio orin**.
 This command creates a symbolic link (a shortcut) to the kernel headers. The command points the standard kernel build location (/lib/modules/$(uname -r)/build) to the specific location where the kernel source files are stored on this device.
@@ -59,12 +66,21 @@ This command creates a symbolic link (a shortcut) to the kernel headers. The com
 
     2. `sudo make -C /lib/modules/$(uname -r)/build M=$PWD modules_install`
 
+    3. If you get the error `Warning: modules_install: missing 'System.map' file. Skipping depmod.`. Run the following command to make sure the files are present: `ls -l /lib/modules/$(uname -r)/updates/bme680*.ko`. Once ran you should get an output similar to the one below which confirms that you have installed the module properly.
+        ```
+        -rw-r--r-- 1 root root 86168 Oct  7 17:34 /lib/modules/5.15.148-tegra/updates/bme680_core.ko
+        -rw-r--r-- 1 root root 54488 Oct  7 17:34 /lib/modules/5.15.148-tegra/updates/bme680_i2c.ko
+        ```
+
 9.  Build the module's dependency list by running the command `depmod -a`
 
 10.  Run command `modprobe bme680_i2c` to see if the module was successfully installed
 > Note: If there is no output then the module was installed correctly
 
-11.  To use the sensor we have to register it with the kernels i2c subsystem so run this command `echo bme680 0x76 | sudo tee /sys/bus/i2c/devices/i2c-7/new_device`
+11.  To use the sensor we have to register it with the kernels i2c subsystem so run this command `echo bme680 0x76 | sudo tee /sys/bus/i2c/devices/i2c-7/new_device`. Output should look something like this:
+        ```
+        bme680 0x76
+        ```
 > Note: change number to 77 if that's the address the sensor is on
 
 12. Check if the BME680 sensor is registered by running the command `cat /sys/bus/iio/devices/*/name`
@@ -76,7 +92,7 @@ This command creates a symbolic link (a shortcut) to the kernel headers. The com
     bme680
     ```
 
-13.  Once the sensor is registered, the sensors readings can be acquired using the `sysfs` interface:
+13.  Once the sensor is registered, the sensors readings can be acquired using the `sysfs` interface, run the command `grep ^ /sys/bus/i2cxdevices/i2c-7/*-0076/iio:device*/in_*_input`:
 
         ```bash
         waggle@<id>:~#  grep ^ /dev/null /sys/bus/i2c/devices/i2c-7/1-0076/iio:device1/*input*
@@ -90,7 +106,11 @@ This command creates a symbolic link (a shortcut) to the kernel headers. The com
 
 14. If your outputs in steps 11 & 12 are similar then configure the nano to set bme680 on boot
 
-    1. To load the bme680_i2c kernel module on startup add it to the modules.conf file by running this command `echo bme680_i2c >> /etc/modules-load.d/modules.conf`
+    1. To load the bme680_i2c kernel module on startup add it to the modules.conf file by running this command `echo bme680_i2c >> /etc/modules-load.d/modules.conf`. Output should be as seen below:
+        1. If you get an error running that command run this one instead `echo bme680_i2c | sudo tee -a /etc/modules-load.d/modules.conf`.
+        ```
+        bme680_i2c
+        ```
 
     2. Next, we have to register the sensor with the kernels i2c subsystem on startup. To do so we have to create a rc.local file since ubuntu 18.04 doesn't have it by default. `vim /etc/rc.local`
 
