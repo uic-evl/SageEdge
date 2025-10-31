@@ -7,7 +7,6 @@
 #
 # Usage:
 #   DIR_THRESH=100 python beta_ultralytics_tracking_patched.py
-# IP FOR CAMERAS: rtsp://admin:SageWaggle@10.42.0.53:554
 
 import os
 import cv2
@@ -19,6 +18,7 @@ import subprocess
 import numpy as np
 from collections import defaultdict, deque
 from ultralytics import YOLO
+import time 
 
 print("This program uses YOLOv8 and Ultralytics ByteTrack to count the number of people moving left/right from a video file or live camera feed.")
 print()
@@ -67,12 +67,35 @@ if AI_model not in ['n', 's', 'm', 'l', 'x']:
 print()
 
 print("Loading YOLO model... (first run may download weights)")
-model = YOLO('yolov8' + AI_model + '.pt')
+person_model = YOLO('yolov8' + AI_model + '.pt')
 
 # counting sensitivity (pixels across the image width)
 direction_threshold = int(os.getenv("DIR_THRESH", "100"))
 print(f"Direction threshold set to {direction_threshold} px (override with DIR_THRESH env var).")
 
+#-------------------------------
+# --- V2: Face blurring settings ---
+FACE_BLUR = bool(int(os.getenv("FACE_BLUR", "1")))   # set 0 to disable
+FACE_CONF = float(os.getenv("FACE_CONF", "0.35"))    # face detector confidence
+FACE_EVERY = int(os.getenv("FACE_EVERY", "1"))       # run face detection every N frames (1 = every frame)
+
+face_model = None
+if FACE_BLUR:
+    try:
+        # Ultralytics face model; downloads on first use
+        face_weights = os.getenv("FACE_WEIGHTS", "/home/waggle/SageEdge/AI_Programs/Movement_Tracking/yolov8n-face.pt")
+        face_model = YOLO(face_weights)
+        print(f"Face blurring enabled (conf={FACE_CONF}, every={FACE_EVERY} frame(s)) using: {face_weights}")
+    except Exception as e:
+        print(f"Warning: could not load face model: {e}. Face blurring disabled.")
+        FACE_BLUR = False
+
+# Helps catch small/distant faces + privacy fallback
+FACE_UPSCALE  = float(os.getenv("FACE_UPSCALE", "1.8"))  # 1.6–2.0 is good
+HEAD_FAILSAFE = bool(int(os.getenv("HEAD_FAILSAFE", "1")))
+HEAD_RATIO    = float(os.getenv("HEAD_RATIO", "0.38"))   # top % of person box to blur if no face found
+
+# -------------------------------
 # Create output directory based on current timestamp
 cwd = os.path.dirname(os.path.abspath(__file__))
 cdt = datetime.datetime.now()
@@ -162,36 +185,84 @@ def log_stats(direction=None, x_start=None, x_end=None):
     ])
     data_file.flush()
 
+# --------------------------------
+# V2: Face blurring function
+# --------------------------------
+
+def blur_roi(frame, x1, y1, x2, y2):
+    # clamp to frame bounds
+    H, W = frame.shape[:2]
+    x1 = max(0, min(W - 1, x1)); x2 = max(0, min(W - 1, x2))
+    y1 = max(0, min(H - 1, y1)); y2 = max(0, min(H - 1, y2))
+    if x2 <= x1 or y2 <= y1:
+        return
+    roi = frame[y1:y2, x1:x2]
+    # kernel proportional to face size; ensure odd >= 3
+    kx = max(3, ( (x2 - x1) // 7 ) | 1)  # make odd
+    ky = max(3, ( (y2 - y1) // 7 ) | 1)
+    blurred = cv2.GaussianBlur(roi, (kx, ky), 0)
+    roi[:] = blurred
+
+
 # -------------------------------
 # Open video stream
 # -------------------------------
 print("Connecting to video feed...")
-# CHATGPT PATCH START
-#if video_path.startswith("rtsp://"):
-#    print("RTSP stream detected. Forcing TCP transport.")
-#    os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;tcp"
-# CHATGPT PATCH END
 cap = cv2.VideoCapture(video_path)
 
 # Read first frame to get resolution and FPS
-ret, frame0 = cap.read()
-if not ret:
-    print("Error: Could not read first frame. Using default resolution 1280x720 at 30 FPS.")
-    W, H = 1280, 720
-    fps = 30
-else:
+#ret, frame0 = cap.read()
+#if not ret:
+#    print("Error: Could not read first frame. Using default resolution 1280x720 at 30 FPS.")
+#    W, H = 1280, 720
+#    fps = 30
+#else:
+#    W = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)) or 1280
+#   H = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)) or 720
+#    fps = cap.get(cv2.CAP_PROP_FPS)
+#   if fps is None or fps <= 0:
+#        fps = 30
+#    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) if is_file else 0
+#    duration = (total_frames / fps) if (is_file and fps > 0) else 0
+#V2.1 change to try to read first frame with retries
+max_retries = 10
+retry_delay = 1.0  # seconds
+attempt = 0
+while True:
+    ret, frame0 = cap.read()
+    if ret and frame0 is not None:
+        break
+    attempt += 1
+    print(f"[WARN] Could not read first frame (attempt {attempt}/{max_retries}). Reopening stream...")
+    cap.release()
+    time.sleep(retry_delay)
+    cap = cv2.VideoCapture(video_path)
+    if attempt >= max_retries:
+        print("[WARN] Still no frame after retries — using default 1280x720@30 and continuing.")
+        frame0 = np.zeros((720, 1280, 3), dtype=np.uint8)
+        ret = True
+        break
+
+# Infer resolution / fps safely
+if ret and frame0 is not None:
     W = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)) or 1280
     H = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)) or 720
     fps = cap.get(cv2.CAP_PROP_FPS)
-    if fps is None or fps <= 0:
+    if fps is None or fps <= 0 or fps > 120:
         fps = 30
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) if is_file else 0
     duration = (total_frames / fps) if (is_file and fps > 0) else 0
-
+else:
+    # Fallback defaults if nothing works
+    print("Error: Could not read first frame. Using default resolution 1280x720 at 30 FPS.")
+    W, H, fps = 1280, 720, 30
+    total_frames, duration = 0, 0
+    
 print(f"Video resolution: {W}x{H} at {fps} FPS")
 if is_file:
     print(f"Total frames: {total_frames}, Duration: {duration:.2f} seconds")
 
+# -------------------------------
 # Setup display / writer
 if os.name == 'posix' and "DISPLAY" not in os.environ:
     headless = True
@@ -217,11 +288,15 @@ try:
         frame_idx += 1
 
         # Run Ultralytics tracker on this frame (ByteTrack)
-        results = model.track(
+        results = person_model.track(
             frame, classes=[0], conf=0.4,
             tracker="bytetrack.yaml",
             persist=True, verbose=False
         )
+        
+        # -- V2: Face blurring --
+        person_boxes = []  # collect smoothed person boxes for face blurring
+        # -- Collect person boxes for face blurring --
 
         # Draw detections and update histories
         ids_tensor = results[0].boxes.id
@@ -237,6 +312,10 @@ try:
                 sx1, sy1, sx2, sy2 = np.mean(bbox_history[track_id], axis=0).astype(int)
                 x1, y1, x2, y2 = sx1, sy1, sx2, sy2
 
+                # -- V2: save smoothed person box for the face pass
+                person_boxes.append((x1, y1, x2, y2))
+                # -- end --  
+                
                 # Draw
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0,255,0), 2)
                 # direction hint (based on recent centers)
@@ -272,6 +351,35 @@ try:
         cv2.putText(frame, f'Left: {numLeft}, Right: {numRight}', (10, 30),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
 
+        # -- V2: Face blurring pass (seq after people; BEFORE write/show) --
+        if FACE_BLUR and (frame_idx % FACE_EVERY == 0) and person_boxes:
+            faces_found = 0
+            for (px1, py1, px2, py2) in person_boxes:
+                roi = frame[py1:py2, px1:px2]
+                if roi.size == 0:
+                    continue
+
+                # Upscale ROI to help detect small faces
+                roi_up = cv2.resize(
+                    roi, None, fx=FACE_UPSCALE, fy=FACE_UPSCALE, interpolation=cv2.INTER_LINEAR
+                ) if FACE_UPSCALE != 1.0 else roi
+
+                dets = face_model.predict(roi_up, conf=FACE_CONF, verbose=False)
+                if dets and hasattr(dets[0], "boxes") and dets[0].boxes is not None:
+                    for fx1, fy1, fx2, fy2 in dets[0].boxes.xyxy.cpu().numpy():
+                        # map back from upscaled ROI to full frame
+                        if FACE_UPSCALE != 1.0:
+                            fx1, fy1, fx2, fy2 = [int(v / FACE_UPSCALE) for v in (fx1, fy1, fx2, fy2)]
+                        blur_roi(frame, px1 + int(fx1), py1 + int(fy1), px1 + int(fx2), py1 + int(fy2))
+                        faces_found += 1
+
+            # Privacy fallback: blur the "head" slice if no faces this frame
+            if HEAD_FAILSAFE and faces_found == 0:
+                for (px1, py1, px2, py2) in person_boxes:
+                    head_h = int((py2 - py1) * HEAD_RATIO)
+                    blur_roi(frame, px1, py1, px2, py1 + head_h)
+        # -- end face blurring --
+        
         if not headless:
             cv2.imshow("Live People Tracking", frame)
 
