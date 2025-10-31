@@ -66,7 +66,7 @@ if AI_model not in ['n', 's', 'm', 'l', 'x']:
 print()
 
 print("Loading YOLO model... (first run may download weights)")
-model = YOLO('yolov8' + AI_model + '.pt')
+model = YOLO('yolov8' + AI_model + '.pt') #V2 edit 
 
 # counting sensitivity (pixels across the image width)
 direction_threshold = int(os.getenv("DIR_THRESH", "100"))
