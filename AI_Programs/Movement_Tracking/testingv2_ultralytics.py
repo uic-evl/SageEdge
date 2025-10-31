@@ -257,7 +257,6 @@ else:
     print("Error: Could not read first frame. Using default resolution 1280x720 at 30 FPS.")
     W, H, fps = 1280, 720, 30
     total_frames, duration = 0, 0
-    
 print(f"Video resolution: {W}x{H} at {fps} FPS")
 if is_file:
     print(f"Total frames: {total_frames}, Duration: {duration:.2f} seconds")
@@ -280,13 +279,50 @@ frame_idx = 0
 
 print("Starting processing loop...")
 try:
+    # --------------------------------------------
+    # main processing loop with retry + reconnect
+    # --------------------------------------------
+    max_soft_fail = 20    # how many bad reads before reconnect
+    soft_fail = 0         # counter for consecutive failed frames
+
     while True:
         ret, frame = cap.read()
-        if not ret:
-            print("End of video reached or failed to grab frame.")
-            break
-        frame_idx += 1
 
+        # if a frame fails to read, handle retries or reconnect
+        if not ret or frame is None:
+            soft_fail += 1
+
+            # small transient issue — retry a few times
+            if soft_fail < max_soft_fail:
+                if soft_fail % 5 == 0:
+                    print(f"[warn] temporary read failure x{soft_fail} — retrying...")
+                time.sleep(0.05)
+                continue
+
+            # too many failures, try to reconnect
+            print("[warn] read failures exceeded threshold — attempting reconnect...")
+            try:
+                cap.release()
+            except Exception:
+                pass
+            time.sleep(1.0)
+            cap = cv2.VideoCapture(video_path, cv2.CAP_FFMPEG)
+            cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+
+            # check if reconnect worked
+            if not cap.isOpened():
+                print("[error] reconnect failed; stopping.")
+                break
+
+            print("[info] reconnect successful; continuing stream.")
+            soft_fail = 0
+            continue
+
+        # reset fail counter on success
+        soft_fail = 0
+        frame_idx += 1
+        # -------------------------------
+        
         # Run Ultralytics tracker on this frame (ByteTrack)
         results = person_model.track(
             frame, classes=[0], conf=0.4,
