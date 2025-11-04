@@ -89,7 +89,8 @@ print()
 # -------------------------------
 video_path = video_input_file
 is_file = os.path.isfile(video_path)
-if not is_file and not (video_path.startswith("http://") or video_path.startswith("https://") or video_path.startswith("rtsp://")):
+is_stream = video_path.startswith(("rtsp://", "http://", "https://"))
+if not is_file and not is_stream:
     print(f"Error: '{video_path}' is neither a local file nor a URL. Please check the path and try again.")
     raise SystemExit(1)
 
@@ -291,18 +292,22 @@ try:
     while True:
         ret, frame = cap.read()
 
-        # if a frame fails to read, handle retries or reconnect
+        # if a frame fails to read, handle based on source type
         if not ret or frame is None:
             soft_fail += 1
 
-            # small transient issue — retry a few times
+            # For FILES: treat as EOF → stop cleanly
+            if is_file:
+                print("[info] end of file or read failure on file source — stopping.")
+                break
+
+            # For STREAMS: retry/reconnect
             if soft_fail < max_soft_fail:
                 if soft_fail % 5 == 0:
                     print(f"[warn] temporary read failure x{soft_fail} — retrying...")
                 time.sleep(0.05)
                 continue
 
-            # too many failures, try to reconnect
             print("[warn] read failures exceeded threshold — attempting reconnect...")
             try:
                 cap.release()
@@ -312,7 +317,6 @@ try:
             cap = cv2.VideoCapture(video_path, cv2.CAP_FFMPEG)
             cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
 
-            # check if reconnect worked
             if not cap.isOpened():
                 print("[error] reconnect failed; stopping.")
                 break
@@ -323,7 +327,7 @@ try:
 
         # reset fail counter on success
         soft_fail = 0
-        frame_idx += 1
+        frame_idx += 1  
         # -------------------------------
         
         # Run Ultralytics tracker on this frame (ByteTrack)
