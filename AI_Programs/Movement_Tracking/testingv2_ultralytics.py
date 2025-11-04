@@ -20,6 +20,40 @@ from collections import defaultdict, deque
 from ultralytics import YOLO
 import time 
 
+# ---- V2 head-band blur config (env-driven) ----
+
+def _odd(n: int) -> int:
+    return n if (n % 2 == 1) else (n + 1)
+
+def _clip(v, lo, hi):
+    return max(lo, min(hi, v))
+
+def apply_head_blur(frame, x1, y1, x2, y2, head_frac, strength):
+    """
+    Blur only the top band (approx head area) of a person bbox.
+    Mutates 'frame' in place. (x1,y1,x2,y2) may be float or int.
+    """
+    h, w = frame.shape[:2]
+    x1i, y1i = int(_clip(round(x1), 0, w - 1)), int(_clip(round(y1), 0, h - 1))
+    x2i, y2i = int(_clip(round(x2), 0, w - 1)), int(_clip(round(y2), 0, h - 1))
+    if x2i <= x1i or y2i <= y1i:
+        return
+
+    box_h = y2i - y1i
+    head_h = max(4, int(box_h * head_frac))
+    y2_head = _clip(y1i + head_h, 0, h - 1)
+
+    roi = frame[y1i:y2_head, x1i:x2i]
+    if roi.size == 0:
+        return
+
+    # scale kernel by region size for consistent blur across distances
+    kx = _odd(max(3, int((x2i - x1i) / 12) + strength // 10))
+    ky = _odd(max(3, int(head_h / 12) + strength // 10))
+    blurred = cv2.GaussianBlur(roi, (kx, ky), 0)
+    frame[y1i:y2_head, x1i:x2i] = blurred
+# -------------------------------
+
 print("This program uses YOLOv8 and Ultralytics ByteTrack to count the number of people moving left/right from a video file or live camera feed.")
 print()
 
@@ -73,27 +107,28 @@ person_model = YOLO('yolov8' + AI_model + '.pt')
 direction_threshold = int(os.getenv("DIR_THRESH", "100"))
 print(f"Direction threshold set to {direction_threshold} px (override with DIR_THRESH env var).")
 
-#-------------------------------
-# --- V2: Face blurring settings ---
-FACE_BLUR = bool(int(os.getenv("FACE_BLUR", "1")))   # set 0 to disable
-FACE_CONF = float(os.getenv("FACE_CONF", "0.35"))    # face detector confidence
-FACE_EVERY = int(os.getenv("FACE_EVERY", "1"))       # run face detection every N frames (1 = every frame)
+# -------------------------------
+# V2 Head-band privacy blur (no extra model)
+# -------------------------------
+try:
+    enable_blur = int(input("Enable head-band privacy blur? 1 for Yes, 0 for No: "))
+except Exception:
+    enable_blur = 0
+print(f"Head-band blur {'enabled' if enable_blur == 1 else 'disabled'}")
 
-face_model = None
-if FACE_BLUR:
+# we can also make this interactive or env-driven
+head_frac = float(os.getenv("HEAD_FRAC", "0.33"))
+
+#for educational purposes let user tune blur strength interactively
+if enable_blur == 1:
     try:
-        # Ultralytics face model; downloads on first use
-        face_weights = os.getenv("FACE_WEIGHTS", "/home/waggle/SageEdge/AI_Programs/Movement_Tracking/yolov8n-face.pt")
-        face_model = YOLO(face_weights)
-        print(f"Face blurring enabled (conf={FACE_CONF}, every={FACE_EVERY} frame(s)) using: {face_weights}")
-    except Exception as e:
-        print(f"Warning: could not load face model: {e}. Face blurring disabled.")
-        FACE_BLUR = False
-
-# Helps catch small/distant faces + privacy fallback
-FACE_UPSCALE  = float(os.getenv("FACE_UPSCALE", "1.8"))  # 1.6–2.0 is good
-HEAD_FAILSAFE = bool(int(os.getenv("HEAD_FAILSAFE", "1")))
-HEAD_RATIO    = float(os.getenv("HEAD_RATIO", "0.38"))   # top % of person box to blur if no face found
+        blur_strength = int(input("Blur strength (e.g., 25; higher = stronger): ").strip() or "25")
+    except Exception:
+        blur_strength = 25
+    print(f"Using HEAD_FRAC={head_frac}, BLUR_STRENGTH={blur_strength}")
+else:
+    blur_strength = 25
+print()
 
 # -------------------------------
 # Create output directory based on current timestamp
@@ -185,45 +220,13 @@ def log_stats(direction=None, x_start=None, x_end=None):
     ])
     data_file.flush()
 
-# --------------------------------
-# V2: Face blurring function
-# --------------------------------
-
-def blur_roi(frame, x1, y1, x2, y2):
-    # clamp to frame bounds
-    H, W = frame.shape[:2]
-    x1 = max(0, min(W - 1, x1)); x2 = max(0, min(W - 1, x2))
-    y1 = max(0, min(H - 1, y1)); y2 = max(0, min(H - 1, y2))
-    if x2 <= x1 or y2 <= y1:
-        return
-    roi = frame[y1:y2, x1:x2]
-    # kernel proportional to face size; ensure odd >= 3
-    kx = max(3, ( (x2 - x1) // 7 ) | 1)  # make odd
-    ky = max(3, ( (y2 - y1) // 7 ) | 1)
-    blurred = cv2.GaussianBlur(roi, (kx, ky), 0)
-    roi[:] = blurred
-
-
 # -------------------------------
 # Open video stream
 # -------------------------------
 print("Connecting to video feed...")
 cap = cv2.VideoCapture(video_path)
 
-# Read first frame to get resolution and FPS
-#ret, frame0 = cap.read()
-#if not ret:
-#    print("Error: Could not read first frame. Using default resolution 1280x720 at 30 FPS.")
-#    W, H = 1280, 720
-#    fps = 30
-#else:
-#    W = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)) or 1280
-#   H = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)) or 720
-#    fps = cap.get(cv2.CAP_PROP_FPS)
-#   if fps is None or fps <= 0:
-#        fps = 30
-#    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) if is_file else 0
-#    duration = (total_frames / fps) if (is_file and fps > 0) else 0
+
 #V2.1 change to try to read first frame with retries
 max_retries = 10
 retry_delay = 1.0  # seconds
@@ -387,35 +390,12 @@ try:
         cv2.putText(frame, f'Left: {numLeft}, Right: {numRight}', (10, 30),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
 
-        # -- V2: Face blurring pass (seq after people; BEFORE write/show) --
-        if FACE_BLUR and (frame_idx % FACE_EVERY == 0) and person_boxes:
-            faces_found = 0
+        # -- V2: Head-band blur pass --
+        if enable_blur == 1 and person_boxes:
             for (px1, py1, px2, py2) in person_boxes:
-                roi = frame[py1:py2, px1:px2]
-                if roi.size == 0:
-                    continue
-
-                # Upscale ROI to help detect small faces
-                roi_up = cv2.resize(
-                    roi, None, fx=FACE_UPSCALE, fy=FACE_UPSCALE, interpolation=cv2.INTER_LINEAR
-                ) if FACE_UPSCALE != 1.0 else roi
-
-                dets = face_model.predict(roi_up, conf=FACE_CONF, verbose=False)
-                if dets and hasattr(dets[0], "boxes") and dets[0].boxes is not None:
-                    for fx1, fy1, fx2, fy2 in dets[0].boxes.xyxy.cpu().numpy():
-                        # map back from upscaled ROI to full frame
-                        if FACE_UPSCALE != 1.0:
-                            fx1, fy1, fx2, fy2 = [int(v / FACE_UPSCALE) for v in (fx1, fy1, fx2, fy2)]
-                        blur_roi(frame, px1 + int(fx1), py1 + int(fy1), px1 + int(fx2), py1 + int(fy2))
-                        faces_found += 1
-
-            # Privacy fallback: blur the "head" slice if no faces this frame
-            if HEAD_FAILSAFE and faces_found == 0:
-                for (px1, py1, px2, py2) in person_boxes:
-                    head_h = int((py2 - py1) * HEAD_RATIO)
-                    blur_roi(frame, px1, py1, px2, py1 + head_h)
-        # -- end face blurring --
-        
+                apply_head_blur(frame, px1, py1, px2, py2, head_frac, blur_strength)
+        # -------------------------------
+    
         if not headless:
             cv2.imshow("Live People Tracking", frame)
 
