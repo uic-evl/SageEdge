@@ -1,0 +1,33 @@
+name: "left-right-tracker"
+version: "0.1.0"
+description: "Left-Right-Tracker uses YOLOv8 + built-in tracking to estimate simple pedestrian flow (left vs right) from either a Waggle camera or a video/RTSP stream."
+namespace: "sage"
+authors: "Fatima Mora Garcia; Michael Cortez; Om Patel; Elizabeth Cardoso"
+collaborators: "
+funding: ""
+license: "MIT License"
+keywords: "pedestrian, people-tracking, YOLOv8, ByteTrack, edge AI, education"
+homepage: ""
+
+source:
+  architectures:
+    - "linux/amd64"
+    - "linux/arm64"
+
+inputs:
+  - id: "stream"
+    type: "string"
+    description: "file path or rtsp/http url. preferred source."
+  - id: "camera_fallback"
+    type: "boolean"
+    description: "if true and no stream provided, use waggle camera"
+  - id: "camera"
+    type: "string"
+    description: "waggle camera name (e.g., left/right) if fallback is enabled"
+  - id: "model"
+    type: "string"
+    description: "yolov8 size (n/s/m/l/x)"
+  - id: "dir_thresh"
+    type: "int"
+    description: "pixel displacement to count left/right"
+
