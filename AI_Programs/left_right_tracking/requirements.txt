@@ -2,10 +2,17 @@
 # https://github.com/waggle-sensor/pywaggle#installation-guides
 pywaggle[vision]==0.56.0
 
-ultralytics
-opencv-python
+# core
 numpy==1.26.4
-psutil
-pandas
+ultralytics==8.3.5
+
+# utilities & helpers
+shapely
+sympy
+recordtype
+pascal_voc_writer
 matplotlib
+pandas
+tqdm
+psutil
 
