@@ -41,8 +41,13 @@ pip install "numpy==1.26.4"
 # Install OpenCV with GUI support
 pip install "opencv-python==4.9.0.80"
 
-# Install PyTorch and torchviion for Jetson
-pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu126
+# Install PyTorch and torchvision for Jetson orin nx
+pip uninstall torch torchvision torchaudio -y
+pip install --upgrade pip setuptools wheel
+
+pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 \
+--index-url https://pypi.jetson-ai-lab.io/jp6/cu126
+
 
 # Install deep-person-reid
 git clone --depth 1 https://github.com/KaiyangZhou/deep-person-reid.git
