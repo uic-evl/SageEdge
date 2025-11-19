@@ -1,10 +1,12 @@
 name: "left-right-tracker"
-version: "0.1.0"
-description: "Left-Right-Tracker uses YOLOv8 + built-in tracking to estimate simple pedestrian flow (left vs right) from either a Waggle camera or a video/RTSP stream."
 namespace: "sage"
-authors: "Fatima Mora Garcia; Michael Cortez; Om Patel; Elizabeth Cardoso"
-collaborators: "
-funding: ""
+version: "0.1.0"
+
+description: "Left-Right-Tracker uses YOLOv8 + built-in tracking to estimate simple pedestrian flow (left vs right) from either a Waggle camera or a video/RTSP stream."
+
+authors: "Michael Cortez; Om Patel; Elizabeth Cardoso; Fatima Mora Garcia;"
+collaborators: "The Sage Team"
+funding: "NSF Grants: 2436842, 1935984, 2331263"
 license: "MIT License"
 keywords: "pedestrian, people-tracking, YOLOv8, ByteTrack, edge AI, education"
 homepage: ""
@@ -12,22 +14,37 @@ homepage: ""
 source:
   architectures:
     - "linux/amd64"
-    - "linux/arm64"
+source:
+  architectures:
+    - "linux/amd64"
+  url: "https://github.com/uic-evl/SageEdge.git"
+  dir: "AI_Programs/left_right_tracking"
 
 inputs:
   - id: "stream"
     type: "string"
-    description: "file path or rtsp/http url. preferred source."
+    description: "File path or RTSP/HTTP URL. Preferred video source."
+
   - id: "camera_fallback"
     type: "boolean"
-    description: "if true and no stream provided, use waggle camera"
+    description: "If true and no stream is provided, use the Waggle camera."
+
   - id: "camera"
     type: "string"
-    description: "waggle camera name (e.g., left/right) if fallback is enabled"
+    description: "Waggle camera name (e.g., left/right) when camera_fallback is enabled."
+
   - id: "model"
     type: "string"
-    description: "yolov8 size (n/s/m/l/x)"
+    description: "YOLOv8 model size (n/s/m/l/x)."
+
   - id: "dir_thresh"
     type: "int"
-    description: "pixel displacement to count left/right"
+    description: "Pixel displacement needed to classify movement direction."
 
+  - id: "live_output"
+    type: "boolean"
+    description: "Show live OpenCV window (for development only)."
+
+  - id: "save_output"
+    type: "boolean"
+    description: "If true, save processed video output to OUT_PATH."
