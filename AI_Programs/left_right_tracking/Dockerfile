@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PIP_NO_CACHE_DIR=1 \
     PYTHONUNBUFFERED=1
 
-# system packages (copied from your working dockerfile, trimmed only a tiny bit)
+# system packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git cmake pkg-config build-essential gfortran \
     libgeos-dev sqlite3 \
@@ -28,15 +28,13 @@ RUN python -m pip install --upgrade pip setuptools wheel && \
     python -m pip install --no-cache-dir --prefer-binary --only-binary=:all: \
         -r requirements.txt
 
-# optional: pre-download yolov8 weights so first run does not need internet
+# TODO: pre-download yolov8 weights so first run does not need internet ? saw a comment about this on sage 
 RUN python - << 'PY'
 from ultralytics import YOLO
 for size in ("n", "s", "m"):
     YOLO(f"yolov8{size}.pt")
 PY
 
-# copy your app code (main.py, etc.)
 COPY . .
 
-# default entrypoint for the plugin
 ENTRYPOINT ["python", "main.py"]
