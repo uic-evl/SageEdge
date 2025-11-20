@@ -119,6 +119,39 @@ What these mean:
 | `-v /path:/data`          | Mounts your local videos into the container (optional). |
 
 
+## 📦 Saving Output Locally (local testing)
+If your node is not connected to Beehive, or you want to test locally, mount a host folder into the container so output files are saved outside the container and remain available after it exits.
+This preserves:
+- `data.csv`
+- `output.mp4` (if `SAVE_OUTPUT=1`)
+- the timestamped `output/` directory
+
+Quick steps:
+
+```bash
+# create a host folder for results (change path as needed)
+mkdir -p /home/thorwaggle/Desktop/left_right_output
+```
+
+Example run (replace `/path/to/your/videos` with your video folder):
+
+```bash
+sudo docker run --rm \
+   --gpus all \
+   --ipc=host \
+   --ulimit memlock=-1 \
+   --ulimit stack=67108864 \
+   -it \
+   -e STREAM="/data/people_walking.mp4" \
+   -e SAVE_OUTPUT=1 \
+   -v /path/to/your/videos:/data \
+   -v /home/thorwaggle/Desktop/left_right_output:/app/output \
+   left-right-thor:v1.0
+```
+After the run, outputs will be under:
+```
+/home/thorwaggle/Desktop/left_right_output/<timestamp>/
+```
 ## Environment variables
 
 | Variable          | Type    | Description                                   | Default      |
@@ -152,6 +185,7 @@ left_right_tracking/
 ## Funding
 
 Supported by NSF Grants: 2436842, 1935984, 2331263
+
 
 ## Contributors
  
