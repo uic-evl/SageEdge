@@ -134,9 +134,8 @@ track_history = defaultdict(lambda: deque(maxlen=20))  # track_id -> centers
 bbox_history = defaultdict(lambda: deque(maxlen=5))    # track_id -> last N boxes
 
 psutil.cpu_percent(interval=None)
-
 # -------------------------------
-# logging function (unchanged)
+# logging function (jetson + thor)
 # -------------------------------
 def log_stats(direction=None, x_start=None, x_end=None):
     cdt = datetime.datetime.now()
@@ -149,6 +148,8 @@ def log_stats(direction=None, x_start=None, x_end=None):
     gpu_util = None
     temps_parsed = {"cpu": None, "gpu": None}
 
+    # first try jetson tegrastats
+    tegra_ok = False
     try:
         proc = subprocess.Popen(
             ["tegrastats", "--interval", "1000"],
@@ -158,34 +159,73 @@ def log_stats(direction=None, x_start=None, x_end=None):
         out = proc.stdout.readline().decode("utf-8").strip()
         proc.kill()
 
-        ram_match = re.search(r"RAM (\d+)/(\d+)MB", out)
-        ram_used = int(ram_match.group(1)) if ram_match else None
-        ram_total = int(ram_match.group(2)) if ram_match else None
+        if out:
+            # ram
+            ram_match = re.search(r"RAM (\d+)/(\d+)MB", out)
+            if ram_match:
+                ram_used = int(ram_match.group(1))
+                ram_total = int(ram_match.group(2))
 
-        gpu_match = re.search(r"GR3D_FREQ (\d+)%", out)
-        gpu_util = int(gpu_match.group(1)) if gpu_match else None
+            # gpu % (jetson)
+            gpu_match = re.search(r"GR3D_FREQ (\d+)%", out)
+            if gpu_match:
+                gpu_util = int(gpu_match.group(1))
 
-        cpu_match = re.search(r"CPU \[([^\]]+)\]", out)
-        if cpu_match:
-            core_usages = re.findall(r"(\d+)%", cpu_match.group(1))
-            if core_usages:
-                core_usages = list(map(int, core_usages))
-                cpu_util = sum(core_usages) / len(core_usages)
+            # cpu %
+            cpu_match = re.search(r"CPU \[([^\]]+)\]", out)
+            if cpu_match:
+                core_usages = re.findall(r"(\d+)%", cpu_match.group(1))
+                if core_usages:
+                    core_usages = list(map(int, core_usages))
+                    cpu_util = sum(core_usages) / len(core_usages)
 
-        temps = {
-            "cpu": re.search(r"cpu@([\d\.]+)C", out),
-            "gpu": re.search(r"gpu@([\d\.]+)C", out),
-        }
-        temps_parsed = {k: float(v.group(1)) if v else None for k, v in temps.items()}
+            # temps
+            temps = {
+                "cpu": re.search(r"cpu@([\d\.]+)C", out),
+                "gpu": re.search(r"gpu@([\d\.]+)C", out),
+            }
+            temps_parsed = {
+                k: float(v.group(1)) if v else None
+                for k, v in temps.items()
+            }
+
+            tegra_ok = True
 
     except FileNotFoundError:
+        tegra_ok = False
+
+    # if *not* Jetson → fall back to Thor or other x86
+    if not tegra_ok:
+        # cpu + ram
         cpu_util = psutil.cpu_percent()
         mem = psutil.virtual_memory()
         ram_used = int(mem.used / 1024**2)
         ram_total = int(mem.total / 1024**2)
-        temps_parsed = {"cpu": None, "gpu": None}
-        gpu_util = None
 
+        # gpu stats via nvidia-smi
+        try:
+            smi = subprocess.run(
+                [
+                    "nvidia-smi",
+                    "--query-gpu=utilization.gpu,temperature.gpu",
+                    "--format=csv,noheader,nounits",
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                check=True,
+            )
+            line = smi.stdout.strip().splitlines()[0]
+            parts = [p.strip() for p in line.split(",")]
+            if len(parts) >= 2:
+                gpu_util = float(parts[0])
+                temps_parsed["gpu"] = float(parts[1])
+        except:
+            pass  # leave GPU fields None
+
+        # cpu temp not available on Thor → remains None
+
+    # write csv
     csv_writer.writerow([
         date, time_str, direction, x_start, x_end,
         round(cpu_util, 1) if cpu_util is not None else None,
@@ -194,6 +234,7 @@ def log_stats(direction=None, x_start=None, x_end=None):
         temps_parsed["cpu"], temps_parsed["gpu"]
     ])
     data_file.flush()
+
 
 # -------------------------------
 # open video stream or camera
