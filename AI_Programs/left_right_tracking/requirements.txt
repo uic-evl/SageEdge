@@ -16,5 +16,4 @@ tqdm==4.66.5
 psutil==6.0.0
 sympy==1.13.2
 recordtype==1.3
-filterpy==1.4.5
-lapx==0.5.10
+
