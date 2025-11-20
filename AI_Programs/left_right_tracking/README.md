@@ -90,6 +90,35 @@ sudo docker run -it --rm \
   left-right-thor
 ```
 
+### Recommended run flags
+
+For Thor we recommend the following (enables GPU and prevents common PyTorch/CUDA shared-memory issues):
+
+```bash
+docker run --rm \
+   --gpus all \
+   --ipc=host \
+   --ulimit memlock=-1 \
+   --ulimit stack=67108864 \
+   -it \
+   -e STREAM=/data/test.mp4 \
+   -v /absolute/path/to/videos:/data \
+   left-right-thor:v1.0
+```
+
+What these mean:
+
+| Flag                      | Why it matters (short)                                  |
+| ------------------------- | ------------------------------------------------------- |
+| `--gpus all`              | Use the NVIDIA GPU for YOLOv8 (much faster).            |
+| `--ipc=host`              | Gives PyTorch enough shared memory so it doesn’t crash. |
+| `--ulimit memlock=-1`     | Allows CUDA to lock memory (prevents GPU errors).       |
+| `--ulimit stack=67108864` | Provides a larger stack to avoid segmentation faults.   |
+| `-it`                     | Shows logs and runs interactively (useful for testing). |
+| `-e STREAM=...`           | Sets your input (video file or RTSP URL).               |
+| `-v /path:/data`          | Mounts your local videos into the container (optional). |
+
+
 ## Environment variables
 
 | Variable          | Type    | Description                                   | Default      |
@@ -125,9 +154,5 @@ left_right_tracking/
 Supported by NSF Grants: 2436842, 1935984, 2331263
 
 ## Contributors
-
-- Michael Cortez
-- Om Patel
-- Elizabeth Cardoso
-- Fatima Mora Garcia
-- The Sage Team (ANL, Northwestern, UIC EVL)
+ 
+```
