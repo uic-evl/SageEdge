@@ -106,7 +106,7 @@ print("this program uses yolov8 and ultralytics bytetrack to count the number of
 # -------------------------------
 AI_model = args.model
 print("loading yolo model... (first run may download weights)")
-model = YOLO(f"yolov8{AI_model}.pt")
+model = YOLO(f"/app/models/yolov8{AI_model}.pt")
 
 direction_threshold = args.dir_thresh
 print(f"direction threshold set to {direction_threshold} px (override with DIR_THRESH env var).")

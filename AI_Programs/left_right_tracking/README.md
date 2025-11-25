@@ -47,7 +47,7 @@ x_diff = last_center_x - first_center_x
 Thor uses an NVIDIA GPU-optimized PyTorch base image. Build with Docker on a Thor node:
 
 ```bash
-sudo docker build -t left-right-thor -f Dockerfile .
+sudo docker build -t pedestrian-tracker -f Dockerfile .
 ```
 
 This build includes:
@@ -56,57 +56,45 @@ This build includes:
 - Python 3.12-compatible wheels (numpy 2.x, opencv-headless, etc.)
 - `pywaggle[vision]` for plugin support
 
-## Running on Thor 
+## Running (recommended)
 
-Example: local video of people walking
+Note: this repository image and the examples below are tested and pinned for Thor (linux/amd64). Use these commands on Thor unless you update base images and dependencies for other platforms. ** Updates for Jetson Orin coming soon.
 
-```bash
-sudo docker run --gpus all -it --rm \
-  -e STREAM=/data/test.mp4 \
-  -e MODEL_SIZE=m \
-  -e DIR_THRESH=100 \
-  -v /absolute/path/to/videos:/data \
-  left-right-thor
-```
-
-Example: RTSP stream
+Recommened command — GPU, shared memory, and local output mounted:
 
 ```bash
-sudo docker run --gpus all -it --rm \
-  -e STREAM="rtsp://192.168.1.10:554/stream" \
-  -e MODEL_SIZE=s \
-  -e DIR_THRESH=120 \
-  left-right-thor
-```
-
-Example: Waggle camera fallback
-
-```bash
-sudo docker run -it --rm \
-  -e CAMERA_FALLBACK=1 \
-  -e CAMERA=left \
-  -e MODEL_SIZE=n \
-  -e DIR_THRESH=80 \
-  left-right-thor
-```
-
-### Recommended run flags
-
-For Thor we recommend the following (enables GPU and prevents common PyTorch/CUDA shared-memory issues):
-
-```bash
-docker run --rm \
+sudo docker run --rm \
    --gpus all \
    --ipc=host \
    --ulimit memlock=-1 \
    --ulimit stack=67108864 \
    -it \
-   -e STREAM=/data/test.mp4 \
-   -v /absolute/path/to/videos:/data \
-   left-right-thor:v1.0
+   -e STREAM="/data/people_walking.mp4" \
+   -e MODEL_SIZE=m \
+   -e DIR_THRESH=100 \
+   -e SAVE_OUTPUT=1 \
+   -v /path/to/your/videos:/data \
+   -v /path/to/output:/app/output \
+   pedestrian-tracker:v1.0
 ```
 
-What these mean:
+Short variants (change these envs as needed):
+
+- RTSP stream:
+
+```bash
+# same flags, replace STREAM and (optionally) MODEL_SIZE
+-e STREAM="rtsp://192.168.1.10:554/stream" -e MODEL_SIZE=s
+```
+
+- Waggle camera fallback:
+
+```bash
+# same flags, enable camera fallback
+-e CAMERA_FALLBACK=1 -e CAMERA=left
+```
+
+Flags explained (short):
 
 | Flag                      | Why it matters (short)                                  |
 | ------------------------- | ------------------------------------------------------- |
@@ -115,9 +103,88 @@ What these mean:
 | `--ulimit memlock=-1`     | Allows CUDA to lock memory (prevents GPU errors).       |
 | `--ulimit stack=67108864` | Provides a larger stack to avoid segmentation faults.   |
 | `-it`                     | Shows logs and runs interactively (useful for testing). |
-| `-e STREAM=...`           | Sets your input (video file or RTSP URL).               |
-| `-v /path:/data`          | Mounts your local videos into the container (optional). |
+| `-v /path:/data`          | Mounts your local videos into the container.            |
+| `-v host:/app/output`     | Mounts output so results remain after the container exits. |
 
+### Note on testing with local video files / mounts
+
+Docker containers do not see host paths directly. To test with a host video:
+
+1. Mount the folder containing the video to `/data` (example):
+
+```bash
+-v /path/to/your/videos:/data
+```
+
+2. Set `STREAM` to the in-container path (example):
+
+```bash
+-e STREAM="/data/people_walking.mp4"
+```
+
+Full working example (video on the host at `/path/to/your/videos/people_walking.mp4`):
+
+```bash
+sudo docker run --rm \
+   --gpus all \
+   --ipc=host \
+   --ulimit memlock=-1 \
+   --ulimit stack=67108864 \
+   -it \
+   -e STREAM="/data/people_walking.mp4" \
+   -v /path/to/your/videos:/data \
+   pedestrian-tracker:v1.0
+```
+
+Inside the container this file is `/data/people_walking.mp4`. If you use the host path (e.g. `/home/...`) by mistake you'll see:
+
+```
+Error: '<path>' is neither a local file nor a URL
+```
+
+Mounting output (local testing / no Beehive): results will be written to the host folder you mount at `/app/output`, for example:
+
+```
+/path/to/output/<timestamp>/
+```
+## 📌 Note on Testing With Local Video Files
+
+When running in Docker, your host file paths do not exist inside the container. To test with a video:
+
+1. Mount your video folder into the container using `-v /path/on/host:/data`
+2. Set `STREAM` to the container path (not the host path)
+
+Example (video stored on your host):
+
+```
+/path/to/your/videos/people_walking.mp4
+```
+
+Run using:
+
+```bash
+sudo docker run --rm \
+   --gpus all \
+   --ipc=host \
+   --ulimit memlock=-1 \
+   --ulimit stack=67108864 \
+   -it \
+   -e STREAM="/data/people_walking.mp4" \
+   -v /path/to/your/videos:/data \
+   pedestrian-tracker:v1.0
+```
+
+Inside the container the file is available at:
+
+```
+/data/people_walking.mp4
+```
+
+If you use the host path (for example `/home/...`) by mistake you'll see an error like:
+
+```
+Error: '<path>' is neither a local file nor a URL
+```
 
 ## 📦 Saving Output Locally (local testing)
 If your node is not connected to Beehive, or you want to test locally, mount a host folder into the container so output files are saved outside the container and remain available after it exits.
