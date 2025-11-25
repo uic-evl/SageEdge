@@ -1,8 +1,8 @@
-# Left-Right-Tracker (YOLOv8 People Flow App)
+# pedestrian-direction-tracker (YOLOv8)
 
 **Thor‑Optimized Version (linux/amd64 only)**
 
-Left-Right-Tracker estimates left-versus-right pedestrian movement using YOLOv8 with the Ultralytics ByteTrack tracker.
+pedestrian-direction-tracker estimates left-versus-right pedestrian movement using YOLOv8 with the Ultralytics ByteTrack tracker.
 
 > **Note:** This build is currently optimized and tested for Thor (linux/amd64). Jetson Orin (linux/arm64) compatibility will be added in a future update.
 

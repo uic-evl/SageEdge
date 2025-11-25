@@ -1,9 +1,8 @@
-name: "left-right-tracker"
+name: "pedestrian-direction-tracker"
 namespace: "sage"
 version: "0.1.0"
 
-description: "Left-Right-Tracker uses YOLOv8 + built-in tracking to estimate simple pedestrian flow (left vs right) from either a Waggle camera or a video/RTSP stream."
-
+description: "Pedestrian-Direction-Tracker uses YOLOv8 + built-in tracking to estimate simple pedestrian flow (left vs right) from either a Waggle camera or a video/RTSP stream."
 authors: "Michael Cortez; Om Patel; Elizabeth Cardoso; Fatima Mora Garcia;"
 collaborators: "The Sage Team"
 funding: "NSF Grants: 2436842, 1935984, 2331263"
@@ -17,8 +16,7 @@ source:
 source:
   architectures:
     - "linux/amd64"
-  url: "https://github.com/uic-evl/SageEdge.git"
-  dir: "AI_Programs/left_right_tracking"
+  url: ""
 
 inputs:
   - id: "stream"
