@@ -255,6 +255,7 @@ Supported by NSF Grants: 2436842, 1935984, 2331263
 
 
 ## Contributors
+```
 Micheal Papka
 Michael Cortez  
 Om Patel  
