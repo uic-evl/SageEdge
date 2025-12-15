@@ -1,0 +1,158 @@
+[
+  {
+    "model_key": "yolo",
+    "model_type": "yolo",
+    "task": "yolo_detection",
+    "image_path": "/home/thorwaggle1/Desktop/SageEdge/Benchmarking/images/image1.jpg",
+    "image_name": "image1.jpg",
+    "num_detections": 14,
+    "class_counts": {
+      "person": 14
+    },
+    "duration_sec": 0.505,
+    "sys_before": {
+      "cpu_percent": 4.9,
+      "ram_used_gb": 22.65,
+      "ram_percent": 18.4,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 100.17
+    },
+    "sys_after": {
+      "cpu_percent": 7.4,
+      "ram_used_gb": 23.37,
+      "ram_percent": 19.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 99.45
+    },
+    "timestamp": "2025-12-08T16:54:40.786655",
+    "summary": "person: 14"
+  },
+  {
+    "model_key": "yolo",
+    "model_type": "yolo",
+    "task": "yolo_detection",
+    "image_path": "/home/thorwaggle1/Desktop/SageEdge/Benchmarking/images/image2.jpg",
+    "image_name": "image2.jpg",
+    "num_detections": 14,
+    "class_counts": {
+      "sheep": 14
+    },
+    "duration_sec": 0.02,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 23.37,
+      "ram_percent": 19.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 99.45
+    },
+    "sys_after": {
+      "cpu_percent": 7.1,
+      "ram_used_gb": 23.38,
+      "ram_percent": 19.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 99.45
+    },
+    "timestamp": "2025-12-08T16:54:40.807376",
+    "summary": "sheep: 14"
+  },
+  {
+    "model_key": "yolo",
+    "model_type": "yolo",
+    "task": "yolo_detection",
+    "image_path": "/home/thorwaggle1/Desktop/SageEdge/Benchmarking/images/image3.jpg",
+    "image_name": "image3.jpg",
+    "num_detections": 20,
+    "class_counts": {
+      "train": 1,
+      "person": 12,
+      "handbag": 5,
+      "suitcase": 1,
+      "backpack": 1
+    },
+    "duration_sec": 0.017,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 23.38,
+      "ram_percent": 19.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 99.45
+    },
+    "sys_after": {
+      "cpu_percent": 8.7,
+      "ram_used_gb": 23.38,
+      "ram_percent": 19.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 99.44
+    },
+    "timestamp": "2025-12-08T16:54:40.824461",
+    "summary": "train: 1, person: 12, handbag: 5, suitcase: 1, backpack: 1"
+  },
+  {
+    "model_key": "yolo",
+    "model_type": "yolo",
+    "task": "yolo_detection",
+    "image_path": "/home/thorwaggle1/Desktop/SageEdge/Benchmarking/images/image4.jpg",
+    "image_name": "image4.jpg",
+    "num_detections": 15,
+    "class_counts": {
+      "car": 14,
+      "truck": 1
+    },
+    "duration_sec": 0.017,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 23.38,
+      "ram_percent": 19.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 99.44
+    },
+    "sys_after": {
+      "cpu_percent": 4.2,
+      "ram_used_gb": 23.38,
+      "ram_percent": 19.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 99.44
+    },
+    "timestamp": "2025-12-08T16:54:40.841983",
+    "summary": "car: 14, truck: 1"
+  },
+  {
+    "model_key": "yolo",
+    "model_type": "yolo",
+    "task": "yolo_detection",
+    "image_path": "/home/thorwaggle1/Desktop/SageEdge/Benchmarking/images/image5.jpg",
+    "image_name": "image5.jpg",
+    "num_detections": 8,
+    "class_counts": {
+      "cow": 7,
+      "bench": 1
+    },
+    "duration_sec": 0.057,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 23.38,
+      "ram_percent": 19.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 99.44
+    },
+    "sys_after": {
+      "cpu_percent": 8.6,
+      "ram_used_gb": 23.38,
+      "ram_percent": 19.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 99.44
+    },
+    "timestamp": "2025-12-08T16:54:40.900056",
+    "summary": "cow: 7, bench: 1"
+  }
+]
