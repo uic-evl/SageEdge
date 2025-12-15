@@ -10,13 +10,10 @@ os.environ["TRANSFORMERS_NO_TORCHVISION"] = "1"
 MODEL_ID = "google/gemma-3n-E4B-it"
 IMAGE_PATH = os.environ.get(
     "IMAGE_PATH",
-    "/home/thorwaggle1/Desktop/SageEdge/Benchmarking/images/test.jpg",
+    "images/image2.jpg"
 )
 
-# where to save JSON output
-OUTPUT_DIR = os.path.join(
-    "/home/thorwaggle1/Desktop/SageEdge/Benchmarking", "outputs"
-)
+OUTPUT_DIR = "outputs"
 OUTPUT_JSON = os.path.join(OUTPUT_DIR, "gemma_caption.json")
 
 device = "cuda" if torch.cuda.is_available() else "cpu"

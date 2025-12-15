@@ -1,0 +1,7 @@
+{
+  "model_id": "google/gemma-3n-E4B-it",
+  "image_path": "images/image2.jpg",
+  "device": "cuda",
+  "dtype": "torch.bfloat16",
+  "caption": "The image captures a tranquil scene of a flock of sheep grazing on a gently sloping hillside under a warm, golden light, likely during late afternoon or early morning. The overall color palette is warm, with hues of golden yellow, beige, and muted greens dominating the landscape.\n\nIn the foreground, a single sheep is prominently positioned, facing towards the viewer but slightly angled to the right. It has a"
+}
