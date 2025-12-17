@@ -1,0 +1,158 @@
+[
+  {
+    "model_key": "yolo",
+    "model_type": "yolo",
+    "task": "yolo_detection",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image1.jpg",
+    "image_name": "image1.jpg",
+    "num_detections": 14,
+    "class_counts": {
+      "person": 14
+    },
+    "duration_sec": 0.1,
+    "sys_before": {
+      "cpu_percent": 2.4,
+      "ram_used_gb": 28.54,
+      "ram_percent": 23.9,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 91.1
+    },
+    "sys_after": {
+      "cpu_percent": 5.5,
+      "ram_used_gb": 28.59,
+      "ram_percent": 23.9,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 91.05
+    },
+    "timestamp": "2025-12-15T14:56:23.661053",
+    "summary": "person: 14"
+  },
+  {
+    "model_key": "yolo",
+    "model_type": "yolo",
+    "task": "yolo_detection",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image2.jpg",
+    "image_name": "image2.jpg",
+    "num_detections": 14,
+    "class_counts": {
+      "sheep": 14
+    },
+    "duration_sec": 0.011,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.59,
+      "ram_percent": 23.9,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 91.05
+    },
+    "sys_after": {
+      "cpu_percent": 4.3,
+      "ram_used_gb": 28.6,
+      "ram_percent": 23.9,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 91.04
+    },
+    "timestamp": "2025-12-15T14:56:23.672859",
+    "summary": "sheep: 14"
+  },
+  {
+    "model_key": "yolo",
+    "model_type": "yolo",
+    "task": "yolo_detection",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image3.jpg",
+    "image_name": "image3.jpg",
+    "num_detections": 20,
+    "class_counts": {
+      "train": 1,
+      "person": 12,
+      "handbag": 5,
+      "suitcase": 1,
+      "backpack": 1
+    },
+    "duration_sec": 0.008,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.6,
+      "ram_percent": 23.9,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 91.04
+    },
+    "sys_after": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.6,
+      "ram_percent": 23.9,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 91.04
+    },
+    "timestamp": "2025-12-15T14:56:23.681425",
+    "summary": "train: 1, person: 12, handbag: 5, suitcase: 1, backpack: 1"
+  },
+  {
+    "model_key": "yolo",
+    "model_type": "yolo",
+    "task": "yolo_detection",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image4.jpg",
+    "image_name": "image4.jpg",
+    "num_detections": 15,
+    "class_counts": {
+      "car": 14,
+      "truck": 1
+    },
+    "duration_sec": 0.01,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.6,
+      "ram_percent": 23.9,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 91.04
+    },
+    "sys_after": {
+      "cpu_percent": 5.0,
+      "ram_used_gb": 28.6,
+      "ram_percent": 23.9,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 91.04
+    },
+    "timestamp": "2025-12-15T14:56:23.691835",
+    "summary": "car: 14, truck: 1"
+  },
+  {
+    "model_key": "yolo",
+    "model_type": "yolo",
+    "task": "yolo_detection",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image5.jpg",
+    "image_name": "image5.jpg",
+    "num_detections": 8,
+    "class_counts": {
+      "cow": 7,
+      "bench": 1
+    },
+    "duration_sec": 0.021,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.6,
+      "ram_percent": 23.9,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 91.04
+    },
+    "sys_after": {
+      "cpu_percent": 4.7,
+      "ram_used_gb": 28.6,
+      "ram_percent": 23.9,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 91.04
+    },
+    "timestamp": "2025-12-15T14:56:23.713637",
+    "summary": "cow: 7, bench: 1"
+  }
+]

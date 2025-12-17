@@ -1,0 +1,8 @@
+{
+  "model_id": "vikhyatk/moondream2",
+  "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image2.jpg",
+  "device": "cuda",
+  "dtype": "torch.float16",
+  "question": "Describe this image in detail.",
+  "caption": "A light brown sheep grazes leisurely in a field, its woolly coat contrasting with the dry, light brown grass. Its attention is drawn to a nearby fence, made of wooden posts and wire, which separates the field from the road beyond. Several other sheep are also visible in the field, scattered across the grassy terrain. The sheep appear to be grazing on a hillside. In the distance, a road stretches out, lined with trees that add depth to the scene. The overall color palette of the image is dominated by browns, tans, and muted greens, creating a calm and rustic atmosphere."
+}

@@ -1,0 +1,467 @@
+[
+  {
+    "model_key": "gemma3n",
+    "model_type": "gemma3n",
+    "hf_id": "google/gemma-3n-E4B-it",
+    "task": "image_captioning",
+    "prompt": "Describe the content of this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image1.jpg",
+    "image_name": "image1.jpg",
+    "tokens": 65,
+    "duration_sec": 6.773,
+    "tps": 9.598,
+    "sys_before": {
+      "cpu_percent": 1.3,
+      "ram_used_gb": 24.44,
+      "ram_percent": 20.4,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 95.2
+    },
+    "sys_after": {
+      "cpu_percent": 3.5,
+      "ram_used_gb": 25.57,
+      "ram_percent": 21.4,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.06
+    },
+    "timestamp": "2025-12-15T14:54:10.504075",
+    "output": "The image captures a bustling street scene in a European city, likely during the daytime. The street is paved with cobblestones and appears to be pedestrianized or at least heavily foot-trafficked. Tall, narrow buildings line both sides of the street, showcasing a mix of architectural styles with varying colors and window designs. Many of the buildings house shops and businesses, indicated by signs and storefronts,",
+    "error": null
+  },
+  {
+    "model_key": "gemma3n",
+    "model_type": "gemma3n",
+    "hf_id": "google/gemma-3n-E4B-it",
+    "task": "object_detection_like",
+    "prompt": "List the main objects you can see in this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image1.jpg",
+    "image_name": "image1.jpg",
+    "tokens": 55,
+    "duration_sec": 6.049,
+    "tps": 9.093,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 25.57,
+      "ram_percent": 21.4,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.06
+    },
+    "sys_after": {
+      "cpu_percent": 3.4,
+      "ram_used_gb": 25.56,
+      "ram_percent": 21.4,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.07
+    },
+    "timestamp": "2025-12-15T14:54:16.553105",
+    "output": "Here's a list of the main objects visible in the image:\n\n* **People:** Many people are walking along the street.\n* **Buildings:** Tall buildings line both sides of the street, with various architectural styles and colors.\n* **Street:** A cobblestone street occupies the foreground.\n* **Shops/Stores:** Numerous storefronts with signs are visible, indicating various businesses",
+    "error": null
+  },
+  {
+    "model_key": "gemma3n",
+    "model_type": "gemma3n",
+    "hf_id": "google/gemma-3n-E4B-it",
+    "task": "scene_understanding",
+    "prompt": "Describe the scene in this image in detail.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image1.jpg",
+    "image_name": "image1.jpg",
+    "tokens": 71,
+    "duration_sec": 6.052,
+    "tps": 11.732,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 25.56,
+      "ram_percent": 21.4,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.07
+    },
+    "sys_after": {
+      "cpu_percent": 3.3,
+      "ram_used_gb": 25.51,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.12
+    },
+    "timestamp": "2025-12-15T14:54:22.605328",
+    "output": "The image captures a bustling street scene in a European city, likely a pedestrian zone, on what appears to be a slightly overcast day. The street is paved with light gray cobblestones and is relatively narrow, flanked by tall buildings on both sides. The buildings exhibit a variety of architectural styles and colors, ranging from muted grays and creams to light peach and brick. Many have multiple stories with numerous windows",
+    "error": null
+  },
+  {
+    "model_key": "gemma3n",
+    "model_type": "gemma3n",
+    "hf_id": "google/gemma-3n-E4B-it",
+    "task": "image_captioning",
+    "prompt": "Describe the content of this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image2.jpg",
+    "image_name": "image2.jpg",
+    "tokens": 69,
+    "duration_sec": 5.992,
+    "tps": 11.516,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 25.51,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.12
+    },
+    "sys_after": {
+      "cpu_percent": 3.3,
+      "ram_used_gb": 25.47,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.16
+    },
+    "timestamp": "2025-12-15T14:54:28.597532",
+    "output": "The image shows a flock of sheep grazing on a grassy hillside. The sheep are mostly white and brown, and they are spread out across the slope. The hillside is covered in dry, yellow grass, and there are a few small bushes scattered around. In the foreground, a fence runs diagonally across the frame, partially obscuring a large sheep that is facing the viewer. To the left, a narrow",
+    "error": null
+  },
+  {
+    "model_key": "gemma3n",
+    "model_type": "gemma3n",
+    "hf_id": "google/gemma-3n-E4B-it",
+    "task": "object_detection_like",
+    "prompt": "List the main objects you can see in this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image2.jpg",
+    "image_name": "image2.jpg",
+    "tokens": 58,
+    "duration_sec": 5.996,
+    "tps": 9.673,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 25.47,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.16
+    },
+    "sys_after": {
+      "cpu_percent": 3.5,
+      "ram_used_gb": 25.45,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.18
+    },
+    "timestamp": "2025-12-15T14:54:34.594375",
+    "output": "Here's a list of the main objects visible in the image:\n\n* **Sheep:** Several sheep are scattered across the hillside.\n* **Hillside/Grassy Slope:** The majority of the image shows a sloping hill covered in dry grass.\n* **Fence:** A wire fence runs along the left side of the frame.\n* **Road:** A paved road is visible on the",
+    "error": null
+  },
+  {
+    "model_key": "gemma3n",
+    "model_type": "gemma3n",
+    "hf_id": "google/gemma-3n-E4B-it",
+    "task": "scene_understanding",
+    "prompt": "Describe the scene in this image in detail.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image2.jpg",
+    "image_name": "image2.jpg",
+    "tokens": 64,
+    "duration_sec": 5.99,
+    "tps": 10.684,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 25.45,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.18
+    },
+    "sys_after": {
+      "cpu_percent": 3.3,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "timestamp": "2025-12-15T14:54:40.585331",
+    "output": "The image captures a serene rural scene, bathed in the warm, soft light of either early morning or late afternoon. A flock of sheep grazes peacefully on a gently sloping hillside, the landscape dominated by tall, dry, golden-brown grass. The grass appears somewhat sparse in areas, revealing patches of darker earth. \n\nThe sheep are scattered across the hillside, some clustered together, others grazing individually",
+    "error": null
+  },
+  {
+    "model_key": "gemma3n",
+    "model_type": "gemma3n",
+    "hf_id": "google/gemma-3n-E4B-it",
+    "task": "image_captioning",
+    "prompt": "Describe the content of this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image3.jpg",
+    "image_name": "image3.jpg",
+    "tokens": 68,
+    "duration_sec": 6.261,
+    "tps": 10.861,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "sys_after": {
+      "cpu_percent": 3.4,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "timestamp": "2025-12-15T14:54:46.846862",
+    "output": "The image captures a scene at a train station platform, likely during rush hour or a busy travel period. A long passenger train, predominantly silver and blue, dominates the right side of the frame, occupying a significant portion of the view. The train's windows reflect the surrounding environment and the people on the platform.\n\nOn the left side of the image, several people are standing on the platform,",
+    "error": null
+  },
+  {
+    "model_key": "gemma3n",
+    "model_type": "gemma3n",
+    "hf_id": "google/gemma-3n-E4B-it",
+    "task": "object_detection_like",
+    "prompt": "List the main objects you can see in this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image3.jpg",
+    "image_name": "image3.jpg",
+    "tokens": 58,
+    "duration_sec": 6.003,
+    "tps": 9.662,
+    "sys_before": {
+      "cpu_percent": 100.0,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "sys_after": {
+      "cpu_percent": 3.3,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.2
+    },
+    "timestamp": "2025-12-15T14:54:52.850468",
+    "output": "Here's a list of the main objects visible in the image:\n\n* **Train:** A long passenger train is the dominant object, occupying most of the frame.\n* **Train Station Platform:** A concrete platform alongside the train tracks where people are standing.\n* **Passengers:** Several people are present on the platform, some with luggage.\n* **Luggage:** Suitcases and bags",
+    "error": null
+  },
+  {
+    "model_key": "gemma3n",
+    "model_type": "gemma3n",
+    "hf_id": "google/gemma-3n-E4B-it",
+    "task": "scene_understanding",
+    "prompt": "Describe the scene in this image in detail.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image3.jpg",
+    "image_name": "image3.jpg",
+    "tokens": 69,
+    "duration_sec": 6.176,
+    "tps": 11.173,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.2
+    },
+    "sys_after": {
+      "cpu_percent": 3.3,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "timestamp": "2025-12-15T14:54:59.026791",
+    "output": "The image shows a busy train platform with a long, modern train stopped at the edge. The train is predominantly silver and dark teal, with rows of large windows reflecting the surroundings. Passengers are in the process of boarding or disembarking the train.\n\nThe platform itself is a muted grey color with a yellow safety line marking the edge. Several people are visible: some are pulling suitcases, others are",
+    "error": null
+  },
+  {
+    "model_key": "gemma3n",
+    "model_type": "gemma3n",
+    "hf_id": "google/gemma-3n-E4B-it",
+    "task": "image_captioning",
+    "prompt": "Describe the content of this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image4.jpg",
+    "image_name": "image4.jpg",
+    "tokens": 70,
+    "duration_sec": 5.979,
+    "tps": 11.708,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "sys_after": {
+      "cpu_percent": 3.3,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "timestamp": "2025-12-15T14:55:05.005969",
+    "output": "The image captures a tranquil street scene in an urban area, likely during the autumn season. The street is straight and stretches into the distance, lined on both sides with parked cars. The sidewalks are paved with red brick, adding a warm contrast to the grey asphalt. \n\nOn either side of the street, mature trees with vibrant yellow and golden autumn foliage are planted at regular intervals. Their leaves create",
+    "error": null
+  },
+  {
+    "model_key": "gemma3n",
+    "model_type": "gemma3n",
+    "hf_id": "google/gemma-3n-E4B-it",
+    "task": "object_detection_like",
+    "prompt": "List the main objects you can see in this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image4.jpg",
+    "image_name": "image4.jpg",
+    "tokens": 60,
+    "duration_sec": 5.971,
+    "tps": 10.048,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "sys_after": {
+      "cpu_percent": 3.4,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "timestamp": "2025-12-15T14:55:10.977724",
+    "output": "Certainly! Here are the main objects I can see in the image:\n\n* **Road:** A paved asphalt road with white lane markings.\n* **Cars:** Several parked cars on both sides of the road, including sedans and SUVs.\n* **Trees:** Many trees lining both sides of the road with yellow autumn leaves.\n* **Buildings:** Various buildings in the background, appearing to",
+    "error": null
+  },
+  {
+    "model_key": "gemma3n",
+    "model_type": "gemma3n",
+    "hf_id": "google/gemma-3n-E4B-it",
+    "task": "scene_understanding",
+    "prompt": "Describe the scene in this image in detail.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image4.jpg",
+    "image_name": "image4.jpg",
+    "tokens": 69,
+    "duration_sec": 5.935,
+    "tps": 11.627,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "sys_after": {
+      "cpu_percent": 3.6,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "timestamp": "2025-12-15T14:55:16.912838",
+    "output": "The image captures a serene autumn scene on a city street lined with vibrant yellow-leaved trees. The street stretches straight into the distance, flanked by sidewalks on both sides. The road surface is asphalt, marked with a single solid double yellow line down the center and dashed white lines marking the lanes. \n\nOn the left side of the street, a row of parked cars lines the curb. The cars",
+    "error": null
+  },
+  {
+    "model_key": "gemma3n",
+    "model_type": "gemma3n",
+    "hf_id": "google/gemma-3n-E4B-it",
+    "task": "image_captioning",
+    "prompt": "Describe the content of this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image5.jpg",
+    "image_name": "image5.jpg",
+    "tokens": 67,
+    "duration_sec": 5.958,
+    "tps": 11.246,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "sys_after": {
+      "cpu_percent": 3.4,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "timestamp": "2025-12-15T14:55:22.871110",
+    "output": "The image shows a picturesque, expansive view of a lush green alpine pasture dotted with several cows. The foreground features a brown cow lying down in the vibrant green grass, looking directly at the camera with a relaxed posture. Behind it, a small stream meanders through the field, with some rocks visible in the shallow water. \n\nSeveral other cows are scattered throughout the midground. Two cows, one",
+    "error": null
+  },
+  {
+    "model_key": "gemma3n",
+    "model_type": "gemma3n",
+    "hf_id": "google/gemma-3n-E4B-it",
+    "task": "object_detection_like",
+    "prompt": "List the main objects you can see in this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image5.jpg",
+    "image_name": "image5.jpg",
+    "tokens": 59,
+    "duration_sec": 6.089,
+    "tps": 9.689,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "sys_after": {
+      "cpu_percent": 3.3,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "timestamp": "2025-12-15T14:55:28.961032",
+    "output": "Here are the main objects visible in the image:\n\n* **Cows:** Several cows are the most prominent objects, scattered across the green meadow. There are different colors and patterns among them.\n* **Meadow/Grassland:** The majority of the image is covered by a lush green meadow.\n* **Stream/Small River:** A small stream or river flows through the middle of the",
+    "error": null
+  },
+  {
+    "model_key": "gemma3n",
+    "model_type": "gemma3n",
+    "hf_id": "google/gemma-3n-E4B-it",
+    "task": "scene_understanding",
+    "prompt": "Describe the scene in this image in detail.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image5.jpg",
+    "image_name": "image5.jpg",
+    "tokens": 66,
+    "duration_sec": 6.05,
+    "tps": 10.909,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "sys_after": {
+      "cpu_percent": 3.5,
+      "ram_used_gb": 25.44,
+      "ram_percent": 21.3,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 94.19
+    },
+    "timestamp": "2025-12-15T14:55:35.011511",
+    "output": "The image captures a serene and picturesque alpine pasture scene. Several cows are scattered across a rolling, green hillside dotted with patches of darker, slightly damp grass. A small, shallow stream meanders through the middle ground, its clear water reflecting the surrounding greenery. \n\nIn the foreground, a brown and white cow is lying down, resting peacefully with its head resting on the grass. To its left,",
+    "error": null
+  }
+]

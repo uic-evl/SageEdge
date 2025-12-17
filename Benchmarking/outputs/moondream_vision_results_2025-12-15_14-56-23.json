@@ -1,0 +1,467 @@
+[
+  {
+    "model_key": "moondream",
+    "model_type": "moondream",
+    "hf_id": "vikhyatk/moondream2",
+    "task": "image_captioning",
+    "prompt": "Describe the content of this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image1.jpg",
+    "image_name": "image1.jpg",
+    "tokens": 89,
+    "duration_sec": 2.114,
+    "tps": 42.104,
+    "sys_before": {
+      "cpu_percent": 1.2,
+      "ram_used_gb": 28.71,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.93
+    },
+    "sys_after": {
+      "cpu_percent": 2.0,
+      "ram_used_gb": 28.7,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.93
+    },
+    "timestamp": "2025-12-15T14:55:56.826546",
+    "output": "The scene depicts a lively city street bustling with activity. People are walking down the street, carrying various bags and wearing backpacks. Some are carrying bicycles, adding to the urban atmosphere. The street is lined with tall buildings, creating a sense of depth and perspective.\n\nNumerous signs are visible on the buildings, advertising different businesses and shops. The street is well-lit, likely due to overhead street lamps or natural light from nearby buildings. The overall impression is one of a vibrant, bustling city street filled with pedestrians and shops.",
+    "error": null
+  },
+  {
+    "model_key": "moondream",
+    "model_type": "moondream",
+    "hf_id": "vikhyatk/moondream2",
+    "task": "object_detection_like",
+    "prompt": "List the main objects you can see in this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image1.jpg",
+    "image_name": "image1.jpg",
+    "tokens": 45,
+    "duration_sec": 1.205,
+    "tps": 37.356,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.7,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.93
+    },
+    "sys_after": {
+      "cpu_percent": 1.7,
+      "ram_used_gb": 28.7,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.94
+    },
+    "timestamp": "2025-12-15T14:55:58.031646",
+    "output": "The main objects visible in this image are a street, pedestrians, bicycles, various buildings, signs, and street lamps. The street is lined with buildings on both sides, and people are walking and riding bicycles. The street appears to be pedestrian-friendly and relatively empty of vehicles.",
+    "error": null
+  },
+  {
+    "model_key": "moondream",
+    "model_type": "moondream",
+    "hf_id": "vikhyatk/moondream2",
+    "task": "scene_understanding",
+    "prompt": "Describe the scene in this image in detail.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image1.jpg",
+    "image_name": "image1.jpg",
+    "tokens": 128,
+    "duration_sec": 2.808,
+    "tps": 45.583,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.7,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.94
+    },
+    "sys_after": {
+      "cpu_percent": 1.9,
+      "ram_used_gb": 28.7,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.94
+    },
+    "timestamp": "2025-12-15T14:56:00.840166",
+    "output": "The scene depicts a lively city street bustling with activity on a cobblestone road. People are walking along the sidewalk, going about their daily routines. Some are carrying backpacks or handbags, further indicating the urban setting. The street is lined with buildings, showcasing a mix of architectural styles and colors, contributing to the vibrant atmosphere. Several signs and advertisements are visible on the buildings, adding to the bustling city feel.\n\nA couple of bicycles can be seen parked or being ridden on the street, hinting at the combination of pedestrian and bike traffic in the area. The presence of street lamps and benches along the sidewalk further enhances the urban feel of the scene. Overall, the image captures the energy of a typical day in a busy city.",
+    "error": null
+  },
+  {
+    "model_key": "moondream",
+    "model_type": "moondream",
+    "hf_id": "vikhyatk/moondream2",
+    "task": "image_captioning",
+    "prompt": "Describe the content of this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image2.jpg",
+    "image_name": "image2.jpg",
+    "tokens": 92,
+    "duration_sec": 1.882,
+    "tps": 48.883,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.7,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.94
+    },
+    "sys_after": {
+      "cpu_percent": 1.8,
+      "ram_used_gb": 28.69,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.94
+    },
+    "timestamp": "2025-12-15T14:56:02.722686",
+    "output": "The scene features a herd of sheep grazing on a grassy hillside. The sheep are scattered across the hillside, with some standing closer to the foreground and others further in the background. The grass on the hillside is tall and dry, giving the area a somewhat barren appearance. \n\nA fence runs along the left side of the image, separating the sheep from the surrounding area. A road is also visible on the left side of the image, running parallel to the fence. The overall atmosphere of the image is serene and pastoral.",
+    "error": null
+  },
+  {
+    "model_key": "moondream",
+    "model_type": "moondream",
+    "hf_id": "vikhyatk/moondream2",
+    "task": "object_detection_like",
+    "prompt": "List the main objects you can see in this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image2.jpg",
+    "image_name": "image2.jpg",
+    "tokens": 24,
+    "duration_sec": 0.724,
+    "tps": 33.162,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.69,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.94
+    },
+    "sys_after": {
+      "cpu_percent": 1.5,
+      "ram_used_gb": 28.69,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.94
+    },
+    "timestamp": "2025-12-15T14:56:03.446899",
+    "output": "The main objects visible in this image are a herd of sheep grazing on a grassy hillside, and a fence running alongside the hillside.",
+    "error": null
+  },
+  {
+    "model_key": "moondream",
+    "model_type": "moondream",
+    "hf_id": "vikhyatk/moondream2",
+    "task": "scene_understanding",
+    "prompt": "Describe the scene in this image in detail.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image2.jpg",
+    "image_name": "image2.jpg",
+    "tokens": 84,
+    "duration_sec": 1.804,
+    "tps": 46.559,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.69,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.94
+    },
+    "sys_after": {
+      "cpu_percent": 1.9,
+      "ram_used_gb": 28.69,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.94
+    },
+    "timestamp": "2025-12-15T14:56:05.251522",
+    "output": "A herd of sheep is peacefully grazing on a grassy hillside. The sheep are scattered across the hillside, with some closer to the foreground and others further in the background. They appear to be enjoying the fresh green grass. \n\nA wooden fence runs along the left side of the image, separating the sheep from the path or road nearby. The fence is partially obscured by tall grass, adding a rustic touch to the scene. The overall atmosphere of the image is serene and pastoral.",
+    "error": null
+  },
+  {
+    "model_key": "moondream",
+    "model_type": "moondream",
+    "hf_id": "vikhyatk/moondream2",
+    "task": "image_captioning",
+    "prompt": "Describe the content of this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image3.jpg",
+    "image_name": "image3.jpg",
+    "tokens": 99,
+    "duration_sec": 2.261,
+    "tps": 43.78,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.69,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.94
+    },
+    "sys_after": {
+      "cpu_percent": 1.9,
+      "ram_used_gb": 28.69,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.94
+    },
+    "timestamp": "2025-12-15T14:56:07.513304",
+    "output": "The scene depicts a busy train station with a long, sleek, blue train prominently positioned on the tracks. The train is surrounded by numerous passengers, some of whom are carrying luggage such as suitcases and backpacks. The passengers are walking in various directions, navigating the platform and boarding the train.\n\nThe platform is covered by a roof, providing shelter for waiting passengers and allowing them to board or disembark the train. There are several signs hanging from the roof, likely displaying platform information or train schedules. The overall atmosphere conveys the hustle and bustle of a popular train station.",
+    "error": null
+  },
+  {
+    "model_key": "moondream",
+    "model_type": "moondream",
+    "hf_id": "vikhyatk/moondream2",
+    "task": "object_detection_like",
+    "prompt": "List the main objects you can see in this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image3.jpg",
+    "image_name": "image3.jpg",
+    "tokens": 62,
+    "duration_sec": 1.462,
+    "tps": 42.421,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.69,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.94
+    },
+    "sys_after": {
+      "cpu_percent": 2.1,
+      "ram_used_gb": 28.69,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.94
+    },
+    "timestamp": "2025-12-15T14:56:08.975302",
+    "output": "The main objects visible in this image are a train, a platform, and several people waiting for the train. The train is parked at the platform, and people are standing, walking, and waiting to board or disembark. The platform is covered by a roof, providing shelter for the passengers. The train has multiple windows and doors for passengers to board and disembark.",
+    "error": null
+  },
+  {
+    "model_key": "moondream",
+    "model_type": "moondream",
+    "hf_id": "vikhyatk/moondream2",
+    "task": "scene_understanding",
+    "prompt": "Describe the scene in this image in detail.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image3.jpg",
+    "image_name": "image3.jpg",
+    "tokens": 136,
+    "duration_sec": 3.059,
+    "tps": 44.458,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.69,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.94
+    },
+    "sys_after": {
+      "cpu_percent": 2.0,
+      "ram_used_gb": 28.69,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.94
+    },
+    "timestamp": "2025-12-15T14:56:12.034833",
+    "output": "In the heart of a bustling train station, a sleek, modern train is stationed on the tracks, ready to embark on its journey. The train is painted in a striking shade of blue and has a streamlined, streamlined design, giving it an aerodynamic appearance. \n\nThe platform is teeming with people, many of whom are carrying luggage and waiting to board the train. Some people are standing closer to the train, while others are scattered around the platform. The platform itself is well-maintained and clean, equipped with benches for waiting passengers and clearly marked signage for train information. \n\nThe station is well-lit and has a modern aesthetic, with pillars and overhead structures providing a sense of security and order. The overall atmosphere conveys the energy and excitement of travel, as people prepare to embark on their journeys.",
+    "error": null
+  },
+  {
+    "model_key": "moondream",
+    "model_type": "moondream",
+    "hf_id": "vikhyatk/moondream2",
+    "task": "image_captioning",
+    "prompt": "Describe the content of this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image4.jpg",
+    "image_name": "image4.jpg",
+    "tokens": 84,
+    "duration_sec": 1.901,
+    "tps": 44.18,
+    "sys_before": {
+      "cpu_percent": 100.0,
+      "ram_used_gb": 28.69,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.94
+    },
+    "sys_after": {
+      "cpu_percent": 1.8,
+      "ram_used_gb": 28.69,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.95
+    },
+    "timestamp": "2025-12-15T14:56:13.936644",
+    "output": "The scene depicts a picturesque city street lined with tall trees displaying vibrant yellow leaves, creating a beautiful autumn atmosphere. The street is filled with parked cars on both sides, reflecting the urban setting. Buildings of various sizes and architectural styles line the street, contributing to the city's skyline. The sky above is a clear blue, dotted with fluffy white clouds, adding to the serene ambiance of the scene. The street appears to be well-maintained and clean, with no visible signs of traffic congestion.",
+    "error": null
+  },
+  {
+    "model_key": "moondream",
+    "model_type": "moondream",
+    "hf_id": "vikhyatk/moondream2",
+    "task": "object_detection_like",
+    "prompt": "List the main objects you can see in this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image4.jpg",
+    "image_name": "image4.jpg",
+    "tokens": 86,
+    "duration_sec": 1.863,
+    "tps": 46.171,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.69,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.95
+    },
+    "sys_after": {
+      "cpu_percent": 1.9,
+      "ram_used_gb": 28.68,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.95
+    },
+    "timestamp": "2025-12-15T14:56:15.799738",
+    "output": "The main objects visible in this image are a street, cars, trees, buildings, streetlights, and parked cars. The street is lined with trees displaying yellow leaves, indicating the autumn season. The cars are parked along the street, with some closer to the foreground and others further back. The buildings on either side of the street are multi-story and appear to be residential or commercial structures. The streetlights are positioned along the street, providing illumination. The overall scene suggests a typical urban setting during the fall season.",
+    "error": null
+  },
+  {
+    "model_key": "moondream",
+    "model_type": "moondream",
+    "hf_id": "vikhyatk/moondream2",
+    "task": "scene_understanding",
+    "prompt": "Describe the scene in this image in detail.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image4.jpg",
+    "image_name": "image4.jpg",
+    "tokens": 85,
+    "duration_sec": 1.839,
+    "tps": 46.214,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.68,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.95
+    },
+    "sys_after": {
+      "cpu_percent": 1.9,
+      "ram_used_gb": 28.68,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.96
+    },
+    "timestamp": "2025-12-15T14:56:17.639478",
+    "output": "A picturesque city street is lined with tall trees displaying vibrant yellow leaves, creating a beautiful autumn atmosphere. The street is relatively empty, with only a few cars parked along its sides. The buildings on either side are multi-story and appear to be a mix of residential and commercial structures. The sky above is a clear blue, dotted with fluffy white clouds, adding to the overall serene ambiance of the scene. The street itself is paved with asphalt and features white lines marking the lanes.",
+    "error": null
+  },
+  {
+    "model_key": "moondream",
+    "model_type": "moondream",
+    "hf_id": "vikhyatk/moondream2",
+    "task": "image_captioning",
+    "prompt": "Describe the content of this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image5.jpg",
+    "image_name": "image5.jpg",
+    "tokens": 86,
+    "duration_sec": 1.802,
+    "tps": 47.725,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.68,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.96
+    },
+    "sys_after": {
+      "cpu_percent": 1.8,
+      "ram_used_gb": 28.68,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.96
+    },
+    "timestamp": "2025-12-15T14:56:19.441974",
+    "output": "The scene depicts a peaceful rural setting with several cows scattered across the lush green field. Some cows are grazing, while others are resting or standing. A small stream runs through the field, adding to the tranquility of the scene. \n\nIn the background, there are two houses, one located closer to the stream and the other further away, providing a picturesque backdrop to the pastoral landscape. A bench can be seen near the stream, offering a place for visitors to sit and enjoy the serene surroundings.",
+    "error": null
+  },
+  {
+    "model_key": "moondream",
+    "model_type": "moondream",
+    "hf_id": "vikhyatk/moondream2",
+    "task": "object_detection_like",
+    "prompt": "List the main objects you can see in this image.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image5.jpg",
+    "image_name": "image5.jpg",
+    "tokens": 87,
+    "duration_sec": 1.597,
+    "tps": 54.491,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.68,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.96
+    },
+    "sys_after": {
+      "cpu_percent": 1.9,
+      "ram_used_gb": 28.67,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.96
+    },
+    "timestamp": "2025-12-15T14:56:21.039061",
+    "output": "The main objects visible in this image are several cows grazing in a grassy field. There are at least six cows visible, some standing and others lying down. The cows are spread out across the field, with some closer to the foreground and others further in the background. There is also a bench located near the left side of the image, and a small stream or creek running through the field. The scene appears to be set in a rural area, possibly a pasture or a farm.",
+    "error": null
+  },
+  {
+    "model_key": "moondream",
+    "model_type": "moondream",
+    "hf_id": "vikhyatk/moondream2",
+    "task": "scene_understanding",
+    "prompt": "Describe the scene in this image in detail.",
+    "image_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/images/image5.jpg",
+    "image_name": "image5.jpg",
+    "tokens": 95,
+    "duration_sec": 2.011,
+    "tps": 47.232,
+    "sys_before": {
+      "cpu_percent": 0.0,
+      "ram_used_gb": 28.67,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.96
+    },
+    "sys_after": {
+      "cpu_percent": 1.8,
+      "ram_used_gb": 28.67,
+      "ram_percent": 24.0,
+      "swap_used_gb": 0.0,
+      "swap_percent": 0.0,
+      "ram_available_gb": 90.96
+    },
+    "timestamp": "2025-12-15T14:56:23.050909",
+    "output": "The scene depicts a peaceful rural landscape with several cows scattered across a lush green field. Some cows are grazing, while others are resting or standing. A small stream flows through the field, adding to the tranquility of the scene. In the background, there are two rustic stone houses nestled among the trees, providing a charming contrast to the natural surroundings. A wooden fence runs along the left side of the image, further enhancing the rural feel. A bench is situated near the stream, offering a place for visitors to rest and enjoy the view.",
+    "error": null
+  }
+]

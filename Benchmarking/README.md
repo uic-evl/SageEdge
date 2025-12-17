@@ -142,3 +142,14 @@ python3 scripts/test_gemma.py
 ```
 
 During environment setup on Jetson Thor, standard PyTorch CUDA wheels were incompatible with the Thor GPU architecture (sm_110), causing kernel execution errors. We resolved this by installing Thor-specific PyTorch wheels (CUDA 13 build) and disabling TorchVision usage within Transformers via `TRANSFORMERS_NO_TORCHVISION=1` to avoid unsupported torchvision operators.”
+
+## GB10 Baseline (v1)
+
+- Device: Dell Pro Max (NVIDIA GB10)
+- PyTorch: 2.9.1+cu130
+- CUDA: 13.0
+- Models verified:
+  - Gemma3n
+  - Moondream2
+- Known issue:
+  - Torch build lacks native sm_121 kernels; fallback/JIT used

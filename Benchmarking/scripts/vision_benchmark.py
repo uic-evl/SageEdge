@@ -12,6 +12,7 @@ import gc
 
 import psutil
 import torch
+from pathlib import Path
 from PIL import Image
 
 from transformers import (
@@ -36,8 +37,11 @@ MODEL_KEYS = sys.argv[1:]
 
 os.environ.setdefault("TRANSFORMERS_NO_TORCHVISION", "1")
 
-# folder with your 5 test images
-IMAGE_DIR = "/home/thorwaggle1/Desktop/SageEdge/Benchmarking/images"
+BASE_DIR = Path(__file__).resolve().parent.parent  # repo root (Benchmarking/)
+# allow overrides, otherwise use repo-relative folders
+IMAGE_DIR = Path(os.getenv("BENCH_IMAGE_DIR", BASE_DIR / "images")).resolve()
+OUTPUT_DIR = Path(os.getenv("BENCH_OUTPUT_DIR", BASE_DIR / "outputs")).resolve()
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # prompts we will run for every *vlm* (gemma / moondream)
 VISION_TASKS = {
@@ -74,25 +78,26 @@ MODEL_CONFIG = {
     },
 }
 
-OUTPUT_DIR = "/home/thorwaggle1/Desktop/SageEdge/Benchmarking/outputs"
 
 # -------------------- helpers --------------------
-
 def get_image_file_list(image_dir):
     """return a sorted list of image paths from the given folder."""
     exts = (".jpg", ".jpeg", ".png", ".bmp", ".webp")
-    files = []
-    if not os.path.isdir(image_dir):
+    image_dir = Path(image_dir)
+
+    if not image_dir.is_dir():
         print(f"⚠️ image directory not found: {image_dir}")
-        return files
-    for name in sorted(os.listdir(image_dir)):
-        if name.lower().endswith(exts):
-            files.append(os.path.join(image_dir, name))
+        return []
+
+    files = sorted([p for p in image_dir.iterdir() if p.suffix.lower() in exts])
+
     if not files:
         print(f"⚠️ no images found in {image_dir}")
-    else:
-        print(f"📂 found {len(files)} images in {image_dir}")
-    return files
+        return []
+
+    print(f"📂 found {len(files)} images in {image_dir}")
+    return [str(p) for p in files]  # keep rest of your code unchanged
+
 
 
 def get_system_metrics():
@@ -239,8 +244,6 @@ def main():
     if not image_files:
         print("no images to run on, exiting.")
         sys.exit(1)
-
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     for key in MODEL_KEYS:
         if key not in MODEL_CONFIG:
@@ -401,7 +404,7 @@ def main():
         # --------------------------
         timestamp_date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         output_filename = f"{key}_vision_results_{timestamp_date}.json"
-        summary_path = os.path.join(OUTPUT_DIR, output_filename)
+        summary_path = str(OUTPUT_DIR / output_filename)
 
         with open(summary_path, "w") as f:
             json.dump(results, f, indent=2)
