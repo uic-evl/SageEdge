@@ -5,7 +5,6 @@
   <title>Pedestrian Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* body { background: #191f59; color: white; font-family: sans-serif; padding: 20px; } */
     body { background: #191f59; color: white; font-family: sans-serif; padding: 20px; }
     .card { background: white; color: black; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
     .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
@@ -18,8 +17,8 @@
   <p>Curriculum using SAGE/Waggle for HS and undergrad</p>
 
   <div class="card">
-    <h2>Live Directional Flow</h2>
-    <p>Real-time pedestrian tracking</p>
+    <h2>Live 🔴 Directional Flow</h2>
+    <p>Smile and keep walking! 🚶‍♀️ You’re officially part of the graph! 📊 The EVL Vision Team is exploring edge computing using AI to track people walking left and right. What you see here is your walk visualized.</p>
 
     <div>
       <select id="monthSelect" onchange="handleChange()">All Data</select>
@@ -33,7 +32,7 @@
     </div>
 
     <canvas id="lineChart" height="100"></canvas>
-    <div id="custom-tooltip" style="margin-top: 16px; font-size: 16px; text-align: center;"></div>
+    <div id="custom-tooltip" style="margin-top: 20px; background: #f8f9fa; padding: 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>
     <div class="grid" id="statGrid"></div>
   </div>
 
@@ -52,8 +51,11 @@
         monthSelect.add(opt)
       })
 
+      // Initialize data analysis with placeholder
+      updateDataAnalysis()
+
       // API call to fetch data
-      fetch("https://sage.evl.uic.edu/api/data")
+      fetch("https://sage.evl.uic.edu/api/get_viz_data")
         .then(res => res.json())
         .then(json => {
           data = json.data.map(entry => ({
@@ -194,8 +196,8 @@
             }]
             });
 
-            // Also clear the tooltip if no data
-            document.getElementById('custom-tooltip').innerHTML = "";
+            // Show default data analysis with dashes
+            updateDataAnalysis();
             return;
         }
 
@@ -209,15 +211,19 @@
                 label: 'Left',
                 data: filteredData.map(d => d.left),
                 borderColor: 'blue',
-                borderWidth: 2,
-                tension: 0.4
+                backgroundColor: 'blue',
+                borderWidth: 5,
+                tension: 0.4,
+                pointRadius: 3
             },
             {
                 label: 'Right',
                 data: filteredData.map(d => d.right),
                 borderColor: 'red',
-                borderWidth: 2,
-                tension: 0.4
+                backgroundColor: 'red',
+                borderWidth: 5,
+                tension: 0.4,
+                pointRadius: 3
             }
             ]
         };
@@ -239,7 +245,8 @@
                 },
                 legend: {
                 labels: {
-                    color: 'white'
+                    color: 'black',
+                    font: { size: 14 }
                 }
                 }
             },
@@ -249,12 +256,24 @@
             },
             scales: {
                 x: {
-                grid: { display: true },
-                ticks: { color: 'white' }
+                    grid: { display: true, color: 'rgba(255, 255, 255, 0.1)' },
+                    ticks: { color: 'black' },
+                    title: {
+                        display: true,
+                        text: 'Day at Spot',
+                        color: 'black',
+                        font: { size: 16, weight: 'bold' }
+                    }
                 },
                 y: {
-                grid: { display: true },
-                ticks: { color: 'white' }
+                    grid: { display: true, color: 'rgba(0, 0, 0, 0.1)' },
+                    ticks: { color: 'black' },
+                    title: {
+                        display: true,
+                        text: 'Total People (Left + Right)',
+                        color: 'black',
+                        font: { size: 16, weight: 'bold' }
+                    }
                 }
             }
             },
@@ -281,11 +300,54 @@
         });
     }
 
-    // Update grid stats
+    // Update data analysis display
+    function updateDataAnalysis() {
+      const tooltipEl = document.getElementById('custom-tooltip')
+      
+      if (!filteredData.length) {
+        tooltipEl.innerHTML = `
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; font-size: 18px; color: #2c3e50;">
+            <span style="background: #e3f2fd; padding: 8px 16px; border-radius: 20px; font-weight: bold;">Data Analysis</span>
+            <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Date:</strong> --</span>
+            <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Left:</strong> --</span>
+            <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Right:</strong> --</span>
+            <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Total Left:</strong> --</span>
+            <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Total Right:</strong> --</span>
+            <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Peak Day:</strong> --</span>
+            <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Avg Per Day:</strong> --</span>
+          </div>
+        `
+        return
+      }
+
+      // Get the most recent day (last entry in sorted data)
+      const sortedData = [...filteredData].sort((a, b) => new Date(b.date) - new Date(a.date))
+      const currentDay = sortedData[0]
+      
+      const totalLeft = filteredData.reduce((sum, d) => sum + d.left, 0)
+      const totalRight = filteredData.reduce((sum, d) => sum + d.right, 0)
+      const avgLeft = Math.round(totalLeft / filteredData.length)
+      const peak = filteredData.reduce((a, b) => (a.left + a.right > b.left + b.right ? a : b))
+
+      tooltipEl.innerHTML = `
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; font-size: 18px; color: #2c3e50;">
+          <span style="background: #e3f2fd; padding: 8px 16px; border-radius: 20px; font-weight: bold;">Data Analysis</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Date:</strong> ${currentDay.displayDate}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Left:</strong> ${currentDay.left}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Right:</strong> ${currentDay.right}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Total Left:</strong> ${totalLeft}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Total Right:</strong> ${totalRight}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Peak Day:</strong> ${peak.displayDate}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Avg Per Day:</strong> ${avgLeft}</span>
+        </div>
+      `
+    }
+
+    // Update grid stats on hover
     function customTooltip(ctx) {
       const index = ctx.tooltip.dataPoints?.[0]?.dataIndex
       const tooltipEl = document.getElementById('custom-tooltip')
-      if (index == null) return
+      if (index == null || !filteredData.length) return
 
       const point = filteredData[index]
       const totalLeft = filteredData.reduce((sum, d) => sum + d.left, 0)
@@ -294,16 +356,16 @@
       const peak = filteredData.reduce((a, b) => (a.left + a.right > b.left + b.right ? a : b))
 
       tooltipEl.innerHTML = `
-        <strong>Date:</strong> ${point.displayDate} |
-        <strong>Left:</strong> ${point.left} |
-        <strong>Right:</strong> ${point.right}<br/>
-        <br/>
-        <strong>Month Averages:</strong>
-        <br/>
-        <strong>Total Left:</strong> ${totalLeft} |
-        <strong>Total Right:</strong> ${totalRight}<br/>
-        <strong>Peak Day:</strong> ${peak.displayDate} |
-        <strong>Avg Per Day:</strong> ${avgLeft}
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; font-size: 18px; color: #2c3e50;">
+          <span style="background: #e3f2fd; padding: 8px 16px; border-radius: 20px; font-weight: bold;">Data Analysis</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Date:</strong> ${point.displayDate}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Left:</strong> ${point.left}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Right:</strong> ${point.right}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Total Left:</strong> ${totalLeft}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Total Right:</strong> ${totalRight}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Peak Day:</strong> ${peak.displayDate}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Avg Per Day:</strong> ${avgLeft}</span>
+        </div>
       `
     }
 
