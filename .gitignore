@@ -197,3 +197,5 @@ cython_debug/
 # Ignore a large local data folder for benchmarking
 # -----------------------------------------------
 Benchmarking/coco_val2017/
+Benchmarking/output/
+Benchmarking/env_info/
