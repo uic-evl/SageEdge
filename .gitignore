@@ -199,3 +199,4 @@ cython_debug/
 Benchmarking/coco_val2017/
 Benchmarking/output/
 Benchmarking/env_info/
+Benchmarking/scripts/hf_benchmark_logs
