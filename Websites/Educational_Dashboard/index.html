@@ -8,41 +8,106 @@
     body { background: #191f59; color: white; font-family: sans-serif; padding: 20px; }
     .card { background: white; color: black; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
     .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-    button, select { padding: 6px 12px; margin-left: 10px; }
+    
+    .time-toggle {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      background: #f5f5f5;
+      padding: 4px;
+      gap: 4px;
+      margin-right: 10px;
+    }
+    
+    .time-toggle button {
+      height: 32px;
+      padding: 0 12px;
+      font-size: 20px;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .time-toggle button:hover {
+      background: #e0e0e0;
+    }
+    
+    .time-toggle button.active {
+      background: #0879d6;
+      color: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    
+    .controls-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    select, button {
+      padding: 6px 12px;
+      font-size: 20px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    
+    .nav-button {
+      background: #0879d6;
+      color: white;
+      border: none;
+      cursor: pointer;
+      min-width: 40px;
+    }
+    
+    .nav-button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
 
-  <h1>EVL Educational Waggle</h1>
-  <p>Curriculum using SAGE/Waggle for HS and undergrad</p>
+  <h1 style="font-size: 48px;">EVL Educational Waggle</h1>
+  <p style="font-size: 30px;">Curriculum using SAGE/Waggle for HS and undergrad</p>
 
   <div class="card">
     <h2>Live 🔴 Directional Flow</h2>
-    <p>Smile and keep walking! 🚶‍♀️ You’re officially part of the graph! 📊 The EVL Vision Team is exploring edge computing using AI to track people walking left and right. What you see here is your walk visualized.</p>
+    <p style="font-size: 30px;">Smile and keep walking! 🚶‍♀️ You're officially part of the graph! 📊 The EVL Vision Team is exploring edge computing using AI to track people walking left and right. What you see here is your walk visualized.</p>
 
-    <div>
-      <select id="monthSelect" onchange="handleChange()">All Data</select>
-      <select id="viewSelect" onchange="handleChange()">
-        <option>Month View</option>
-        <option>Week View</option>
-      </select>
-      <button onclick="prevWeek()">←</button>
-      <span id="weekInfo">Week 1</span>
-      <button onclick="nextWeek()">→</button>
+    <div class="controls-row">
+      <select id="monthSelect" onchange="handleChange()"></select>
+      <select id="daySelect" onchange="handleDayChange()" style="display: none;"></select>
+      <select id="hourSelect" onchange="handleHourChange()" style="display: none;"></select>
+      
+      <button class="nav-button" onclick="prevPeriod()" id="prevBtn" style="display: none;">←</button>
+      <span id="periodInfo"></span>
+      <button class="nav-button" onclick="nextPeriod()" id="nextBtn" style="display: none;">→</button>
+      
+      <div style="flex: 1;"></div>
+      
+      <div class="time-toggle">
+        <button onclick="changeGranularity('minute')" id="btn-minute">Minute</button>
+        <button onclick="changeGranularity('hour')" id="btn-hour">Hour</button>
+        <button onclick="changeGranularity('week')" id="btn-week">Week</button>
+        <button onclick="changeGranularity('month')" class="active" id="btn-month">Month</button>
+      </div>
     </div>
 
     <canvas id="lineChart" height="100"></canvas>
     <div id="custom-tooltip" style="margin-top: 20px; background: #f8f9fa; padding: 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>
-    <div class="grid" id="statGrid"></div>
   </div>
 
-  <div class="grid" id="summaryGrid"></div>
-
   <script>
-    let data = [], filteredData = [], selectedMonth = "All Data", viewFormat = "Month View", currentWeekIndex = 0, lineChart
+    let data = [], filteredData = [], selectedMonth = "All Data", selectedDay = null, selectedHour = null
+    let granularity = "month", currentPeriodIndex = 0, lineChart
 
-    // options for the month select dropdown
     const months = ['All Data','January','February','March','April','May','June','July','August','September','October','November','December']
+    
     window.onload = () => {
       const monthSelect = document.getElementById("monthSelect")
       months.forEach(m => {
@@ -51,335 +116,608 @@
         monthSelect.add(opt)
       })
 
-      // Initialize data analysis with placeholder
       updateDataAnalysis()
 
-      // API call to fetch data
       fetch("https://sage.evl.uic.edu/api/get_viz_data")
         .then(res => res.json())
         .then(json => {
-          data = json.data.map(entry => ({
-            date: entry.Date.trim(),
-            displayDate: new Date(entry.Date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-            left: entry.direction_left,
-            right: entry.direction_right,
-            cpu_temp: entry.CPU_temp,
-            cpu_usage: entry.CPU_usage
-          }))
+          data = json.data.map(entry => {
+            const dateObj = new Date(entry.Date)
+            const [hours, minutes] = entry.Time.split(':')
+            
+            return {
+              date: entry.Date.trim(),
+              time: entry.Time,
+              hour: parseInt(hours),
+              minute: parseInt(minutes),
+              displayDate: dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+              displayTime: entry.Time,
+              left: entry.direction_left,
+              right: entry.direction_right,
+              cpu_temp: entry.CPU_temp,
+              cpu_usage: entry.CPU_usage,
+
+            }
+          })
+          
+          // Set default month to current month
+          const now = new Date()
+          const currentMonthName = months[now.getMonth() + 1]
+          if (data.some(d => new Date(d.date).getMonth() === now.getMonth())) {
+            selectedMonth = currentMonthName
+            document.getElementById("monthSelect").value = currentMonthName
+          }
+          
           filterAndRender()
         })
     }
-
-    // hover line on graph
-    const verticalLinePlugin = {
-      id: 'verticalLineOnHover',
-      afterDraw(chart) {
-        if (chart.tooltip._active?.length) {
-          const ctx = chart.ctx
-          const x = chart.tooltip._active[0].element.x
-          const { top, bottom } = chart.scales.y
-          ctx.save()
-          ctx.beginPath()
-          ctx.moveTo(x, top)
-          ctx.lineTo(x, bottom)
-          ctx.lineWidth = 1
-          ctx.strokeStyle = 'gray'
-          ctx.stroke()
-          ctx.restore()
+    
+    /*
+      Updates the time granularity (minute, hour, week, month),
+      manages UI state for selectors, and re-renders the chart.
+    */
+    function changeGranularity(newGranularity) {
+      granularity = newGranularity
+      currentPeriodIndex = 0
+      
+      document.querySelectorAll('.time-toggle button').forEach(btn => btn.classList.remove('active'))
+      document.getElementById(`btn-${newGranularity}`).classList.add('active')
+      
+      const daySelect = document.getElementById("daySelect")
+      const hourSelect = document.getElementById("hourSelect")
+      
+      if (granularity === 'minute') {
+        daySelect.style.display = 'inline-block'
+        hourSelect.style.display = 'inline-block'
+        if (selectedMonth !== "All Data") {
+          populateDaySelector()
+          if (selectedDay) {
+            populateHourSelector()
+          }
         }
+      } else if (granularity === 'hour') {
+        daySelect.style.display = 'inline-block'
+        hourSelect.style.display = 'none'
+        if (selectedMonth !== "All Data") {
+          populateDaySelector()
+        }
+        selectedHour = null
+      } else {
+        daySelect.style.display = 'none'
+        hourSelect.style.display = 'none'
+        selectedDay = null
+        selectedHour = null
       }
-    }
-
-    function handleChange() {
-      selectedMonth = document.getElementById("monthSelect").value
-      viewFormat = document.getElementById("viewSelect").value
-      currentWeekIndex = 0
+      
       filterAndRender()
     }
 
-    // Get month index from name
+    /*
+      Populates the day dropdown based on the selected month
+      and auto-selects the most recent or current day if available.
+    */
+    function populateDaySelector() {
+      const daySelect = document.getElementById("daySelect")
+      daySelect.innerHTML = '<option value="">Select Day</option>'
+      
+      if (selectedMonth === "All Data") return
+      
+      const monthIndex = getMonthIndex(selectedMonth)
+      const daysInMonth = data.filter(d => new Date(d.date).getMonth() === monthIndex)
+      
+      const uniqueDays = [...new Set(daysInMonth.map(d => d.displayDate))]
+        .sort((a, b) => new Date(a) - new Date(b))
+      
+      uniqueDays.forEach(day => {
+        const opt = document.createElement("option")
+        opt.value = day
+        opt.text = day
+        daySelect.add(opt)
+      })
+      
+      // Auto-select current day if it exists in the list
+      if (!selectedDay && uniqueDays.length > 0) {
+        const now = new Date()
+        const currentDisplayDate = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        if (uniqueDays.includes(currentDisplayDate)) {
+          selectedDay = currentDisplayDate
+          daySelect.value = currentDisplayDate
+        } else {
+          // Select the most recent day
+          selectedDay = uniqueDays[uniqueDays.length - 1]
+          daySelect.value = selectedDay
+        }
+      } else if (selectedDay) {
+        daySelect.value = selectedDay
+      }
+    }
+
+    /*
+      Populates the hour dropdown for a selected day and
+      auto-selects the most recent or current hour.
+    */
+    function populateHourSelector() {
+      const hourSelect = document.getElementById("hourSelect")
+      hourSelect.innerHTML = '<option value="">Select Hour</option>'
+      
+      if (!selectedDay) return
+      
+      const monthIndex = getMonthIndex(selectedMonth)
+      const hoursInDay = data.filter(d => 
+        new Date(d.date).getMonth() === monthIndex && d.displayDate === selectedDay
+      )
+      
+      const uniqueHours = [...new Set(hoursInDay.map(d => d.hour))]
+        .sort((a, b) => a - b)
+      
+      uniqueHours.forEach(hour => {
+        const opt = document.createElement("option")
+        opt.value = hour
+        opt.text = `${hour.toString().padStart(2, '0')}:00`
+        hourSelect.add(opt)
+      })
+      
+      // Auto-select current hour if it exists in the list
+      if (selectedHour === null && uniqueHours.length > 0) {
+        const now = new Date()
+        const currentHour = now.getHours()
+        if (uniqueHours.includes(currentHour)) {
+          selectedHour = currentHour
+          hourSelect.value = currentHour
+        } else {
+          // Select the most recent hour
+          selectedHour = uniqueHours[uniqueHours.length - 1]
+          hourSelect.value = selectedHour
+        }
+      } else if (selectedHour !== null) {
+        hourSelect.value = selectedHour
+      }
+    }
+
+    /*
+      Handles month selection changes and updates
+      dependent day/hour selectors and chart state.
+    */
+    function handleChange() {
+      selectedMonth = document.getElementById("monthSelect").value
+      const daySelect = document.getElementById("daySelect")
+      const hourSelect = document.getElementById("hourSelect")
+      
+      if (granularity === 'minute' || granularity === 'hour') {
+        if (selectedMonth !== "All Data") {
+          populateDaySelector()
+          selectedDay = daySelect.value || null
+          
+          if (granularity === 'minute' && selectedDay) {
+            populateHourSelector()
+            selectedHour = hourSelect.value ? parseInt(hourSelect.value) : null
+          }
+        } else {
+          selectedDay = null
+          selectedHour = null
+        }
+      }
+      
+      currentPeriodIndex = 0
+      filterAndRender()
+    }
+
+    /*
+      Handles day selection changes and updates hour selector
+      when in minute granularity.
+    */
+    function handleDayChange() {
+      selectedDay = document.getElementById("daySelect").value || null
+      
+      if (granularity === 'minute' && selectedDay) {
+        populateHourSelector()
+        const hourSelect = document.getElementById("hourSelect")
+        selectedHour = hourSelect.value ? parseInt(hourSelect.value) : null
+      }
+      
+      filterAndRender()
+    }
+
+    /*
+      Handles hour selection changes and triggers re-rendering.
+    */
+    function handleHourChange() {
+      const hourSelect = document.getElementById("hourSelect")
+      selectedHour = hourSelect.value ? parseInt(hourSelect.value) : null
+      filterAndRender()
+    }
+
+    /*
+      Converts a month name into a zero-based month index.
+    */
     function getMonthIndex(month) {
       return months.indexOf(month) - 1
     }
 
-    // Split month data into weeks
-    function splitIntoWeeks(monthData) {
-      return [...monthData].sort((a, b) => new Date(a.date) - new Date(b.date))
-                          .reduce((weeks, val, i) => {
-                            const weekIndex = Math.floor(i / 7)
-                            if (!weeks[weekIndex]) weeks[weekIndex] = []
-                            weeks[weekIndex].push(val)
-                            return weeks
-                          }, [])
+    /*
+      Aggregates raw data points into hourly totals.
+    */
+    function aggregateByHour(dataToAggregate) {
+      const hourlyData = {}
+      
+      dataToAggregate.forEach(d => {
+        const key = d.hour
+        if (!hourlyData[key]) {
+          hourlyData[key] = {
+            hour: d.hour,
+            displayTime: `${d.hour.toString().padStart(2, '0')}:00`,
+            left: 0,
+            right: 0,
+            count: 0,
+            date: d.date,
+            displayDate: d.displayDate
+          }
+        }
+        hourlyData[key].left += d.left
+        hourlyData[key].right += d.right
+        hourlyData[key].count++
+      })
+      
+      return Object.values(hourlyData).sort((a, b) => a.hour - b.hour)
     }
 
-    // Filter data by month and week, then render chart
+    function aggregateByDay(dataToAggregate) {
+      const dailyData = {}
+      
+      dataToAggregate.forEach(d => {
+        const key = d.displayDate
+        if (!dailyData[key]) {
+          dailyData[key] = {
+            displayDate: d.displayDate,
+            date: d.date,
+            left: 0,
+            right: 0,
+            count: 0
+          }
+        }
+        dailyData[key].left += d.left
+        dailyData[key].right += d.right
+        dailyData[key].count++
+      })
+      
+      return Object.values(dailyData).sort((a, b) => new Date(a.date) - new Date(b.date))
+    }
+
+    /*
+      Splits daily data into sequential week-sized chunks.
+    */
+    function splitIntoWeeks(dataToSplit) {
+      const sorted = [...dataToSplit].sort((a, b) => new Date(a.date) - new Date(b.date))
+      return sorted.reduce((weeks, val, i) => {
+        const weekIndex = Math.floor(i / 7)
+        if (!weeks[weekIndex]) weeks[weekIndex] = []
+        weeks[weekIndex].push(val)
+        return weeks
+      }, [])
+    }
+
+    /*
+      Filters data based on selected month, day, hour, and granularity,
+      updates navigation controls, and triggers chart rendering.
+    */
     function filterAndRender() {
-        let monthData = (selectedMonth === "All Data")
-            ? data
-            : data.filter(d => new Date(d.date).getMonth() === getMonthIndex(selectedMonth));
+      let workingData = (selectedMonth === "All Data")
+        ? data
+        : data.filter(d => new Date(d.date).getMonth() === getMonthIndex(selectedMonth))
 
-        const weekInfo = document.getElementById("weekInfo");
-        const prevBtn = document.querySelector('button[onclick="prevWeek()"]');
-        const nextBtn = document.querySelector('button[onclick="nextWeek()"]');
-        const viewSelect = document.getElementById("viewSelect");
+      const periodInfo = document.getElementById("periodInfo")
+      const prevBtn = document.getElementById('prevBtn')
+      const nextBtn = document.getElementById('nextBtn')
 
-        if (!monthData.length) {
-            filteredData = [];
-            weekInfo.textContent = "";
-            prevBtn.disabled = true;
-            nextBtn.disabled = true;
-            viewSelect.disabled = true; // disable week/month toggle if there is no data for that month 
-            renderChart();
-            return;
-        }
+      if (!workingData.length) {
+        filteredData = []
+        periodInfo.textContent = ""
+        prevBtn.style.display = 'none'
+        nextBtn.style.display = 'none'
+        renderChart()
+        return
+      }
 
-        viewSelect.disabled = false; // add week view if data exist for the month 
-
-        if (viewFormat === "Week View" && selectedMonth !== "All Data") {
-            const weeks = splitIntoWeeks(monthData);
-            filteredData = weeks[currentWeekIndex] || [];
-            weekInfo.textContent = `Week ${currentWeekIndex + 1}`;
-            prevBtn.disabled = currentWeekIndex === 0;
-            nextBtn.disabled = currentWeekIndex === weeks.length - 1;
+      // Handle different granularities
+      if (granularity === 'minute') {
+        if (selectedDay && selectedHour !== null) {
+          // Filter to specific day and hour, show minutes
+          filteredData = workingData.filter(d => 
+            d.displayDate === selectedDay && d.hour === selectedHour
+          ).sort((a, b) => a.minute - b.minute)
+          
+          periodInfo.textContent = `${selectedDay} ${selectedHour.toString().padStart(2, '0')}:00`
+          prevBtn.style.display = 'none'
+          nextBtn.style.display = 'none'
         } else {
-            filteredData = monthData;
-            weekInfo.textContent = "";
-            prevBtn.disabled = true;
-            nextBtn.disabled = true;
+          filteredData = []
+          periodInfo.textContent = "Select month, day, and hour"
+          prevBtn.style.display = 'none'
+          nextBtn.style.display = 'none'
         }
+      } else if (granularity === 'hour') {
+        if (selectedDay) {
+          // Filter to specific day, aggregate by hour
+          const dayData = workingData.filter(d => d.displayDate === selectedDay)
+          filteredData = aggregateByHour(dayData)
+          
+          periodInfo.textContent = selectedDay
+          prevBtn.style.display = 'none'
+          nextBtn.style.display = 'none'
+        } else {
+          filteredData = []
+          periodInfo.textContent = "Select month and day"
+          prevBtn.style.display = 'none'
+          nextBtn.style.display = 'none'
+        }
+      } else if (granularity === 'week') {
+        if (selectedMonth !== "All Data") {
+          // Aggregate by day first, then split into weeks
+          const dailyData = aggregateByDay(workingData)
+          const weeks = splitIntoWeeks(dailyData)
+          filteredData = weeks[currentPeriodIndex] || []
+          
+          periodInfo.textContent = `Week ${currentPeriodIndex + 1}`
+          prevBtn.style.display = 'inline-block'
+          nextBtn.style.display = 'inline-block'
+          prevBtn.disabled = currentPeriodIndex === 0
+          nextBtn.disabled = currentPeriodIndex === weeks.length - 1
+        } else {
+          filteredData = []
+          periodInfo.textContent = "Select a month for week view"
+          prevBtn.style.display = 'none'
+          nextBtn.style.display = 'none'
+        }
+      } else { // month
+        // Aggregate by day
+        filteredData = aggregateByDay(workingData)
+        periodInfo.textContent = selectedMonth !== "All Data" ? selectedMonth : ""
+        prevBtn.style.display = 'none'
+        nextBtn.style.display = 'none'
+      }
 
-        renderChart();
+      renderChart()
     }
 
-    // Render the chart with filtered data
+    /*
+      Renders or updates the Chart.js line chart based on filtered data
+      and current granularity.
+    */
     function renderChart() {
-        const ctx = document.getElementById('lineChart').getContext('2d');
+      const ctx = document.getElementById('lineChart').getContext('2d')
 
-        // Destroy previous chart if it exists
-        if (lineChart) {
-            lineChart.destroy();
-        }
+      if (lineChart) lineChart.destroy()
 
-        // Handle empty data case
-        if (!filteredData.length) {
-            lineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: []
-            },
-            options: {
-                plugins: {
-                legend: { display: false },
-                tooltip: { enabled: false }
-                },
-                scales: {
-                x: { display: false },
-                y: { display: false }
-                },
-                animation: false
-            },
-            plugins: [{
-                id: 'noData',
-                afterDraw(chart) {
-                const { width, height } = chart;
-                const ctx = chart.ctx;
-                ctx.save();
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.font = 'bold 18px sans-serif';
-                ctx.fillStyle = 'gray';
-                ctx.fillText('No data available for this month', width / 2, height / 2);
-                ctx.restore();
-                }
-            }]
-            });
-
-            // Show default data analysis with dashes
-            updateDataAnalysis();
-            return;
-        }
-
-        // Regular chart rendering logic
-        const labels = filteredData.map(d => d.displayDate);
-
-        const chartData = {
-            labels,
-            datasets: [
-            {
-                label: 'Left',
-                data: filteredData.map(d => d.left),
-                borderColor: 'blue',
-                backgroundColor: 'blue',
-                borderWidth: 5,
-                tension: 0.4,
-                pointRadius: 3
-            },
-            {
-                label: 'Right',
-                data: filteredData.map(d => d.right),
-                borderColor: 'red',
-                backgroundColor: 'red',
-                borderWidth: 5,
-                tension: 0.4,
-                pointRadius: 3
-            }
-            ]
-        };
-        
-        // Create the chart
+      if (!filteredData.length) {
         lineChart = new Chart(ctx, {
-            type: 'line',
-            data: chartData,
-            options: {
-            responsive: true,
-            interaction: {
-                mode: 'index',
-                intersect: false,
-            },
-            plugins: {
-                tooltip: {
-                enabled: false, // disable default tooltip
-                external: customTooltip
-                },
-                legend: {
-                labels: {
-                    color: 'black',
-                    font: { size: 14 }
-                }
-                }
-            },
-            hover: {
-                mode: 'index',
-                intersect: false
-            },
-            scales: {
-                x: {
-                    grid: { display: true, color: 'rgba(255, 255, 255, 0.1)' },
-                    ticks: { color: 'black' },
-                    title: {
-                        display: true,
-                        text: 'Day at Spot',
-                        color: 'black',
-                        font: { size: 16, weight: 'bold' }
-                    }
-                },
-                y: {
-                    grid: { display: true, color: 'rgba(0, 0, 0, 0.1)' },
-                    ticks: { color: 'black' },
-                    title: {
-                        display: true,
-                        text: 'Total People (Left + Right)',
-                        color: 'black',
-                        font: { size: 16, weight: 'bold' }
-                    }
-                }
-            }
-            },
-            plugins: [{
-            id: 'hoverLine',
+          type: 'line',
+          data: { labels: [], datasets: [] },
+          options: {
+            plugins: { legend: { display: false }, tooltip: { enabled: false } },
+            scales: { x: { display: false }, y: { display: false } },
+            animation: false
+          },
+          plugins: [{
+            id: 'noData',
             afterDraw(chart) {
-                if (chart.tooltip?._active?.length) {
-                const ctx = chart.ctx;
-                const x = chart.tooltip._active[0].element.x;
-                const topY = chart.scales.y.top;
-                const bottomY = chart.scales.y.bottom;
-
-                ctx.save();
-                ctx.beginPath();
-                ctx.moveTo(x, topY);
-                ctx.lineTo(x, bottomY);
-                ctx.lineWidth = 1;
-                ctx.strokeStyle = 'gray';
-                ctx.stroke();
-                ctx.restore();
-                }
+              const { width, height } = chart
+              const ctx = chart.ctx
+              ctx.save()
+              ctx.textAlign = 'center'
+              ctx.textBaseline = 'middle'
+              ctx.font = 'bold 18px sans-serif'
+              ctx.fillStyle = 'gray'
+              ctx.fillText('No data available - adjust filters above', width / 2, height / 2)
+              ctx.restore()
             }
-            }]
-        });
+          }]
+        })
+        updateDataAnalysis()
+        return
+      }
+
+      let labels, xAxisLabel
+      
+      if (granularity === 'minute') {
+        labels = filteredData.map(d => `${d.hour.toString().padStart(2, '0')}:${d.minute.toString().padStart(2, '0')}`)
+        xAxisLabel = 'Time (Minutes)'
+      } else if (granularity === 'hour') {
+        labels = filteredData.map(d => d.displayTime)
+        xAxisLabel = 'Time (Hours)'
+      } else if (granularity === 'week') {
+        labels = filteredData.map(d => d.displayDate)
+        xAxisLabel = 'Days in Week'
+      } else {
+        labels = filteredData.map(d => d.displayDate)
+        xAxisLabel = 'Days in Month'
+      }
+
+      const chartData = {
+        labels,
+        datasets: [
+          {
+            label: 'Left', 
+            data: filteredData.map(d => d.left),
+            borderColor: 'blue',
+            backgroundColor: 'blue',
+            borderWidth: 7,
+            tension: 0.4,
+            pointRadius: 3
+          },
+          {
+            label: 'Right',
+            data: filteredData.map(d => d.right),
+            borderColor: 'red',
+            backgroundColor: 'red',
+            borderWidth: 7,
+            tension: 0.4,
+            pointRadius: 3
+          }
+        ]
+      }
+      
+      lineChart = new Chart(ctx, {
+        type: 'line',
+        data: chartData,
+        options: {
+          responsive: true,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            tooltip: { enabled: false, external: customTooltip },
+            legend: { labels: { color: 'black', font: { size: 18, weight: 'bold' } } }
+          },
+          hover: { mode: 'index', intersect: false },
+          scales: {
+            x: {
+              grid: { display: true, color: 'rgba(255, 255, 255, 0.1)' },
+              ticks: { color: 'black', font: { size: 16, weight: 'bold' }, maxRotation: 45, minRotation: 0 },
+              title: { display: true, text: xAxisLabel, color: 'black', font: { size: 25, weight: 'bold' } }
+            },
+            y: {
+              grid: { display: true, color: 'rgba(0, 0, 0, 0.1)' },
+              ticks: { color: 'black' , font: { size: 16, weight: 'bold' }, },
+              title: { display: true, text: 'People Count', color: 'black', font: { size: 25, weight: 'bold' } }
+            }
+          }
+        },
+        plugins: [{
+          id: 'hoverLine',
+          afterDraw(chart) {
+            if (chart.tooltip?._active?.length) {
+              const ctx = chart.ctx
+              const x = chart.tooltip._active[0].element.x
+              const topY = chart.scales.y.top
+              const bottomY = chart.scales.y.bottom
+              ctx.save()
+              ctx.beginPath()
+              ctx.moveTo(x, topY)
+              ctx.lineTo(x, bottomY)
+              ctx.lineWidth = 2
+              ctx.strokeStyle = 'gray'
+              ctx.stroke()
+              ctx.restore()
+            }
+          }
+        }]
+      })
     }
 
-    // Update data analysis display
+    /*
+      Updates the summary statistics panel shown below the chart.
+    */
     function updateDataAnalysis() {
       const tooltipEl = document.getElementById('custom-tooltip')
       
       if (!filteredData.length) {
         tooltipEl.innerHTML = `
-          <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; font-size: 18px; color: #2c3e50;">
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; font-size: 30px; color: #2c3e50;">
             <span style="background: #e3f2fd; padding: 8px 16px; border-radius: 20px; font-weight: bold;">Data Analysis</span>
             <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Date:</strong> --</span>
             <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Left:</strong> --</span>
             <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Right:</strong> --</span>
             <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Total Left:</strong> --</span>
             <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Total Right:</strong> --</span>
-            <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Peak Day:</strong> --</span>
-            <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Avg Per Day:</strong> --</span>
+            <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Peak:</strong> --</span>
+            <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Average:</strong> --</span>
           </div>
         `
         return
       }
 
-      // Get the most recent day (last entry in sorted data)
-      const sortedData = [...filteredData].sort((a, b) => new Date(b.date) - new Date(a.date))
-      const currentDay = sortedData[0]
+      const sortedData = [...filteredData].sort((a, b) => {
+        if (granularity === 'minute') return b.minute - a.minute
+        if (granularity === 'hour') return b.hour - a.hour
+        return new Date(b.date) - new Date(a.date)
+      })
+      const currentPoint = sortedData[0]
       
       const totalLeft = filteredData.reduce((sum, d) => sum + d.left, 0)
       const totalRight = filteredData.reduce((sum, d) => sum + d.right, 0)
-      const avgLeft = Math.round(totalLeft / filteredData.length)
+      const avg = Math.round((totalLeft + totalRight) / filteredData.length)
       const peak = filteredData.reduce((a, b) => (a.left + a.right > b.left + b.right ? a : b))
+      
+      let displayLabel = currentPoint.displayDate || '--'
+      if (granularity === 'minute') {
+        displayLabel = `${currentPoint.displayDate} ${currentPoint.hour.toString().padStart(2, '0')}:${currentPoint.minute.toString().padStart(2, '0')}`
+      } else if (granularity === 'hour') {
+        displayLabel = `${currentPoint.displayDate} ${currentPoint.displayTime}`
+      }
+      
+      let peakLabel = peak.displayDate || '--'
+      if (granularity === 'minute' && peak.minute !== undefined) {
+        peakLabel = `${peak.hour.toString().padStart(2, '0')}:${peak.minute.toString().padStart(2, '0')}`
+      } else if (granularity === 'hour' && peak.displayTime) {
+        peakLabel = peak.displayTime
+      }
 
       tooltipEl.innerHTML = `
-        <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; font-size: 18px; color: #2c3e50;">
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; font-size: 30px; color: #2c3e50;">
           <span style="background: #e3f2fd; padding: 8px 16px; border-radius: 20px; font-weight: bold;">Data Analysis</span>
-          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Date:</strong> ${currentDay.displayDate}</span>
-          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Left:</strong> ${currentDay.left}</span>
-          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Right:</strong> ${currentDay.right}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Time:</strong> ${displayLabel}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Left:</strong> ${currentPoint.left}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Right:</strong> ${currentPoint.right}</span>
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Total Left:</strong> ${totalLeft}</span>
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Total Right:</strong> ${totalRight}</span>
-          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Peak Day:</strong> ${peak.displayDate}</span>
-          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Avg Per Day:</strong> ${avgLeft}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Peak:</strong> ${peakLabel}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Average:</strong> ${avg}</span>
         </div>
       `
     }
 
-    // Update grid stats on hover
     function customTooltip(ctx) {
       const index = ctx.tooltip.dataPoints?.[0]?.dataIndex
-      const tooltipEl = document.getElementById('custom-tooltip')
       if (index == null || !filteredData.length) return
 
       const point = filteredData[index]
       const totalLeft = filteredData.reduce((sum, d) => sum + d.left, 0)
       const totalRight = filteredData.reduce((sum, d) => sum + d.right, 0)
-      const avgLeft = Math.round(totalLeft / filteredData.length)
+      const avg = Math.round((totalLeft + totalRight) / filteredData.length)
       const peak = filteredData.reduce((a, b) => (a.left + a.right > b.left + b.right ? a : b))
+      
+      let displayLabel = point.displayDate || '--'
+      if (granularity === 'minute') {
+        displayLabel = `${point.displayDate} ${point.hour.toString().padStart(2, '0')}:${point.minute.toString().padStart(2, '0')}`
+      } else if (granularity === 'hour') {
+        displayLabel = `${point.displayDate} ${point.displayTime}`
+      }
+      
+      let peakLabel = peak.displayDate || '--'
+      if (granularity === 'minute' && peak.minute !== undefined) {
+        peakLabel = `${peak.hour.toString().padStart(2, '0')}:${peak.minute.toString().padStart(2, '0')}`
+      } else if (granularity === 'hour' && peak.displayTime) {
+        peakLabel = peak.displayTime
+      }
 
+      const tooltipEl = document.getElementById('custom-tooltip')
       tooltipEl.innerHTML = `
-        <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; font-size: 18px; color: #2c3e50;">
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; font-size: 30px; color: #2c3e50;">
           <span style="background: #e3f2fd; padding: 8px 16px; border-radius: 20px; font-weight: bold;">Data Analysis</span>
-          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Date:</strong> ${point.displayDate}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Time:</strong> ${displayLabel}</span>
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Left:</strong> ${point.left}</span>
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Right:</strong> ${point.right}</span>
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Total Left:</strong> ${totalLeft}</span>
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Total Right:</strong> ${totalRight}</span>
-          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Peak Day:</strong> ${peak.displayDate}</span>
-          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Avg Per Day:</strong> ${avgLeft}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Peak:</strong> ${peakLabel}</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Average:</strong> ${avg}</span>
         </div>
       `
     }
 
-    // Navigation functions for week view
-    function prevWeek() {
-      if (currentWeekIndex > 0) {
-        currentWeekIndex--
+    /*
+      Navigates to the previous week when in week view.
+    */
+    function prevPeriod() {
+      if (currentPeriodIndex > 0) {
+        currentPeriodIndex--
         filterAndRender()
       }
     }
 
-    // Function to go to next week
-    function nextWeek() {
-      currentWeekIndex++
+    /*
+      Navigates to the next week when in week view.
+    */
+    function nextPeriod() {
+      currentPeriodIndex++
       filterAndRender()
     }
   </script>
