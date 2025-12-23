@@ -64,10 +64,52 @@
       min-width: 40px;
     }
     
+    /* loading screen */
     .nav-button:disabled {
       background: #ccc;
       cursor: not-allowed;
     }
+    .nav-button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      z-index: 10;
+    }
+    
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #e0e0e0;
+      border-top: 5px solid #0879d6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .loading-text {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+      font-weight: bold;
+    }
+
   </style>
 </head>
 <body>
@@ -95,7 +137,10 @@
       </div>
     </div>
 
-    <canvas id="lineChart" height="100"></canvas>
+    <div id="chart-container" style="position: relative;">
+      <canvas id="lineChart" height="100"></canvas>
+    </div>
+
     <div id="custom-tooltip" style="margin-top: 10px; background: #f8f9fa; padding: 5px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>
   </div>
 
@@ -105,6 +150,25 @@
 
     const months = ['All Data','January','February','March','April','May','June','July','August','September','October','November','December']
     
+    function showLoadingScreen() {
+      const chartContainer = document.getElementById('chart-container')
+      const overlay = document.createElement('div')
+      overlay.id = 'loading-overlay'
+      overlay.className = 'loading-overlay'
+      overlay.innerHTML = `
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading data...</div>
+      `
+      chartContainer.appendChild(overlay)
+    }
+
+    function hideLoadingScreen() {
+      const overlay = document.getElementById('loading-overlay')
+      if (overlay) {
+        overlay.remove()
+      }
+    }
+
     window.onload = () => {
       const monthSelect = document.getElementById("monthSelect")
       months.forEach(m => {
@@ -114,6 +178,9 @@
       })
 
       updateDataAnalysis()
+
+      // loading screen appears until data is fetched and chart rendered
+      showLoadingScreen()
 
       fetch("https://sage.evl.uic.edu/api/get_viz_data")
         .then(res => res.json())
@@ -145,8 +212,20 @@
             document.getElementById("monthSelect").value = currentMonthName
           }
           
+          // ends the loading screen
+          filterAndRender()
+          hideLoadingScreen()
+          
+        })
+
+        // error for loading screen
+        .catch(error => {
+          console.error('Error fetching data:', error)
+          // ALSO HIDE ON ERROR
+          hideLoadingScreen()
           filterAndRender()
         })
+        
     }
     
     /*
@@ -188,6 +267,7 @@
       
       filterAndRender()
     }
+
 
     /*
       Populates the day dropdown based on the selected month
