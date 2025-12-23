@@ -137,8 +137,8 @@
       </div>
     </div>
 
-    <div id="chart-container" style="position: relative;">
-      <canvas id="lineChart" height="100"></canvas>
+    <div id="chart-container" style="position: relative; height: 500px;">
+      <canvas id="lineChart"></canvas>
     </div>
 
     <div id="custom-tooltip" style="margin-top: 10px; background: #f8f9fa; padding: 5px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>
@@ -638,6 +638,7 @@
         data: chartData,
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           interaction: { mode: 'index', intersect: false },
           plugins: {
             tooltip: { enabled: false, external: customTooltip },
