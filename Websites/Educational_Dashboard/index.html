@@ -6,7 +6,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body { background: #191f59; color: white; font-family: sans-serif; padding: 20px; }
-    .card { background: white; color: black; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    .card { background: white; color: black; border-radius: 12px; padding: 15px; margin-bottom: 10px; margin-top: 10px;}
     .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
     
     .time-toggle {
@@ -72,11 +72,8 @@
 </head>
 <body>
 
-  <h1 style="font-size: 35px;">EVL Educational Waggle</h1>
-  <p style="font-size: 30px;">Curriculum using SAGE/Waggle for HS and undergrad</p>
-
   <div class="card">
-    <h2>Live 🔴 Directional Flow</h2>
+    <p style="font-size: 30px; font-weight: bold; "> EVL Live 🔴 Directional Flow</p>
     <p style="font-size: 30px;">Smile and keep walking! 🚶‍♀️ You're officially part of the graph! 📊 The EVL Vision Team is exploring edge computing using AI to track people walking left and right. What you see here is your walk visualized.</p>
 
     <div class="controls-row">
@@ -99,7 +96,7 @@
     </div>
 
     <canvas id="lineChart" height="100"></canvas>
-    <div id="custom-tooltip" style="margin-top: 20px; background: #f8f9fa; padding: 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>
+    <div id="custom-tooltip" style="margin-top: 10px; background: #f8f9fa; padding: 5px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>
   </div>
 
   <script>
@@ -570,7 +567,7 @@
           scales: {
             x: {
               grid: { display: true, color: 'rgba(255, 255, 255, 0.1)' },
-              ticks: { color: 'black', font: { size: 25, weight: 'bold' }, maxRotation: 45, minRotation: 0 },
+              ticks: { color: 'black', font: { size: 25, weight: 'bold' }, maxRotation: 45, minRotation: 45 },
               title: { display: true, text: xAxisLabel, color: 'black', font: { size: 25, weight: 'bold' } }
             },
             y: {
@@ -610,7 +607,7 @@
       
       if (!filteredData.length) {
         tooltipEl.innerHTML = `
-          <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; font-size: 25px; color: #2c3e50;">
+          <div style="display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; align-items: center; font-size: 25px; color: black;">
             <span style="background: #e3f2fd; padding: 8px 16px; border-radius: 20px; font-weight: bold;">Data Analysis</span>
             <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Date:</strong> --</span>
             <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Left:</strong> --</span>
@@ -651,7 +648,7 @@
       }
 
       tooltipEl.innerHTML = `
-        <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; font-size: 25px; color: #2c3e50;">
+        <div style="display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; align-items: center; font-size: 25px; font-weight: bold; color: black;">
           <span style="background: #e3f2fd; padding: 8px 16px; border-radius: 20px; font-weight: bold;">Data Analysis</span>
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Time:</strong> ${displayLabel}</span>
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Left:</strong> ${currentPoint.left}</span>
@@ -690,7 +687,7 @@
 
       const tooltipEl = document.getElementById('custom-tooltip')
       tooltipEl.innerHTML = `
-        <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; font-size: 25px; color: #2c3e50;">
+        <div style="display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; align-items: center; font-size: 25px; font-weight: bold; color: black;">
           <span style="background: #e3f2fd; padding: 8px 16px; border-radius: 20px; font-weight: bold;">Data Analysis</span>
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Time:</strong> ${displayLabel}</span>
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Left:</strong> ${point.left}</span>
