@@ -1,4 +1,4 @@
-# Educational Dahsboard Website
+# Educational Dashboard Website
 
 The purpose of this website is to provide an interactive learning environment where students can experiment with code and gain hands-on experience in data visualization.
 
@@ -38,6 +38,7 @@ The **Educational Dashboard** is developed using HTML and CSS, with JavaScript s
 
 6. To Run the project Click the "Go Live" button on the bottom right side bar of the screen. This will open a new webrowser with the website running on your local machine. Once running you are now able change code and view the new changes made. To stop running the website simply click "Port" located in the same place as the 'Go Live" button. 
 <img width="1259" height="442" alt="Screenshot 2025-08-12 at 3 14 17 PM" src="https://github.com/user-attachments/assets/39d4144a-0f30-492f-828a-e2ce97b8c229" />
+
 
 
 
