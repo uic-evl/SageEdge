@@ -185,10 +185,18 @@
       fetch("https://sage.evl.uic.edu/api/get_viz_data")
         .then(res => res.json())
         .then(json => {
-          data = json.data.map(entry => {
+          
+
+          // console.log('Full API response:', json)
+          // console.log('json[0]:', json[0])
+          // console.log('json[1]:', json[1])
+          
+          const apiData = json[1].data
+          
+          data = apiData.map(entry => {
             const dateObj = new Date(entry.Date)
             const [hours, minutes] = entry.Time.split(':')
-            
+
             return {
               date: entry.Date.trim(),
               time: entry.Time,
@@ -200,7 +208,6 @@
               right: entry.direction_right,
               cpu_temp: entry.CPU_temp,
               cpu_usage: entry.CPU_usage,
-
             }
           })
           
@@ -414,28 +421,84 @@
     /*
       Aggregates raw data points into hourly totals.
     */
+    // function aggregateByHour(dataToAggregate) {
+    //   const hourlyData = {}
+      
+    //   dataToAggregate.forEach(d => {
+    //     const key = d.hour
+    //     if (!hourlyData[key]) {
+    //       hourlyData[key] = {
+    //         hour: d.hour,
+    //         displayTime: `${d.hour.toString().padStart(2, '0')}`,
+    //         left: 0,
+    //         right: 0,
+    //         count: 0,
+    //         date: d.date,
+    //         displayDate: d.displayDate
+    //       }
+    //     }
+    //     hourlyData[key].left += d.left
+    //     hourlyData[key].right += d.right
+    //     hourlyData[key].count++
+    //   })
+      
+    //   return Object.values(hourlyData).sort((a, b) => a.hour - b.hour)
+    // }
     function aggregateByHour(dataToAggregate) {
       const hourlyData = {}
       
+      // Initialize all 24 hours with 0
+      for (let h = 0; h < 24; h++) {
+        hourlyData[h] = {
+          hour: h,
+          displayTime: `${h.toString().padStart(2, '0')}`,
+          left: 0,
+          right: 0,
+          count: 0,
+          date: dataToAggregate.length > 0 ? dataToAggregate[0].date : '',
+          displayDate: dataToAggregate.length > 0 ? dataToAggregate[0].displayDate : ''
+        }
+      }
+      
+      // Add actual data
       dataToAggregate.forEach(d => {
         const key = d.hour
-        if (!hourlyData[key]) {
-          hourlyData[key] = {
-            hour: d.hour,
-            displayTime: `${d.hour.toString().padStart(2, '0')}:00`,
-            left: 0,
-            right: 0,
-            count: 0,
-            date: d.date,
-            displayDate: d.displayDate
-          }
-        }
         hourlyData[key].left += d.left
         hourlyData[key].right += d.right
         hourlyData[key].count++
       })
       
       return Object.values(hourlyData).sort((a, b) => a.hour - b.hour)
+    }
+
+   /*
+      Ensures all 60 minutes (0-59) are present in the dataset,
+      filling in missing minutes with zero values.
+    */
+    function fillAllMinutes(dataToFill, hour, displayDate, date) {
+      const minuteData = {}
+      
+      // Initialize all 60 minutes with 0
+      for (let m = 0; m < 60; m++) {
+        minuteData[m] = {
+          hour: hour,
+          minute: m,
+          displayDate: displayDate,
+          date: date,
+          displayTime: `${hour.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`,
+          left: 0,
+          right: 0
+        }
+      }
+      
+      // Add actual data
+      dataToFill.forEach(d => {
+        const key = d.minute
+        minuteData[key].left = d.left
+        minuteData[key].right = d.right
+      })
+      
+      return Object.values(minuteData).sort((a, b) => a.minute - b.minute)
     }
 
     function aggregateByDay(dataToAggregate) {
@@ -498,10 +561,18 @@
       // Handle different granularities
       if (granularity === 'minute') {
         if (selectedDay && selectedHour !== null) {
-          // Filter to specific day and hour, show minutes
-          filteredData = workingData.filter(d => 
+          // Filter to specific day and hour, show all minutes (0-59)
+          const rawMinuteData = workingData.filter(d => 
             d.displayDate === selectedDay && d.hour === selectedHour
-          ).sort((a, b) => a.minute - b.minute)
+          )
+          
+          // Fill in all 60 minutes, even if no data exists
+          filteredData = fillAllMinutes(
+            rawMinuteData, 
+            selectedHour, 
+            selectedDay, 
+            rawMinuteData.length > 0 ? rawMinuteData[0].date : ''
+          )
           
           periodInfo.textContent = `${selectedDay} ${selectedHour.toString().padStart(2, '0')}:00`
           prevBtn.style.display = 'none'
@@ -648,7 +719,7 @@
           scales: {
             x: {
               grid: { display: true, color: 'rgba(255, 255, 255, 0.1)' },
-              ticks: { color: 'black', font: { size: 25, weight: 'bold' }, maxRotation: 45, minRotation: 45 },
+              ticks: { color: 'black', font: { size: 25, weight: 'bold' }, maxRotation: 45, minRotation: 45, autoskip: false, maxTicksLimit: granularity === 'minute' ? 60 : undefined },
               title: { display: true, text: xAxisLabel, color: 'black', font: { size: 25, weight: 'bold' } }
             },
             y: {
