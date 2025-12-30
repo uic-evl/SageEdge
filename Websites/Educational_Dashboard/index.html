@@ -232,18 +232,18 @@
           const [hours, minutes] = entry.Time.split(':');
 
           return {
-            date: entry.Date.trim(),
-            time: entry.Time,
-            hour: parseInt(hours),
-            minute: parseInt(minutes),
-            displayDate: dateObj.toLocaleDateString('en-US', { year: "numeric", month: 'short', day: 'numeric', timeZone: 'UTC' }),
-            year: dateObj.getFullYear(),
-            displayTime: entry.Time,
-            left: entry.direction_left,
-            right: entry.direction_right,
-            cpu_temp: entry.CPU_temp,
-            cpu_usage: entry.CPU_usage,
-          };
+              date: entry.Date.trim(),
+              time: entry.Time,
+              hour: parseInt(hours),
+              minute: parseInt(minutes),
+              displayDate: dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }),
+              year: dateObj.getFullYear(),
+              displayTime: entry.Time,
+              left: entry.direction_left,
+              right: entry.direction_right,
+              cpu_temp: entry.CPU_temp,
+              cpu_usage: entry.CPU_usage,
+            };
         });
         
         // Store all historical data
@@ -321,7 +321,7 @@
                 time: entry.Time,
                 hour: parseInt(hours),
                 minute: parseInt(minutes),
-                displayDate: dateObj.toLocaleDateString('en-US', { year: "numeric", month: 'short', day: 'numeric' }),
+                displayDate: dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }),
                 year: dateObj.getFullYear(),
                 displayTime: entry.Time,
                 left: entry.direction_left,
@@ -464,8 +464,13 @@
       if (selectedMonth === "All Data") return
       
       const monthIndex = getMonthIndex(selectedMonth)
-      const daysInMonth = data.filter(d => new Date(d.date).getMonth() === monthIndex)
-      
+      const daysInMonth = data.filter(d => {
+        const dateObj = new Date(d.date)
+        const monthMatch = dateObj.getMonth() === monthIndex
+        const yearMatch = !selectedYear || dateObj.getFullYear() === selectedYear
+        return monthMatch && yearMatch
+      })
+
       const uniqueDays = [...new Set(daysInMonth.map(d => d.displayDate))]
         .sort((a, b) => new Date(a) - new Date(b))
       
@@ -889,11 +894,15 @@
       const avg = Math.round((totalLeft + totalRight) / filteredData.length)
       const peak = filteredData.reduce((a, b) => (a.left + a.right > b.left + b.right ? a : b))
       
-      let displayLabel = currentPoint.displayDate || '--'
+      let displayLabel = '${currentPoint.displayDate}, ${selectedYear}' || '--'
       if (granularity === 'minute') {
         displayLabel = `${currentPoint.displayDate} ${currentPoint.hour.toString().padStart(2, '0')}:${currentPoint.minute.toString().padStart(2, '0')}`
       } else if (granularity === 'hour') {
         displayLabel = `${currentPoint.displayDate} ${currentPoint.displayTime}`
+      } else if (granularity === 'week') {
+        displayLabel = `${currentPoint.displayDate}, ${selectedYear}`
+      } else if (granularity === 'month') {
+        displayLabel = `${currentPoint.displayDate}, ${selectedYear}`
       }
       
       let peakLabel = peak.displayDate || '--'
@@ -929,9 +938,13 @@
       
       let displayLabel = point.displayDate || '--'
       if (granularity === 'minute') {
-        displayLabel = `${point.displayDate}, ${point.hour.toString().padStart(2, '0')}:${point.minute.toString().padStart(2, '0')}`
+        displayLabel = `${point.displayDate}, ${selectedYear}, ${point.hour.toString().padStart(2, '0')}:${point.minute.toString().padStart(2, '0')}`
       } else if (granularity === 'hour') {
-        displayLabel = `${point.displayDate}, ${point.displayTime}hr`
+        displayLabel = `${point.displayDate}, ${selectedYear}, ${point.displayTime}hr`
+      } else if (granularity === 'week') {
+        displayLabel = `${point.displayDate}, ${selectedYear}`
+      } else if (granularity === 'month') {
+        displayLabel = `${point.displayDate}, ${selectedYear}`
       }
       
       let peakLabel = peak.displayDate || '--'
