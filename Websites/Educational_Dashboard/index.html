@@ -4,131 +4,7 @@
   <meta charset="UTF-8">
   <title>Pedestrian Dashboard (SSE)</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body { background: #191f59; color: white; font-family: sans-serif; padding: 20px; }
-    .card { background: white; color: black; border-radius: 12px; padding: 15px; margin-bottom: 10px; margin-top: 10px;}
-    .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
-    
-    .time-toggle {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 8px;
-      border: 1px solid #e0e0e0;
-      background: #f5f5f5;
-      padding: 4px;
-      gap: 4px;
-      margin-right: 10px;
-    }
-    
-    .time-toggle button {
-      height: 32px;
-      padding: 0 12px;
-      font-size: 20px;
-      border: none;
-      background: transparent;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .time-toggle button:hover {
-      background: #e0e0e0;
-    }
-    
-    .time-toggle button.active {
-      background: #0879d6;
-      color: white;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    }
-    
-    .controls-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    
-    select, button {
-      padding: 6px 12px;
-      font-size: 20px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-    
-    .nav-button {
-      background: #0879d6;
-      color: white;
-      border: none;
-      cursor: pointer;
-      min-width: 40px;
-    }
-    
-    .nav-button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-    
-    .loading-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(255, 255, 255, 0.95);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
-      z-index: 10;
-    }
-    
-    .loading-spinner {
-      width: 50px;
-      height: 50px;
-      border: 5px solid #e0e0e0;
-      border-top: 5px solid #0879d6;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    .loading-text {
-      margin-top: 20px;
-      font-size: 18px;
-      color: #333;
-      font-weight: bold;
-    }
-
-    .connection-status {
-      display: inline-block;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: bold;
-    }
-    
-    .status-connected {
-      background: #4caf50;
-      color: white;
-    }
-    
-    .status-connecting {
-      background: #ff9800;
-      color: white;
-    }
-    
-    .status-disconnected {
-      background: #f44336;
-      color: white;
-    }
-
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -273,7 +149,6 @@
         hideLoadingScreen();
         filterAndRender();
         
-        // NOW start listening for live updates
         setupLiveStream();
         
       } catch (error) {
@@ -350,7 +225,12 @@
             filterAndRender();
             
             // Optional: Show a subtle notification
-            showNewDataNotification();
+            // Calculate total new left and right counts
+            const totalLeft = transformedRows.reduce((sum, row) => sum + row.left, 0);
+            const totalRight = transformedRows.reduce((sum, row) => sum + row.right, 0);
+
+            // Show popup with counts
+            showNewDataNotification(totalLeft, totalRight);
           }
         } catch (error) {
           console.error("Error parsing stream data:", error);
@@ -370,17 +250,29 @@
     }
 
     // Visual notification when new data arrives
-    function showNewDataNotification() {
-      const statusEl = document.getElementById('connectionStatus');
-      const originalText = statusEl.textContent;
+    function showNewDataNotification(leftCount, rightCount) {
+      const chartContainer = document.getElementById('chart-container');
       
-      statusEl.textContent = '✨ New Data!';
-      statusEl.style.background = '#2196f3';
+      // Create popup
+      const popup = document.createElement('div');
+      popup.className = 'data-update-popup';
+      popup.innerHTML = `
+        <div class="popup-content">
+          <div class="popup-title">✨ New Data Received!</div>
+          <div class="popup-counters">
+            <div class="counter-box counter-left">Left: ${leftCount}</div>
+            <div class="counter-box counter-right">Right: ${rightCount}</div>
+          </div>
+        </div>
+      `;
       
+      chartContainer.appendChild(popup);
+      
+      // Remove after 3 seconds
       setTimeout(() => {
-        statusEl.textContent = originalText;
-        statusEl.style.background = '';
-      }, 2000);
+        popup.style.animation = 'fadeOut 0.3s ease-out';
+        setTimeout(() => popup.remove(), 300);
+      }, 3000);
     }
 
     window.onload = () => {
@@ -395,20 +287,6 @@
 
       // Load ALL historical data first, THEN start streaming
       loadInitialHistory();
-
-      const yearSelect = document.getElementById("yearSelect");
-      const uniqueYears = [...new Set(data.map(d => d.year))].sort((a, b) => b - a);
-      uniqueYears.forEach(y => {
-        const opt = document.createElement("option");
-        opt.value = y;
-        opt.text = y;
-        yearSelect.add(opt);
-      });
-      if (uniqueYears.length > 0) {
-        selectedYear = uniqueYears[0]; // Most recent year
-        yearSelect.value = selectedYear;
-      }
-      yearSelect.style.display = 'inline-block';
     }
 
     // Clean up on page unload
@@ -516,19 +394,13 @@
 
     function handleChange() {
       selectedMonth = document.getElementById("monthSelect").value
-      const daySelect = document.getElementById("daySelect")
-      const hourSelect = document.getElementById("hourSelect")
       
       if (granularity === 'minute' || granularity === 'hour') {
         if (selectedMonth !== "All Data") {
           populateDaySelector()
-          selectedDay = daySelect.value || null
-          
           if (granularity === 'minute' && selectedDay) {
             populateHourSelector()
-            selectedHour = hourSelect.value ? parseInt(hourSelect.value) : null
           }
-          
         } else {
           selectedDay = null
           selectedHour = null
@@ -894,7 +766,7 @@
       const avg = Math.round((totalLeft + totalRight) / filteredData.length)
       const peak = filteredData.reduce((a, b) => (a.left + a.right > b.left + b.right ? a : b))
       
-      let displayLabel = '${currentPoint.displayDate}, ${selectedYear}' || '--'
+      let displayLabel = currentPoint.displayDate || '--'
       if (granularity === 'minute') {
         displayLabel = `${currentPoint.displayDate} ${currentPoint.hour.toString().padStart(2, '0')}:${currentPoint.minute.toString().padStart(2, '0')}`
       } else if (granularity === 'hour') {
