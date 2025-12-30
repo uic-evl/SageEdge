@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Pedestrian Dashboard</title>
+  <title>Pedestrian Dashboard (SSE)</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body { background: #191f59; color: white; font-family: sans-serif; padding: 20px; }
@@ -64,11 +64,6 @@
       min-width: 40px;
     }
     
-    /* loading screen */
-    .nav-button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
     .nav-button:disabled {
       background: #ccc;
       cursor: not-allowed;
@@ -110,9 +105,34 @@
       font-weight: bold;
     }
 
+    .connection-status {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    
+    .status-connected {
+      background: #4caf50;
+      color: white;
+    }
+    
+    .status-connecting {
+      background: #ff9800;
+      color: white;
+    }
+    
+    .status-disconnected {
+      background: #f44336;
+      color: white;
+    }
+
   </style>
 </head>
 <body>
+
+  <!-- edit here for header in top blue part -->
 
   <div class="card">
     <p style="font-size: 30px; font-weight: bold; "> EVL Live 🔴 Directional Flow</p>
@@ -122,15 +142,18 @@
       <select id="monthSelect" onchange="handleChange()"></select>
       <select id="daySelect" onchange="handleDayChange()" style="display: none;"></select>
       <select id="hourSelect" onchange="handleHourChange()" style="display: none;"></select>
+      <select id="yearSelect" onchange="handleYearChange()" style="display: none;"></select>
       
       <button class="nav-button" onclick="prevPeriod()" id="prevBtn" style="display: none;">←</button>
       <span id="periodInfo"></span>
       <button class="nav-button" onclick="nextPeriod()" id="nextBtn" style="display: none;">→</button>
       
-      <div style="flex: 1;"></div>
+      <div style="flex: 2;"></div>
+      
+      <span id="connectionStatus" class="connection-status status-connecting">Connecting...</span>
       
       <div class="time-toggle">
-        <button onclick="changeGranularity('minute')" id="btn-minute">Minute</button>
+        <button onclick="changeGranularity('minute')" id="btn-minute">Min</button>
         <button onclick="changeGranularity('hour')" id="btn-hour">Hour</button>
         <button onclick="changeGranularity('week')" id="btn-week">Week</button>
         <button onclick="changeGranularity('month')" class="active" id="btn-month">Month</button>
@@ -147,6 +170,9 @@
   <script>
     let data = [], filteredData = [], selectedMonth = "All Data", selectedDay = null, selectedHour = null
     let granularity = "month", currentPeriodIndex = 0, lineChart
+    let eventSource = null
+    let reconnectTimeout = null
+    let selectedYear = null
 
     const months = ['All Data','January','February','March','April','May','June','July','August','September','October','November','December']
     
@@ -169,76 +195,232 @@
       }
     }
 
-    window.onload = () => {
-      const monthSelect = document.getElementById("monthSelect")
-      months.forEach(m => {
-        const opt = document.createElement("option")
-        opt.text = m
-        monthSelect.add(opt)
-      })
+    function updateConnectionStatus(status) {
+      const statusEl = document.getElementById('connectionStatus')
+      statusEl.className = 'connection-status'
+      
+      switch(status) {
+        case 'connected':
+          statusEl.classList.add('status-connected')
+          statusEl.textContent = '🟢 Live'
+          break
+        case 'connecting':
+          statusEl.classList.add('status-connecting')
+          statusEl.textContent = '🟡 Connecting...'
+          break
+        case 'disconnected':
+          statusEl.classList.add('status-disconnected')
+          statusEl.textContent = '🔴 Disconnected'
+          break
+      }
+    }
 
-      updateDataAnalysis()
-
-      // loading screen appears until data is fetched and chart rendered
-      showLoadingScreen()
-
-      fetch("https://sage.evl.uic.edu/api/get_viz_data")
-        .then(res => res.json())
-        .then(json => {
-          
-
-          // console.log('Full API response:', json)
-          // console.log('json[0]:', json[0])
-          // console.log('json[1]:', json[1])
-          
-          const apiData = json[1].data
-          
-          data = apiData.map(entry => {
-            const dateObj = new Date(entry.Date)
-            const [hours, minutes] = entry.Time.split(':')
-
-            return {
-              date: entry.Date.trim(),
-              time: entry.Time,
-              hour: parseInt(hours),
-              minute: parseInt(minutes),
-              displayDate: dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-              displayTime: entry.Time,
-              left: entry.direction_left,
-              right: entry.direction_right,
-              cpu_temp: entry.CPU_temp,
-              cpu_usage: entry.CPU_usage,
-            }
-          })
-          
-          // Set default month to current month
-          const now = new Date()
-          const currentMonthName = months[now.getMonth() + 1]
-          if (data.some(d => new Date(d.date).getMonth() === now.getMonth())) {
-            selectedMonth = currentMonthName
-            document.getElementById("monthSelect").value = currentMonthName
-          }
-          
-          // ends the loading screen
-          filterAndRender()
-          hideLoadingScreen()
-          
-        })
-
-        // error for loading screen
-        .catch(error => {
-          console.error('Error fetching data:', error)
-          // ALSO HIDE ON ERROR
-          hideLoadingScreen()
-          filterAndRender()
-        })
+    // Load historical data ONCE on page load
+    async function loadInitialHistory() {
+      try {
+        console.log("Loading historical data...");
+        showLoadingScreen();
         
+        const response = await fetch("https://sage.evl.uic.edu/api/get_viz_data");
+        const json = await response.json();
+
+        console.log('Full API response:', json);
+        
+        // Transform the historical data
+        const historicalData = json[1].data.map(entry => {
+          const dateObj = new Date(entry.Date + 'T00:00:00');
+          const [hours, minutes] = entry.Time.split(':');
+
+          return {
+            date: entry.Date.trim(),
+            time: entry.Time,
+            hour: parseInt(hours),
+            minute: parseInt(minutes),
+            displayDate: dateObj.toLocaleDateString('en-US', { year: "numeric", month: 'short', day: 'numeric', timeZone: 'UTC' }),
+            year: dateObj.getFullYear(),
+            displayTime: entry.Time,
+            left: entry.direction_left,
+            right: entry.direction_right,
+            cpu_temp: entry.CPU_temp,
+            cpu_usage: entry.CPU_usage,
+          };
+        });
+        
+        // Store all historical data
+        data = historicalData;
+
+        const yearSelect = document.getElementById("yearSelect");
+        const uniqueYears = [...new Set(data.map(d => d.year))].sort((a, b) => b - a);
+        uniqueYears.forEach(y => {
+          const opt = document.createElement("option");
+          opt.value = y;
+          opt.text = y;
+          yearSelect.add(opt);
+        });
+        if (uniqueYears.length > 0) {
+          selectedYear = uniqueYears[0]; // Most recent year
+          yearSelect.value = selectedYear;
+        }
+        yearSelect.style.display = 'inline-block';
+        
+        // Set default month to current month
+        // Set default to most recent month in the data
+        const latestDate = new Date(Math.max(...data.map(d => new Date(d.date))));
+        const latestMonthName = months[latestDate.getMonth() + 1];
+        selectedMonth = latestMonthName;
+        document.getElementById("monthSelect").value = latestMonthName;
+        
+        hideLoadingScreen();
+        filterAndRender();
+        
+        // NOW start listening for live updates
+        setupLiveStream();
+        
+      } catch (error) {
+        console.error("Failed to load historical data:", error);
+        hideLoadingScreen();
+        updateConnectionStatus('disconnected');
+      }
+    }
+
+    // Listen for new data streaming from the server
+    function setupLiveStream() {
+      console.log("Connecting to live stream...");
+      updateConnectionStatus('connecting');
+      
+      // Close existing connection if any
+      if (eventSource) {
+        eventSource.close();
+      }
+      
+      eventSource = new EventSource("https://sage.evl.uic.edu/api/get_updated_data");
+      
+      eventSource.onopen = () => {
+        console.log("Live stream connected");
+        updateConnectionStatus('connected');
+        if (reconnectTimeout) {
+          clearTimeout(reconnectTimeout);
+          reconnectTimeout = null;
+        }
+      };
+      
+      eventSource.onmessage = (event) => {
+        try {
+          const newRows = JSON.parse(event.data);
+          
+          if (newRows && newRows.length > 0) {
+            console.log("New data received:", newRows);
+            
+            // Transform the new data
+            const transformedRows = newRows.map(entry => {
+              const dateObj = new Date(entry.Date);
+              const [hours, minutes] = entry.Time.split(':');
+
+              return {
+                date: entry.Date.trim(),
+                time: entry.Time,
+                hour: parseInt(hours),
+                minute: parseInt(minutes),
+                displayDate: dateObj.toLocaleDateString('en-US', { year: "numeric", month: 'short', day: 'numeric' }),
+                year: dateObj.getFullYear(),
+                displayTime: entry.Time,
+                left: entry.direction_left,
+                right: entry.direction_right,
+                cpu_temp: entry.CPU_temp,
+                cpu_usage: entry.CPU_usage,
+              };
+            });
+            
+            // Add new data to the END of the array (most recent at end)
+            data = [...data, ...transformedRows];
+            
+            // Keep data sorted by date and time
+            data.sort((a, b) => {
+              const dateCompare = new Date(a.date) - new Date(b.date);
+              if (dateCompare !== 0) return dateCompare;
+              return a.hour * 60 + a.minute - (b.hour * 60 + b.minute);
+            });
+            
+            // Limit data size (keep last 30 days)
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            data = data.filter(d => new Date(d.date) >= thirtyDaysAgo);
+            
+            // Re-render with updated data
+            filterAndRender();
+            
+            // Optional: Show a subtle notification
+            showNewDataNotification();
+          }
+        } catch (error) {
+          console.error("Error parsing stream data:", error);
+        }
+      };
+      
+      eventSource.onerror = (error) => {
+        console.error("Stream error:", error);
+        updateConnectionStatus('disconnected');
+        
+        eventSource.close();
+        reconnectTimeout = setTimeout(() => {
+          console.log("Attempting to reconnect...");
+          setupLiveStream();
+        }, 5000);
+      };
+    }
+
+    // Visual notification when new data arrives
+    function showNewDataNotification() {
+      const statusEl = document.getElementById('connectionStatus');
+      const originalText = statusEl.textContent;
+      
+      statusEl.textContent = '✨ New Data!';
+      statusEl.style.background = '#2196f3';
+      
+      setTimeout(() => {
+        statusEl.textContent = originalText;
+        statusEl.style.background = '';
+      }, 2000);
+    }
+
+    window.onload = () => {
+      const monthSelect = document.getElementById("monthSelect");
+      months.forEach(m => {
+        const opt = document.createElement("option");
+        opt.text = m;
+        monthSelect.add(opt);
+      });
+
+      updateDataAnalysis();
+
+      // Load ALL historical data first, THEN start streaming
+      loadInitialHistory();
+
+      const yearSelect = document.getElementById("yearSelect");
+      const uniqueYears = [...new Set(data.map(d => d.year))].sort((a, b) => b - a);
+      uniqueYears.forEach(y => {
+        const opt = document.createElement("option");
+        opt.value = y;
+        opt.text = y;
+        yearSelect.add(opt);
+      });
+      if (uniqueYears.length > 0) {
+        selectedYear = uniqueYears[0]; // Most recent year
+        yearSelect.value = selectedYear;
+      }
+      yearSelect.style.display = 'inline-block';
+    }
+
+    // Clean up on page unload
+    window.onbeforeunload = () => {
+      if (eventSource) {
+        eventSource.close()
+      }
+      if (reconnectTimeout) {
+        clearTimeout(reconnectTimeout)
+      }
     }
     
-    /*
-      Updates the time granularity (minute, hour, week, month),
-      manages UI state for selectors, and re-renders the chart.
-    */
     function changeGranularity(newGranularity) {
       granularity = newGranularity
       currentPeriodIndex = 0
@@ -275,11 +457,6 @@
       filterAndRender()
     }
 
-
-    /*
-      Populates the day dropdown based on the selected month
-      and auto-selects the most recent or current day if available.
-    */
     function populateDaySelector() {
       const daySelect = document.getElementById("daySelect")
       daySelect.innerHTML = '<option value="">Select Day</option>'
@@ -299,27 +476,12 @@
         daySelect.add(opt)
       })
       
-      // Auto-select current day if it exists in the list
       if (!selectedDay && uniqueDays.length > 0) {
-        const now = new Date()
-        const currentDisplayDate = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-        if (uniqueDays.includes(currentDisplayDate)) {
-          selectedDay = currentDisplayDate
-          daySelect.value = currentDisplayDate
-        } else {
-          // Select the most recent day
-          selectedDay = uniqueDays[uniqueDays.length - 1]
-          daySelect.value = selectedDay
-        }
-      } else if (selectedDay) {
-        daySelect.value = selectedDay
+        selectedDay = uniqueDays[uniqueDays.length - 1]; // Most recent day
+        daySelect.value = selectedDay;
       }
     }
 
-    /*
-      Populates the hour dropdown for a selected day and
-      auto-selects the most recent or current hour.
-    */
     function populateHourSelector() {
       const hourSelect = document.getElementById("hourSelect")
       hourSelect.innerHTML = '<option value="">Select Hour</option>'
@@ -341,27 +503,12 @@
         hourSelect.add(opt)
       })
       
-      // Auto-select current hour if it exists in the list
       if (selectedHour === null && uniqueHours.length > 0) {
-        const now = new Date()
-        const currentHour = now.getHours()
-        if (uniqueHours.includes(currentHour)) {
-          selectedHour = currentHour
-          hourSelect.value = currentHour
-        } else {
-          // Select the most recent hour
-          selectedHour = uniqueHours[uniqueHours.length - 1]
-          hourSelect.value = selectedHour
-        }
-      } else if (selectedHour !== null) {
-        hourSelect.value = selectedHour
+        selectedHour = uniqueHours[uniqueHours.length - 1]; // Most recent hour
+        hourSelect.value = selectedHour;
       }
     }
 
-    /*
-      Handles month selection changes and updates
-      dependent day/hour selectors and chart state.
-    */
     function handleChange() {
       selectedMonth = document.getElementById("monthSelect").value
       const daySelect = document.getElementById("daySelect")
@@ -376,6 +523,7 @@
             populateHourSelector()
             selectedHour = hourSelect.value ? parseInt(hourSelect.value) : null
           }
+          
         } else {
           selectedDay = null
           selectedHour = null
@@ -386,10 +534,6 @@
       filterAndRender()
     }
 
-    /*
-      Handles day selection changes and updates hour selector
-      when in minute granularity.
-    */
     function handleDayChange() {
       selectedDay = document.getElementById("daySelect").value || null
       
@@ -402,52 +546,31 @@
       filterAndRender()
     }
 
-    /*
-      Handles hour selection changes and triggers re-rendering.
-    */
     function handleHourChange() {
       const hourSelect = document.getElementById("hourSelect")
       selectedHour = hourSelect.value ? parseInt(hourSelect.value) : null
       filterAndRender()
     }
 
-    /*
-      Converts a month name into a zero-based month index.
-    */
+    function handleYearChange() {
+      selectedYear = parseInt(document.getElementById("yearSelect").value);
+      
+      // Reset dependent selections
+      selectedMonth = "All Data";
+      document.getElementById("monthSelect").value = "All Data";
+      selectedDay = null;
+      selectedHour = null;
+      
+      filterAndRender();
+    }
+
     function getMonthIndex(month) {
       return months.indexOf(month) - 1
     }
 
-    /*
-      Aggregates raw data points into hourly totals.
-    */
-    // function aggregateByHour(dataToAggregate) {
-    //   const hourlyData = {}
-      
-    //   dataToAggregate.forEach(d => {
-    //     const key = d.hour
-    //     if (!hourlyData[key]) {
-    //       hourlyData[key] = {
-    //         hour: d.hour,
-    //         displayTime: `${d.hour.toString().padStart(2, '0')}`,
-    //         left: 0,
-    //         right: 0,
-    //         count: 0,
-    //         date: d.date,
-    //         displayDate: d.displayDate
-    //       }
-    //     }
-    //     hourlyData[key].left += d.left
-    //     hourlyData[key].right += d.right
-    //     hourlyData[key].count++
-    //   })
-      
-    //   return Object.values(hourlyData).sort((a, b) => a.hour - b.hour)
-    // }
     function aggregateByHour(dataToAggregate) {
       const hourlyData = {}
       
-      // Initialize all 24 hours with 0
       for (let h = 0; h < 24; h++) {
         hourlyData[h] = {
           hour: h,
@@ -460,7 +583,6 @@
         }
       }
       
-      // Add actual data
       dataToAggregate.forEach(d => {
         const key = d.hour
         hourlyData[key].left += d.left
@@ -471,14 +593,9 @@
       return Object.values(hourlyData).sort((a, b) => a.hour - b.hour)
     }
 
-   /*
-      Ensures all 60 minutes (0-59) are present in the dataset,
-      filling in missing minutes with zero values.
-    */
     function fillAllMinutes(dataToFill, hour, displayDate, date) {
       const minuteData = {}
       
-      // Initialize all 60 minutes with 0
       for (let m = 0; m < 60; m++) {
         minuteData[m] = {
           hour: hour,
@@ -491,7 +608,6 @@
         }
       }
       
-      // Add actual data
       dataToFill.forEach(d => {
         const key = d.minute
         minuteData[key].left = d.left
@@ -523,9 +639,6 @@
       return Object.values(dailyData).sort((a, b) => new Date(a.date) - new Date(b.date))
     }
 
-    /*
-      Splits daily data into sequential week-sized chunks.
-    */
     function splitIntoWeeks(dataToSplit) {
       const sorted = [...dataToSplit].sort((a, b) => new Date(a.date) - new Date(b.date))
       return sorted.reduce((weeks, val, i) => {
@@ -536,14 +649,14 @@
       }, [])
     }
 
-    /*
-      Filters data based on selected month, day, hour, and granularity,
-      updates navigation controls, and triggers chart rendering.
-    */
     function filterAndRender() {
-      let workingData = (selectedMonth === "All Data")
-        ? data
-        : data.filter(d => new Date(d.date).getMonth() === getMonthIndex(selectedMonth))
+
+      let workingData = data.filter(d => {
+        const dateObj = new Date(d.date + 'T00:00:00');
+        const yearMatch = !selectedYear || dateObj.getFullYear() === selectedYear;
+        const monthMatch = selectedMonth === "All Data" || dateObj.getMonth() === getMonthIndex(selectedMonth);
+        return yearMatch && monthMatch;
+      });
 
       const periodInfo = document.getElementById("periodInfo")
       const prevBtn = document.getElementById('prevBtn')
@@ -558,15 +671,12 @@
         return
       }
 
-      // Handle different granularities
       if (granularity === 'minute') {
         if (selectedDay && selectedHour !== null) {
-          // Filter to specific day and hour, show all minutes (0-59)
           const rawMinuteData = workingData.filter(d => 
             d.displayDate === selectedDay && d.hour === selectedHour
           )
           
-          // Fill in all 60 minutes, even if no data exists
           filteredData = fillAllMinutes(
             rawMinuteData, 
             selectedHour, 
@@ -585,7 +695,6 @@
         }
       } else if (granularity === 'hour') {
         if (selectedDay) {
-          // Filter to specific day, aggregate by hour
           const dayData = workingData.filter(d => d.displayDate === selectedDay)
           filteredData = aggregateByHour(dayData)
           
@@ -600,7 +709,6 @@
         }
       } else if (granularity === 'week') {
         if (selectedMonth !== "All Data") {
-          // Aggregate by day first, then split into weeks
           const dailyData = aggregateByDay(workingData)
           const weeks = splitIntoWeeks(dailyData)
           filteredData = weeks[currentPeriodIndex] || []
@@ -616,8 +724,7 @@
           prevBtn.style.display = 'none'
           nextBtn.style.display = 'none'
         }
-      } else { // month
-        // Aggregate by day
+      } else {
         filteredData = aggregateByDay(workingData)
         periodInfo.textContent = selectedMonth !== "All Data" ? selectedMonth : ""
         prevBtn.style.display = 'none'
@@ -627,10 +734,6 @@
       renderChart()
     }
 
-    /*
-      Renders or updates the Chart.js line chart based on filtered data
-      and current granularity.
-    */
     function renderChart() {
       const ctx = document.getElementById('lineChart').getContext('2d')
 
@@ -710,6 +813,7 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          animation: false,
           interaction: { mode: 'index', intersect: false },
           plugins: {
             tooltip: { enabled: false, external: customTooltip },
@@ -825,9 +929,9 @@
       
       let displayLabel = point.displayDate || '--'
       if (granularity === 'minute') {
-        displayLabel = `${point.displayDate} ${point.hour.toString().padStart(2, '0')}:${point.minute.toString().padStart(2, '0')}`
+        displayLabel = `${point.displayDate}, ${point.hour.toString().padStart(2, '0')}:${point.minute.toString().padStart(2, '0')}`
       } else if (granularity === 'hour') {
-        displayLabel = `${point.displayDate} ${point.displayTime}`
+        displayLabel = `${point.displayDate}, ${point.displayTime}hr`
       }
       
       let peakLabel = peak.displayDate || '--'
