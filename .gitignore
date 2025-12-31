@@ -200,3 +200,7 @@ Benchmarking/coco_val2017/
 Benchmarking/output/
 Benchmarking/env_info/
 Benchmarking/scripts/hf_benchmark_logs
+Benchmarking/envs/
+Benchmarking/data/
+Benchmarking/scripts/
+Benchmarking/outputs/
