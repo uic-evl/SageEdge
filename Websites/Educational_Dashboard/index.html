@@ -168,7 +168,7 @@
         eventSource.close();
       }
       
-      eventSource = new EventSource("https://sage.evl.uic.edu/api/get_updated_data");
+      eventSource = new EventSource("https://sage.evl.uic.edu/api/stream");
       
       eventSource.onopen = () => {
         console.log("Live stream connected");
