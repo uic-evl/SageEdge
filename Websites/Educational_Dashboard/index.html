@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Pedestrian Dashboard (SSE)</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="/web/style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -100,7 +100,7 @@
         const response = await fetch("https://sage.evl.uic.edu/api/get_viz_data");
         const json = await response.json();
 
-        // console.log('Full API response:', json);
+        console.log('Full API response:', json);
         
         // Transform the historical data
         const historicalData = json[1].data.map(entry => {
@@ -169,6 +169,8 @@
       }
       
       eventSource = new EventSource("https://sage.evl.uic.edu/api/stream");
+
+      console.log('STREAM:', eventSource);
       
       eventSource.onopen = () => {
         console.log("Live stream connected");
@@ -179,16 +181,81 @@
         }
       };
       
+      // eventSource.onmessage = (event) => {
+      //   try {
+      //     const newRows = JSON.parse(event.data);
+          
+      //     if (newRows && newRows.length > 0) {
+      //       console.log("New data received:", newRows);
+            
+      //       // Transform the new data
+      //       const transformedRows = newRows.map(entry => {
+      //         const dateObj = new Date(entry.Date);
+      //         const [hours, minutes] = entry.Time.split(':');
+
+      //         return {
+      //           date: entry.Date.trim(),
+      //           time: entry.Time,
+      //           hour: parseInt(hours),
+      //           minute: parseInt(minutes),
+      //           displayDate: dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }),
+      //           year: dateObj.getFullYear(),
+      //           displayTime: entry.Time,
+      //           left: entry.direction_left,
+      //           right: entry.direction_right,
+      //           cpu_temp: entry.CPU_temp,
+      //           cpu_usage: entry.CPU_usage,
+      //         };
+      //       });
+            
+      //       // Add new data to the END of the array (most recent at end)
+      //       data = [...data, ...transformedRows];
+            
+      //       // Keep data sorted by date and time
+      //       data.sort((a, b) => {
+      //         const dateCompare = new Date(a.date) - new Date(b.date);
+      //         if (dateCompare !== 0) return dateCompare;
+      //         return a.hour * 60 + a.minute - (b.hour * 60 + b.minute);
+      //       });
+            
+      //       // Limit data size (keep last 30 days)
+      //       const thirtyDaysAgo = new Date();
+      //       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      //       data = data.filter(d => new Date(d.date) >= thirtyDaysAgo);
+            
+      //       // Re-render with updated data
+      //       filterAndRender();
+            
+      //       // Optional: Show a subtle notification
+      //       // Calculate total new left and right counts
+      //       const totalLeft = transformedRows.reduce((sum, row) => sum + row.left, 0);
+      //       const totalRight = transformedRows.reduce((sum, row) => sum + row.right, 0);
+
+      //       // Show popup with counts
+      //       showNewDataNotification(totalLeft, totalRight);
+      //     }
+      //   } catch (error) {
+      //     console.error("Error parsing stream data:", error);
+      //   }
+      // };
+
       eventSource.onmessage = (event) => {
         try {
-          const newRows = JSON.parse(event.data);
+          // Parse the wrapper object
+          const payload = JSON.parse(event.data);
           
-          if (newRows && newRows.length > 0) {
-            console.log("New data received:", newRows);
+          console.log("Stream payload received:", payload);
+          
+          // Check if this is actually data (and not just a connection message)
+          if (payload.type === 'data' && payload.data && payload.data.length > 0) {
             
-            // Transform the new data
+            const newRows = payload.data;
+            console.log("New data rows:", newRows);
+            
+            // Transform the new data - match the exact format of historical data
             const transformedRows = newRows.map(entry => {
-              const dateObj = new Date(entry.Date);
+              // Use same date format as historical data
+              const dateObj = new Date(entry.Date + 'T00:00:00');
               const [hours, minutes] = entry.Time.split(':');
 
               return {
@@ -199,41 +266,88 @@
                 displayDate: dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }),
                 year: dateObj.getFullYear(),
                 displayTime: entry.Time,
-                left: entry.direction_left,
-                right: entry.direction_right,
-                cpu_temp: entry.CPU_temp,
-                cpu_usage: entry.CPU_usage,
+                // Handle both possible field name formats
+                left: entry.direction_left || entry.Direction_left || 0,
+                right: entry.direction_right || entry.Direction_right || 0,
+                cpu_temp: entry.CPU_temp_C || entry.CPU_temp || 0,
+                cpu_usage: entry.CPU_percent || entry.CPU_usage || 0,
               };
             });
             
-            // Add new data to the END of the array (most recent at end)
-            data = [...data, ...transformedRows];
+            console.log("Transformed rows:", transformedRows);
             
-            // Keep data sorted by date and time
-            data.sort((a, b) => {
-              const dateCompare = new Date(a.date) - new Date(b.date);
-              if (dateCompare !== 0) return dateCompare;
-              return a.hour * 60 + a.minute - (b.hour * 60 + b.minute);
+            // Process each new row - either add or update existing
+            let hasUpdates = false;
+            let totalNewLeft = 0;
+            let totalNewRight = 0;
+            
+            transformedRows.forEach(newRow => {
+              const signature = `${newRow.date}|${newRow.time}`;
+              
+              // Find if this timestamp already exists
+              const existingIndex = data.findIndex(d => `${d.date}|${d.time}` === signature);
+              
+              if (existingIndex !== -1) {
+                // Entry exists - UPDATE it with new values
+                const oldLeft = data[existingIndex].left;
+                const oldRight = data[existingIndex].right;
+                
+                data[existingIndex].left = newRow.left;
+                data[existingIndex].right = newRow.right;
+                data[existingIndex].cpu_temp = newRow.cpu_temp;
+                data[existingIndex].cpu_usage = newRow.cpu_usage;
+                
+                // Track the delta (difference from old values)
+                const deltaLeft = newRow.left - oldLeft;
+                const deltaRight = newRow.right - oldRight;
+                
+                if (deltaLeft !== 0 || deltaRight !== 0) {
+                  console.log(`Updated existing entry for ${signature}: Left ${oldLeft}→${newRow.left}, Right ${oldRight}→${newRow.right}`);
+                  totalNewLeft += deltaLeft;
+                  totalNewRight += deltaRight;
+                  hasUpdates = true;
+                }
+              } else {
+                // Entry doesn't exist - ADD it
+                data.push(newRow);
+                totalNewLeft += newRow.left;
+                totalNewRight += newRow.right;
+                hasUpdates = true;
+                console.log(`Added new entry for ${signature}: Left ${newRow.left}, Right ${newRow.right}`);
+              }
             });
-            
-            // Limit data size (keep last 30 days)
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-            data = data.filter(d => new Date(d.date) >= thirtyDaysAgo);
-            
-            // Re-render with updated data
-            filterAndRender();
-            
-            // Optional: Show a subtle notification
-            // Calculate total new left and right counts
-            const totalLeft = transformedRows.reduce((sum, row) => sum + row.left, 0);
-            const totalRight = transformedRows.reduce((sum, row) => sum + row.right, 0);
 
-            // Show popup with counts
-            showNewDataNotification(totalLeft, totalRight);
+            if (hasUpdates) {
+              // Sort by date and time
+              data.sort((a, b) => {
+                const dateCompare = new Date(a.date) - new Date(b.date);
+                if (dateCompare !== 0) return dateCompare;
+                return a.hour * 60 + a.minute - (b.hour * 60 + b.minute);
+              });
+              
+              // Limit size to last 30 days
+              const thirtyDaysAgo = new Date();
+              thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+              data = data.filter(d => new Date(d.date + 'T00:00:00') >= thirtyDaysAgo);
+              
+              console.log(`Total data points after update: ${data.length}`);
+              
+              // Re-render with updated data
+              filterAndRender();
+              
+              // Only show popup if there's actual movement detected (use deltas for updates)
+              if (totalNewLeft > 0 || totalNewRight > 0) {
+                showNewDataNotification(totalNewLeft, totalNewRight);
+              }
+            } else {
+              console.log("No changes to data");
+            }
+          } else if (payload.type === 'connected' || payload.type === 'ping') {
+            // Ignore connection/ping messages
+            console.log("Connection message:", payload.type);
           }
         } catch (error) {
-          console.error("Error parsing stream data:", error);
+          console.error("Error parsing stream data:", error, event.data);
         }
       };
       
@@ -258,7 +372,7 @@
       popup.className = 'data-update-popup';
       popup.innerHTML = `
         <div class="popup-content">
-          <div class="popup-title">✨ New Data Received!</div>
+          <div class="popup-title" style="color: white;">✨ New Data Received!</div>
           <div class="popup-counters">
             <div class="counter-box counter-left">Left: ${leftCount}</div>
             <div class="counter-box counter-right">Right: ${rightCount}</div>

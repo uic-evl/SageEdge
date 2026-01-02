@@ -1,7 +1,6 @@
 body { background: #191f59; color: white; font-family: sans-serif; padding: 20px; }
-    .card { background: white; color: black; border-radius: 12px; padding: 15px; margin-bottom: 10px; margin-top: 10px;}
-    .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-}
+.card { background: white; color: black; border-radius: 12px; padding: 15px; margin-bottom: 10px; margin-top: 10px;}
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
 
 .time-toggle {
     display: inline-flex;
@@ -124,23 +123,26 @@ select, button {
 
 .data-update-popup {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(25, 31, 89, 0.95);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(25, 31, 89, 0.576);
+    padding: 20px 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     z-index: 20;
-    animation: fadeIn 0.3s ease-in;
+    animation: fadeIn 0.3s ease-in, scaleIn 0.3s ease-out;
+    border: 2px solid rgba(255, 255, 255, 0.576);
 }
 
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from { transform: translate(-50%, -50%) scale(0.8); }
+    to { transform: translate(-50%, -50%) scale(1); }
 }
 
 .popup-content {
@@ -149,23 +151,23 @@ select, button {
 }
 
 .popup-title {
-    font-size: 36px;
+    font-size: 24px;
     font-weight: bold;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
 .popup-counters {
     display: flex;
-    gap: 40px;
+    gap: 20px;
     justify-content: center;
-    margin-bottom: 20px;
 }
 
 .counter-box {
-    padding: 20px 40px;
-    border-radius: 12px;
-    font-size: 28px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 20px;
     font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .counter-left {
@@ -177,6 +179,12 @@ select, button {
 }
 
 @keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
+    from { 
+        opacity: 1; 
+        transform: translate(-50%, -50%) scale(1);
+    }
+    to { 
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
 }
