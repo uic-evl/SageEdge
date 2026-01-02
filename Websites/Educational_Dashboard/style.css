@@ -126,7 +126,7 @@ select, button {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(25, 31, 89, 0.576);
+    background: rgb(25, 31, 89);
     padding: 20px 30px;
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
