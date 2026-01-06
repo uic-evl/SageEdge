@@ -196,4 +196,10 @@ cython_debug/
 # Custom Project Data
 # Ignore a large local data folder for benchmarking
 # -----------------------------------------------
+AI_Programs/Movement_Tracking/output
+AI_Programs/Movement_Tracking/torch-2.8.0-cp310-cp310-linux_aarch64.whl
+AI_Programs/Movement_Tracking/torchvision-0.23.0-cp310-cp310-linux_aarch64.whl
+AI_Programs/Movement_Tracking/yolov8m.pt
+AI_Programs/Movement_Tracking/yolov8n.pt
+AI_Programs/Movement_Tracking/people_walking.mp4
 Benchmarking/coco_val2017/
