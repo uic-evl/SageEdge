@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EVL Pedestrian Kiosk</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>UIC-EVL Sage Pedestrian Flow</h1>
+            <p>Developed as part of the NSF-funded SAGE research project, this system uses edge AI to observe movement patterns. As people walk by, video is analyzed locally to detect left and right motion. No video is captured or stored; only motion information is displayed.</p>
+        </div>
+        <div class="qr-codes">
+            <div class="qr-card">
+                <img src="images/project_description.png" alt="Project Info QR" class="qr-image">
+                <div class="qr-label">Project Info</div>
+            </div>
+            <div class="qr-card">
+                <img src="images/sageWeb.png" alt="Sage Web QR" class="qr-image">
+                <div class="qr-label">Sage Web</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="datetime-bar">
+        <div class="datetime-item">
+            <span id="currentDate">--</span>
+        </div>
+        <div class="datetime-item">
+            <span id="currentTime">--</span>
+        </div>
+        <div > 
+            <span id="connectionStatus" class="connection-status status-connecting">🟡 Connecting...</span>
+        </div>
+    </div>
+
+    <div class="counters">
+        <div class="counter-card left">
+            <div class="counter-label">← LEFT</div>
+            <div class="counter-value" id="currentLeft">0</div>
+            <div class="counter-subtitle">Today's Total</div>
+        </div>
+        <div class="counter-card right">
+            <div class="counter-label">RIGHT →</div>
+            <div class="counter-value" id="currentRight">0</div>
+            <div class="counter-subtitle">Today's Total</div>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <div class="chart-wrapper">
+            <canvas id="lineChart"></canvas>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">7-Day Avg Left</div>
+            <div class="stat-value" id="monthAvgLeft">--</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">7-Day Avg Right</div>
+            <div class="stat-value" id="monthAvgRight">--</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Peak Day</div>
+            <div class="stat-value" id="peakDay">--</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">7-Day Avg Total</div>
+            <div class="stat-value" id="dayAvg">--</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-content">
+            <div class="footer-title">Scan for More Information</div>
+            <div class="footer-subtitle">University of Illinois Chicago | Electronic Visualization Laboratory</div>
+            <div class="footer-subtitle">This work funded in part by a National Science Foundation grant - A National-Scale Testbed Supporting Artificial Intelligence Research Spanning the Computing Continuum. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.</div>
+
+        </div>
+    </div>
+
+    <script>
+        let data = [];
+        let lineChart;
+        let eventSource = null;
+        let reconnectTimeout = null;
+
+        function updateDateTime() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            const timeStr = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            
+            document.getElementById('currentDate').textContent = dateStr;
+            document.getElementById('currentTime').textContent = timeStr;
+        }
+
+        function showLoadingScreen() {
+            const overlay = document.createElement('div');
+            overlay.id = 'loading-overlay';
+            overlay.className = 'loading-overlay';
+            overlay.innerHTML = `
+                <div class="loading-spinner"></div>
+                <div class="loading-text">Loading Live Data...</div>
+            `;
+            document.body.appendChild(overlay);
+        }
+
+        function hideLoadingScreen() {
+            const overlay = document.getElementById('loading-overlay');
+            if (overlay) overlay.remove();
+        }
+
+        function updateConnectionStatus(status) {
+            const statusEl = document.getElementById('connectionStatus');
+            statusEl.className = 'connection-status';
+            
+            switch(status) {
+                case 'connected':
+                    statusEl.classList.add('status-connected');
+                    statusEl.textContent = '🟢 Live';
+                break;
+                case 'connecting':
+                    statusEl.classList.add('status-connecting');
+                    statusEl.textContent = '🟡 Connecting...';
+                break;
+                case 'disconnected':
+                    statusEl.classList.add('status-disconnected');
+                    statusEl.textContent = '🔴 Disconnected';
+                break;
+            }
+        }
+
+        async function loadInitialHistory() {
+            try {
+                showLoadingScreen();
+                
+                const response = await fetch("https://sage.evl.uic.edu/api/get_viz_data");
+                const json = await response.json();
+
+                console.log("Historical data loaded:", json);
+                
+                const historicalData = json[1].data.map(entry => {
+                const dateObj = new Date(entry.Date + 'T00:00:00');
+                const [hours, minutes] = entry.Time.split(':');
+
+                return {
+                    date: entry.Date.trim(),
+                    time: entry.Time,
+                    hour: parseInt(hours),
+                    minute: parseInt(minutes),
+                    dateObj: dateObj,
+                    left: entry.direction_left,
+                    right: entry.direction_right,
+                };
+                });
+                
+                data = historicalData;
+                
+                hideLoadingScreen();
+                renderKiosk();
+                setupLiveStream();
+                
+            } catch (error) {
+                console.error("Failed to load historical data:", error);
+                hideLoadingScreen();
+                updateConnectionStatus('disconnected');
+            }
+        }
+
+        function setupLiveStream() {
+            updateConnectionStatus('connecting');
+            
+            if (eventSource) eventSource.close();
+            
+            eventSource = new EventSource("https://sage.evl.uic.edu/api/stream");
+            
+            eventSource.onopen = () => {
+                updateConnectionStatus('connected');
+                if (reconnectTimeout) {
+                clearTimeout(reconnectTimeout);
+                reconnectTimeout = null;
+            }
+        };
+        
+        eventSource.onmessage = (event) => {
+            try {
+                const payload = JSON.parse(event.data);
+                
+                if (payload.type === 'data' && payload.data && payload.data.length > 0) {
+                    const newRows = payload.data;
+                    
+                    const transformedRows = newRows.map(entry => {
+                        const dateObj = new Date(entry.Date + 'T00:00:00');
+                        const [hours, minutes] = entry.Time.split(':');
+
+                        return {
+                            date: entry.Date.trim(),
+                            time: entry.Time,
+                            hour: parseInt(hours),
+                            minute: parseInt(minutes),
+                            dateObj: dateObj,
+                            left: entry.direction_left || entry.Direction_left || 0,
+                            right: entry.direction_right || entry.Direction_right || 0,
+                        };
+                    });
+                    
+                    let hasUpdates = false;
+                    
+                    transformedRows.forEach(newRow => {
+                        const signature = `${newRow.date}|${newRow.time}`;
+                        const existingIndex = data.findIndex(d => `${d.date}|${d.time}` === signature);
+                        
+                        if (existingIndex !== -1) {
+                            data[existingIndex].left = newRow.left;
+                            data[existingIndex].right = newRow.right;
+                            hasUpdates = true;
+                        } else {
+                            data.push(newRow);
+                            hasUpdates = true;
+                        }
+                    });
+
+                    if (hasUpdates) {
+                        data.sort((a, b) => {
+                            const dateCompare = new Date(a.date) - new Date(b.date);
+                            if (dateCompare !== 0) return dateCompare;
+                            return a.hour * 60 + a.minute - (b.hour * 60 + b.minute);
+                        });
+                        
+                        const thirtyDaysAgo = new Date();
+                        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                        data = data.filter(d => new Date(d.date + 'T00:00:00') >= thirtyDaysAgo);
+                        
+                        renderKiosk();
+                    }
+                }
+            } catch (error) {
+                console.error("Error parsing stream data:", error);
+            }
+        };
+        
+        eventSource.onerror = () => {
+            updateConnectionStatus('disconnected');
+            eventSource.close();
+            reconnectTimeout = setTimeout(() => setupLiveStream(), 5000);
+        };
+        }
+
+        function renderKiosk() {
+            // Get current date/time info
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth();
+            const currentDay = now.getDate();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            
+            // Filter data for current month
+            const currentMonthData = data.filter(d => {
+                const itemDate = new Date(d.date + 'T00:00:00');
+                return itemDate.getFullYear() === currentYear && 
+                    itemDate.getMonth() === currentMonth;
+            });
+
+            // Get today's total data
+            const todayData = currentMonthData.filter(d => {
+                const itemDate = new Date(d.date + 'T00:00:00');
+                return itemDate.getDate() === currentDay;
+            });
+
+            // Calculate today's totals
+            const todayLeftTotal = todayData.reduce((sum, d) => sum + d.left, 0);
+            const todayRightTotal = todayData.reduce((sum, d) => sum + d.right, 0);
+
+            // Update current counters with today's totals
+            document.getElementById('currentLeft').textContent = todayLeftTotal;
+            document.getElementById('currentRight').textContent = todayRightTotal;
+
+            // Calculate stats from last 7 days only (excluding days with 0 or missing data)
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+
+            const last7Days = data.filter(d => {
+                const itemDate = new Date(d.date + 'T00:00:00');
+                return itemDate >= sevenDaysAgo;
+            });
+
+            // Aggregate by day for the last 7 days
+            const dailyData = {};
+            last7Days.forEach(d => {
+                const dateKey = d.date;
+                if (!dailyData[dateKey]) {
+                    dailyData[dateKey] = {
+                        date: d.date,
+                        displayDate: new Date(d.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                        left: 0,
+                        right: 0
+                    };
+                }
+                dailyData[dateKey].left += d.left;
+                dailyData[dateKey].right += d.right;
+            });
+
+            const chartData = Object.values(dailyData).sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            // Calculate stats from last 7 days only (excluding days with 0 or missing data)
+            const validDays = chartData.filter(d => d.left > 0 || d.right > 0);
+
+            if (validDays.length > 0) {
+                // Average Left from last 7 days (excluding 0s)
+                const daysWithLeft = validDays.filter(d => d.left > 0);
+                const avgLeft = daysWithLeft.length > 0 
+                    ? Math.round(daysWithLeft.reduce((sum, d) => sum + d.left, 0) / daysWithLeft.length)
+                    : 0;
+                document.getElementById('monthAvgLeft').textContent = avgLeft;
+                
+                // Average Right from last 7 days (excluding 0s)
+                const daysWithRight = validDays.filter(d => d.right > 0);
+                const avgRight = daysWithRight.length > 0
+                    ? Math.round(daysWithRight.reduce((sum, d) => sum + d.right, 0) / daysWithRight.length)
+                    : 0;
+                document.getElementById('monthAvgRight').textContent = avgRight;
+                
+                // Peak day from last 7 days
+                let peakDay = null;
+                let peakTotal = 0;
+                validDays.forEach(d => {
+                    const total = d.left + d.right;
+                    if (total > peakTotal) {
+                        peakTotal = total;
+                        peakDay = d.displayDate;
+                    }
+                });
+                document.getElementById('peakDay').textContent = peakDay || '--';
+                
+                // Average daily total from last 7 days
+                const avgDailyTotal = Math.round(validDays.reduce((sum, d) => sum + d.left + d.right, 0) / validDays.length);
+                document.getElementById('dayAvg').textContent = avgDailyTotal;
+            } else {
+                // No valid data in last 7 days
+                document.getElementById('monthAvgLeft').textContent = '--';
+                document.getElementById('monthAvgRight').textContent = '--';
+                document.getElementById('peakDay').textContent = '--';
+                document.getElementById('dayAvg').textContent = '--';
+            }
+                        
+            renderChart(chartData);
+        }
+
+        function renderChart(chartData) {
+            const ctx = document.getElementById('lineChart').getContext('2d');
+            
+            if (lineChart) lineChart.destroy();
+            
+            const labels = chartData.map(d => d.displayDate);
+            
+            lineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                labels,
+                datasets: [
+                    {
+                    label: '← Left',
+                    data: chartData.map(d => d.left),
+                    borderColor: '#2196f3',
+                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                    borderWidth: 4,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#2196f3',
+                    fill: true
+                    },
+                    {
+                    label: 'Right →',
+                    data: chartData.map(d => d.right),
+                    borderColor: '#f44336',
+                    backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                    borderWidth: 4,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#f44336',
+                    fill: true
+                    }
+                ]
+                },
+                options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                    duration: 0
+                },
+                plugins: {
+                    legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        color: '#191f59',
+                        font: { size: 18, weight: 'bold' },
+                        padding: 15
+                    }
+                    },
+                    tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleFont: { size: 16 },
+                    bodyFont: { size: 14 },
+                    padding: 12
+                    }
+                },
+                scales: {
+                    x: {
+                    grid: { display: false },
+                    ticks: {
+                        color: '#191f59',
+                        font: { size: 16, weight: 'bold' }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Last 7 Days',
+                        color: '#191f59',
+                        font: { size: 18, weight: 'bold' }
+                    }
+                    },
+                    y: {
+                    grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                    ticks: {
+                        color: '#191f59',
+                        font: { size: 16, weight: 'bold' }
+                    },
+                    title: {
+                        display: true,
+                        text: 'People Count',
+                        color: '#191f59',
+                        font: { size: 18, weight: 'bold' }
+                    }
+                    }
+                }
+                }
+            });
+        }
+
+        // Initialize
+        window.onload = () => {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            loadInitialHistory();
+            
+            // Refresh display every minute
+            setInterval(() => {
+                if (data.length > 0) {
+                    renderKiosk();
+                }
+            }, 60000);
+        };
+
+        window.onbeforeunload = () => {
+            if (eventSource) eventSource.close();
+            if (reconnectTimeout) clearTimeout(reconnectTimeout);
+        };
+    </script>
+</body>
+</html>
