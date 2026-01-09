@@ -1,0 +1,19 @@
+sudo docker stop tracking_data_api 2>/dev/null
+sudo docker rm tracking_data_api 2>/dev/null
+
+echo "Building Image..."
+sudo docker build -t tracking_data_api_image .
+
+echo "Starting Container..."
+sudo docker run -d \
+  --name tracking_data_api \
+  --restart always \
+  --cpus="0.5" \
+  --memory="512m" \
+  -p 127.0.0.1:5001:8000 \
+  -v "$(pwd)/direction_evl.db:/app/direction_evl.db" \
+  -v "$(pwd)/direction_evl_min.db:/app/direction_evl_min.db" \
+  -v "$(pwd)/.env:/app/.env" \
+  tracking_data_api_image
+
+echo "Done! API is running."
