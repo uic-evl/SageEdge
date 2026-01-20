@@ -9,18 +9,23 @@
 </head>
 <body>
     <div class="header">
+        <div class="qr-codes">
+            <div class="qr-card">
+                <img src="images/sageWeb.png" alt="Sage Web QR" class="qr-image">
+                <div class="qr-label">Sage Web</div>
+            </div>
+        </div>
+
+
         <div class="header-content">
             <h1>UIC-EVL Sage Pedestrian Flow</h1>
             <p>Developed as part of the NSF-funded SAGE research project, this system uses edge AI to observe movement patterns. As people walk by, video is analyzed locally to detect left and right motion. No video is captured or stored; only motion information is displayed.</p>
         </div>
+
         <div class="qr-codes">
             <div class="qr-card">
                 <img src="images/project_description.png" alt="Project Info QR" class="qr-image">
                 <div class="qr-label">Project Info</div>
-            </div>
-            <div class="qr-card">
-                <img src="images/sageWeb.png" alt="Sage Web QR" class="qr-image">
-                <div class="qr-label">Sage Web</div>
             </div>
         </div>
     </div>
@@ -409,14 +414,14 @@
                     position: 'top',
                     labels: {
                         color: '#191f59',
-                        font: { size: 18, weight: 'bold' },
+                        font: { size: 30, weight: 'bold' },
                         padding: 15
                     }
                     },
                     tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    titleFont: { size: 16 },
-                    bodyFont: { size: 14 },
+                    titleFont: { size: 30 },
+                    bodyFont: { size: 30 },
                     padding: 12
                     }
                 },
@@ -425,26 +430,26 @@
                     grid: { display: false },
                     ticks: {
                         color: '#191f59',
-                        font: { size: 16, weight: 'bold' }
+                        font: { size: 30, weight: 'bold' }
                     },
                     title: {
                         display: true,
                         text: 'Last 7 Days',
                         color: '#191f59',
-                        font: { size: 18, weight: 'bold' }
+                        font: { size: 30, weight: 'bold' }
                     }
                     },
                     y: {
                     grid: { color: 'rgba(0, 0, 0, 0.1)' },
                     ticks: {
                         color: '#191f59',
-                        font: { size: 16, weight: 'bold' }
+                        font: { size: 30, weight: 'bold' }
                     },
                     title: {
                         display: true,
                         text: 'People Count',
                         color: '#191f59',
-                        font: { size: 18, weight: 'bold' }
+                        font: { size: 30, weight: 'bold' }
                     }
                     }
                 }
