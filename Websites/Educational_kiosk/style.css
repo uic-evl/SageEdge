@@ -31,15 +31,15 @@ body {
 .header h1 {
     font-size: 50px;
     margin-bottom: 5px;
-    padding-left: 10px;
-    padding-left: 10px;
+    padding-left: 15px;
+    padding-left: 15px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
 .header p {
     /* width: 90%; */
-    padding-left: 25px;
-    padding-right: 25px;
+    padding-left: 15px;
+    padding-right: 15px;
     padding-bottom: 20px;
     font-size: 23px;
     font-weight: bold;
