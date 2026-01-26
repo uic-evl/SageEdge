@@ -10,9 +10,10 @@
 
   <!-- edit here for header in top blue part -->
 
+  <h1 style="font-size: 30px;">UIC-EVL Sage Pedestrian Flow</h1>
+  <p style="font-size: 20px;">Developed as part of the NSF-funded SAGE research project, this system uses edge AI to observe movement patterns. As people walk by, video is analyzed locally to detect left and right motion. No video is captured or stored; only motion information is displayed.</p>
+
   <div class="card">
-    <p style="font-size: 30px; font-weight: bold; "> EVL Live 🔴 Directional Flow</p>
-    <p style="font-size: 30px;">Smile and keep walking! 🚶‍♀️ You're officially part of the graph! 📊 The EVL Vision Team is exploring edge computing using AI to track people walking left and right. What you see here is your walk visualized.</p>
 
     <div class="controls-row">
       <select id="monthSelect" onchange="handleChange()"></select>
@@ -41,6 +42,17 @@
     </div>
 
     <div id="custom-tooltip" style="margin-top: 10px; background: #f8f9fa; padding: 5px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>
+
+  </div>
+
+  <!-- footer here  -->
+  <div class="footer">
+    <div class="footer-content">
+      <div class="footer-title">Scan for More Information</div>
+      <div class="footer-subtitle">University of Illinois Chicago | Electronic Visualization Laboratory</div>
+      <div class="footer-subtitle">This work funded in part by a National Science Foundation grant - A National-Scale Testbed Supporting Artificial Intelligence Research Spanning the Computing Continuum. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.</div>
+
+    </div>
   </div>
 
   <script>
@@ -364,30 +376,30 @@
     }
 
     // Visual notification when new data arrives
-    function showNewDataNotification(leftCount, rightCount) {
-      const chartContainer = document.getElementById('chart-container');
+    // function showNewDataNotification(leftCount, rightCount) {
+    //   const chartContainer = document.getElementById('chart-container');
       
-      // Create popup
-      const popup = document.createElement('div');
-      popup.className = 'data-update-popup';
-      popup.innerHTML = `
-        <div class="popup-content">
-          <div class="popup-title" style="color: white;">✨ New Data Received!</div>
-          <div class="popup-counters">
-            <div class="counter-box counter-left">Left: ${leftCount}</div>
-            <div class="counter-box counter-right">Right: ${rightCount}</div>
-          </div>
-        </div>
-      `;
+    //   // Create popup
+    //   const popup = document.createElement('div');
+    //   popup.className = 'data-update-popup';
+    //   popup.innerHTML = `
+    //     <div class="popup-content">
+    //       <div class="popup-title" style="color: white;">✨ New Data Received!</div>
+    //       <div class="popup-counters">
+    //         <div class="counter-box counter-left">Left: ${leftCount}</div>
+    //         <div class="counter-box counter-right">Right: ${rightCount}</div>
+    //       </div>
+    //     </div>
+    //   `;
       
-      chartContainer.appendChild(popup);
+    //   chartContainer.appendChild(popup);
       
-      // Remove after 3 seconds
-      setTimeout(() => {
-        popup.style.animation = 'fadeOut 0.3s ease-out';
-        setTimeout(() => popup.remove(), 300);
-      }, 3000);
-    }
+    //   // Remove after 3 seconds
+    //   setTimeout(() => {
+    //     popup.style.animation = 'fadeOut 0.3s ease-out';
+    //     setTimeout(() => popup.remove(), 300);
+    //   }, 3000);
+    // }
 
     window.onload = () => {
       const monthSelect = document.getElementById("monthSelect");

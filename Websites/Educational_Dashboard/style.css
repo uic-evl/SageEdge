@@ -188,3 +188,65 @@ select, button {
         transform: translate(-50%, -50%) scale(0.8);
     }
 }
+
+.footer {
+    /* background: linear-gradient(135deg, #191f59 0%, #1e3a8a 100%); */
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 2px solid #0879d6;
+    margin-top: auto;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.footer-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+.footer-subtitle {
+    font-size: 13px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-qr-codes {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.footer-qr-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: transform 0.2s, background 0.2s;
+}
+
+.footer-qr-card:hover {
+    transform: translateY(-3px);
+    background: white;
+}
+
+.footer-qr-image {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 5px;
+}
+
+.footer-qr-label {
+    font-size: 11px;
+    color: #191f59;
+    font-weight: bold;
+}
