@@ -74,9 +74,10 @@ Benchmarking/
 ├── Thor/
 │   ├── scripts/          # Benchmarking scripts for Jetson Thor
 │   └── outputs/          # Results and logs
-└── Orin/
-    ├── scripts/          # Benchmarking scripts for Jetson AGX Orin
-    └── outputs/          # Results and logs
+|── Orin/
+|   ├── scripts/          # Benchmarking scripts for Jetson AGX Orin
+|   └── outputs/          # Results and logs
+|── datat/testsets/       # manifest files for COCO images
 ```
 
 ## Setup & Requirements
@@ -120,7 +121,7 @@ Each script includes:
 - JSONL logging with resume capability
 - Comprehensive warmup procedures
 
-## Key Results
+## Key Findings
 
 | Model | Platform | Latency (ms) | RAM (GB) | Power (W) | Total Tokens |
 |-------|----------|--------------|----------|-----------|--------------|
@@ -130,7 +131,6 @@ Each script includes:
 | InternVL2-2B | Thor | 2,658 | 24.4 | 31.6 | 185,571 |
 | InternVL2-2B | Orin | 5,071 | 18.2 | 21.9 | 192,957 |
 
-**Complete results:** See paper Table I for full performance metrics across all configurations.
 
 ## Deployment Insights
 
