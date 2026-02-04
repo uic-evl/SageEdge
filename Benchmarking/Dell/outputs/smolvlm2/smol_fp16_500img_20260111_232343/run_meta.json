@@ -1,0 +1,21 @@
+{
+  "model_key": "smolvlm2",
+  "model_id": "HuggingFaceTB/SmolVLM2-2.2B-Instruct",
+  "run_group": "smol_fp16_500img_20260111_232343",
+  "host": "dellgb10",
+  "device": "cuda",
+  "dtype": "torch.float16",
+  "torch_version": "2.11.0.dev20251226+cu130",
+  "timestamp": "2026-01-11T23:23:47.831609",
+  "manifest": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/testsets/coco_val2017_500.txt",
+  "num_images": 500,
+  "warmup": 5,
+  "max_new_tokens": 128,
+  "batch_size": 1,
+  "repeats": 1,
+  "suite": "week5_5tasks_bounded",
+  "power_monitoring_available": true,
+  "power_monitoring_method": "nvml",
+  "power_sample_interval_ms": 100,
+  "num_crops": 1
+}
