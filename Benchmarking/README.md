@@ -88,22 +88,6 @@ benchmarking/
 - **PyTorch:** 2.5.1
 - **Transformers:** 4.48.1
 
-### Installation
-
-```bash
-# Clone repository
-git clone https://github.com/uic-evl/SageEdge.git
-cd SageEdge
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
-pip install transformers accelerate pillow numpy
-pip install pynvml  # For power monitoring on Dell
-```
 
 ### Dataset Preparation
 
@@ -171,48 +155,16 @@ Each script includes:
 Current limitations:
 - No task correctness/accuracy evaluation at VQA benchmark level
 - Power measurement inconsistencies on JetPack 7 (Thor)
-- Single-inference mode only (no batching or streaming)
+- GPU utilization monitoring challenges on Thor: jtop is incompatible with JetPack 7, and tegrastats GPU metrics extraction requires further investigation
 
 Planned extensions:
 1. Quantitative accuracy evaluation against VQA benchmarks
-2. Quantization strategies (INT8, 4-bit)
-3. Batching and streaming inference modes
-4. Additional compact VLMs
-5. Concurrent multi-model execution studies
-
-## Citation
-
-If you use this work, please cite:
-
-```bibtex
-@inproceedings{rios2025exploring,
-  title={Exploring Deployment Trade-offs of Compact Vision-Language Models on Edge Systems},
-  author={Rios, Alejandra and Garcia, Fatima Mora and Papka, Michael E.},
-  booktitle={Proceedings of [Conference Name]},
-  year={2025},
-  organization={IEEE}
-}
-```
 
 ## Acknowledgments
 
 This work was supported by NSF grant OAC-2331263 (SAGE Testbed), with additional support from:
 - Electronic Visualization Laboratory at UIC
 - Argonne National Laboratory
-
-## Contact
-
-**Alejandra Rios**  
-Department of Computer Science  
-University of Illinois at Chicago
-
-For questions or collaboration inquiries, please open an issue or contact through the university.
-
-## License
-
-[Add your chosen license here, e.g., MIT, Apache 2.0, etc.]
-
----
 
 **Project Status:** Active Development  
 **Last Updated:** February 2025
