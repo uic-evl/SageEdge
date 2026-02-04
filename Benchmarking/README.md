@@ -67,14 +67,14 @@ Five vision-language tasks reflecting realistic edge use cases, each with 128-to
 ## Repository Structure
 
 ```
-benchmarking/
-├── dell/
+Benchmarking/
+├── Dell/
 │   ├── scripts/          # Benchmarking scripts for Dell Pro Max
 │   └── outputs/          # Results and logs
-├── thor/
+├── Thor/
 │   ├── scripts/          # Benchmarking scripts for Jetson Thor
 │   └── outputs/          # Results and logs
-└── orin/
+└── Orin/
     ├── scripts/          # Benchmarking scripts for Jetson AGX Orin
     └── outputs/          # Results and logs
 ```
@@ -103,7 +103,7 @@ unzip val2017.zip
 Navigate to the appropriate platform directory and run benchmarking scripts:
 
 ```bash
-cd benchmarking/dell/scripts
+cd Benchmarking/Dell/scripts
 
 # Example: Run Moondream2 benchmark
 python benchmark_moondream2.py \
@@ -167,4 +167,4 @@ This work was supported by NSF grant OAC-2331263 (SAGE Testbed), with additional
 - Argonne National Laboratory
 
 **Project Status:** Active Development  
-**Last Updated:** February 2025
+**Last Updated:** February 2026
