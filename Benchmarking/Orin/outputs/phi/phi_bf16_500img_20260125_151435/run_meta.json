@@ -1,0 +1,22 @@
+{
+  "model_key": "phi",
+  "model_id": "microsoft/Phi-3.5-vision-instruct",
+  "run_group": "phi_bf16_500img_20260125_151435",
+  "host": "ubuntu",
+  "device": "cuda",
+  "dtype": "torch.bfloat16",
+  "torch_version": "2.8.0",
+  "timestamp": "2026-01-25T15:14:39.261033",
+  "manifest": "/home/waggle/SageEdge/Benchmarking/data/testsets/coco_val2017_500.txt",
+  "num_images": 500,
+  "warmup": 5,
+  "max_new_tokens": 80,
+  "batch_size": 1,
+  "repeats": 1,
+  "suite": "week5_5tasks_bounded",
+  "num_crops": 16,
+  "n_tiles": 16,
+  "power_monitoring_available": true,
+  "power_monitoring_method": "tegrastats",
+  "power_sample_interval_ms": 100
+}

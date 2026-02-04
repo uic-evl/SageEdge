@@ -1,0 +1,22 @@
+{
+  "model_key": "moondream2",
+  "model_id": "vikhyatk/moondream2",
+  "model_revision": "2025-06-21",
+  "run_group": "moondream2_bf16_500img_20260118_161628",
+  "host": "ubuntu",
+  "device": "cuda",
+  "dtype": "torch.bfloat16",
+  "torch_version": "2.8.0",
+  "timestamp": "2026-01-18T16:16:33.091637",
+  "manifest": "/home/waggle/SageEdge/Benchmarking/data/testsets/coco_val2017_500.txt",
+  "num_images": 500,
+  "warmup": 5,
+  "max_new_tokens": 128,
+  "batch_size": 10,
+  "repeats": 1,
+  "suite": "week5_5tasks_bounded",
+  "hf_home": "/home/waggle/Desktop/SageEdge/Benchmarking/.cache/hf",
+  "power_monitoring_available": true,
+  "power_monitoring_method": "tegrastats",
+  "power_sample_interval_ms": 100
+}
