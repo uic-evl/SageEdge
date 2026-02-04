@@ -1,144 +1,218 @@
-## System Assumptions
+# SAGE Edge: Compact VLM Benchmarking Suite
 
-This project was developed and tested on a SAGE Thor node with:
+Deployment-oriented benchmarking of compact vision-language models on edge computing platforms for the NSF SAGE testbed.
 
-- Ubuntu 22.04 (Jetson-based)
-- NVIDIA CUDA preinstalled (CUDA 13)
-- NVIDIA drivers compatible with JetPack
-- Python 3.10+
-- Internet access for model downloads
+## Overview
 
-## Python Environment Setup
+This repository contains benchmarking scripts and results for evaluating six compact vision-language models (VLMs) across three edge computing platforms. Rather than focusing on accuracy leaderboards, we measure **deployment-critical metrics**: latency, throughput, memory consumption, power usage, and execution reliability under real-world constraints.
 
-We recommend using a virtual environment:
+**Key Findings:**
+- **Moondream2** achieves lowest latency (895ms on Thor, 2.3s on Orin) with minimal memory footprint (12GB)
+- **SmolVLM2** exhibits extreme token generation (3M tokens/run), limiting practical deployment despite competitive latency
+- **InternVL2-2B** offers balanced performance across platforms
+- Memory pressure becomes the primary constraint on embedded devices (Jetson AGX Orin)
+
+## Models Evaluated
+
+| Model | Parameters | Key Characteristics |
+|-------|-----------|---------------------|
+| **Moondream2** | 1.8B | Efficient vision encoder, compact language model |
+| **SmolVLM2** | 2B | Dense vision encoding, high token generation |
+| **LLaVA-Mini** | 9B | Smaller LLaVA variant, higher memory requirements |
+| **Gemma 3n (E4B-IT)** | 8B/4B eff. | Instruction-tuned with selective parameter activation |
+| **InternVL2-2B** | 2B | Balanced vision-language architecture |
+| **Phi-3.5-Vision** | 4.2B | Microsoft's compact multimodal model |
+
+## Hardware Platforms
+
+### Dell Pro Max (GB10)
+- **GPU:** NVIDIA RTX A2000 (12GB VRAM)
+- **CPU:** Intel Xeon
+- **RAM:** 64GB
+- **Role:** Development/near-edge environment
+
+### NVIDIA Jetson Thor
+- **Memory:** 32GB unified memory
+- **Role:** Higher-performance edge inference
+- **Status:** JetPack 7 (experimental)
+
+### NVIDIA Jetson AGX Orin
+- **Memory:** 32GB unified memory
+- **Power Limit:** 50W
+- **Role:** Power-constrained embedded deployment
+
+## Evaluation Methodology
+
+### Tasks
+Five vision-language tasks reflecting realistic edge use cases, each with 128-token generation limit:
+
+1. **caption_brief** - Concise 1-2 sentence factual captioning
+2. **objects_and_counts** - Object detection with approximate counts
+3. **spatial_relationships** - Relative spatial grounding (left/right, near/far)
+4. **scene_context** - Scene type classification (urban, indoor, landscape)
+5. **attributes** - Visual attributes (color, lighting, materials)
+
+### Dataset
+- **500 images** from COCO validation split
+- **2,500 total inferences** (5 tasks × 500 images)
+- Both **fp16** and **bf16** precision tested where supported
+
+### Metrics
+- **Latency:** Mean and tail (P90, P99) per-image inference time
+- **Throughput:** Images processed per second
+- **Memory:** Peak RAM usage
+- **Power:** GPU-specific (NVML on Dell, VDD_GPU rail on Jetson)
+- **Token metrics:** Total tokens, tokens/sec, energy per token
+
+## Repository Structure
+
+```
+benchmarking/
+├── dell/
+│   ├── scripts/          # Benchmarking scripts for Dell Pro Max
+│   └── outputs/          # Results and logs
+├── thor/
+│   ├── scripts/          # Benchmarking scripts for Jetson Thor
+│   └── outputs/          # Results and logs
+└── orin/
+    ├── scripts/          # Benchmarking scripts for Jetson AGX Orin
+    └── outputs/          # Results and logs
+```
+
+## Setup & Requirements
+
+### Software Environment
+- **OS:** Ubuntu (20.04+ recommended)
+- **CUDA:** 12.x
+- **Python:** 3.10+
+- **PyTorch:** 2.5.1
+- **Transformers:** 4.48.1
+
+### Installation
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install --upgrade pip
+# Clone repository
+git clone https://github.com/uic-evl/SageEdge.git
+cd SageEdge
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+pip install transformers accelerate pillow numpy
+pip install pynvml  # For power monitoring on Dell
 ```
-## Core dependencies
-These are the things **without which the project does not run**.
-- torch: model execution on CPU/GPU
-- transformers: Hugging Face vision-language models (Gemma, Moondream)
-- accelerate: device mapping on constrained hardware
-- pillow: image loading and preprocessing
-- psutil: system-level performance metrics
-- ultralytics: YOLO object detection
 
-## Thor Setup Notes (Reproducible)
+### Dataset Preparation
 
-### Goal
+Download COCO validation images:
+```bash
+# Download and extract COCO val2017
+wget http://images.cocodataset.org/zips/val2017.zip
+unzip val2017.zip
+```
 
-Run Gemma-3n (HF), moondream2, YOLO benchmarks on Jetson Thor reliably.
+## Usage
 
-### Repo context
+Navigate to the appropriate platform directory and run benchmarking scripts:
 
-* Gemma model card: `google/gemma-3n-E4B-it`
-* Related baseline repo: `SageImageCaption` (for reference)
+```bash
+cd benchmarking/dell/scripts
+
+# Example: Run Moondream2 benchmark
+python benchmark_moondream2.py \
+    --images_dir /path/to/val2017 \
+    --output_dir ../outputs \
+    --num_images 500 \
+    --dtype bf16
+```
+
+Each script includes:
+- Standardized 5-task evaluation suite
+- Power monitoring (platform-specific)
+- GPU utilization tracking
+- JSONL logging with resume capability
+- Comprehensive warmup procedures
+
+## Key Results
+
+| Model | Platform | Latency (ms) | RAM (GB) | Power (W) | Total Tokens |
+|-------|----------|--------------|----------|-----------|--------------|
+| Moondream2 | Thor | 895 | 24.9 | 27.2 | 140,867 |
+| Moondream2 | Orin | 2,276 | 12.2 | 14.2 | 140,863 |
+| SmolVLM2 | Thor | 2,079 | 26.6 | 29.5 | 2,956,750 |
+| InternVL2-2B | Thor | 2,658 | 24.4 | 31.6 | 185,571 |
+| InternVL2-2B | Orin | 5,071 | 18.2 | 21.9 | 192,957 |
+
+**Complete results:** See paper Table I for full performance metrics across all configurations.
+
+## Deployment Insights
+
+### Best for Resource-Constrained Edge
+**Moondream2** - Lowest latency, smallest memory footprint, stable tail behavior
+
+### Best for Balanced Performance
+**InternVL2-2B** - Good latency with moderate memory, works well on Thor and Dell
+
+### Avoid for Production Edge
+**SmolVLM2** - Despite fast inference, 30× token generation creates downstream bottlenecks
+
+## Implementation Notes
+
+- **Attention Backend:** Eager mode for consistency across devices
+- **Precision Control:** Explicit dtype management (fp16/bf16)
+- **Power Telemetry:** Device-specific (NVML vs. tegrastats)
+- **No Ollama:** Direct Transformers implementation for precise control
+
+## Limitations & Future Work
+
+Current limitations:
+- No task correctness/accuracy evaluation at VQA benchmark level
+- Power measurement inconsistencies on JetPack 7 (Thor)
+- Single-inference mode only (no batching or streaming)
+
+Planned extensions:
+1. Quantitative accuracy evaluation against VQA benchmarks
+2. Quantization strategies (INT8, 4-bit)
+3. Batching and streaming inference modes
+4. Additional compact VLMs
+5. Concurrent multi-model execution studies
+
+## Citation
+
+If you use this work, please cite:
+
+```bibtex
+@inproceedings{rios2025exploring,
+  title={Exploring Deployment Trade-offs of Compact Vision-Language Models on Edge Systems},
+  author={Rios, Alejandra and Garcia, Fatima Mora and Papka, Michael E.},
+  booktitle={Proceedings of [Conference Name]},
+  year={2025},
+  organization={IEEE}
+}
+```
+
+## Acknowledgments
+
+This work was supported by NSF grant OAC-2331263 (SAGE Testbed), with additional support from:
+- Electronic Visualization Laboratory at UIC
+- Argonne National Laboratory
+
+## Contact
+
+**Alejandra Rios**  
+Department of Computer Science  
+University of Illinois at Chicago
+
+For questions or collaboration inquiries, please open an issue or contact through the university.
+
+## License
+
+[Add your chosen license here, e.g., MIT, Apache 2.0, etc.]
 
 ---
 
-## 1) Create and activate environment
-
-```bash
-cd ~/Desktop/SageEdge/Benchmarking
-python3 -m venv thor-env
-source thor-env/bin/activate
-pip install --upgrade pip
-```
-
----
-
-## 2) Disable TorchVision inside Transformers (Thor-safe)
-
-On Thor, TorchVision can cause import/runtime issues. We disable it for Transformers:
-
-**one-time**
-
-```bash
-echo 'export TRANSFORMERS_NO_TORCHVISION=1' >> ~/.bashrc
-source ~/.bashrc
-```
-
-**verify**
-
-```bash
-echo $TRANSFORMERS_NO_TORCHVISION
-# expected: 1
-```
-
-**run scripts like**
-
-```bash
-TRANSFORMERS_NO_TORCHVISION=1 python3 scripts/test_gemma.py
-```
-
----
-
-## 3) Install PyTorch (Thor-compatible) + dependencies
-
-### What went wrong initially (important)
-
-Installing PyTorch from the standard CUDA wheel index (`download.pytorch.org/whl/cu126`) produced:
-
-* `NVIDIA Thor with CUDA capability sm_110 is not compatible...`
-* `no kernel image is available for execution on the device`
-
-This indicates the wheel was not built with **sm_110** support (Thor GPU arch).
-
-### Fix: install Thor-compatible wheels
-
-**remove incorrect installs**
-
-```bash
-pip uninstall -y torch torchvision torchaudio
-```
-
-**install Thor-compatible PyTorch**
-
-```bash
-pip install torch torchvision --index-url https://pypi.jetson-ai-lab.io/sbsa/cu130
-```
-
-> This index contains wheels compiled for Thor (sm_110) with CUDA 13.
-
-
-##  Install model + benchmarking dependencies
-
-```bash
-pip install "transformers>=4.53.0" timm pillow sentencepiece accelerate protobuf psutil
-pip install huggingface_hub
-pip install ultralytics
-```
-
----
-
-## 6) Verify GPU + Torch works
-
-```bash
-python3 - << 'EOF'
-import torch
-print("torch:", torch.__version__)
-print("cuda available:", torch.cuda.is_available())
-if torch.cuda.is_available():
-    print("device:", torch.cuda.get_device_name(0))
-EOF
-```
-
-Expected:
-
-* `cuda available: True`
-* device shows `NVIDIA Thor`
-* no warnings about `sm_110 not compatible`
-
----
-
-## 7) Sanity test: Gemma captioning
-
-```bash
-export TRANSFORMERS_NO_TORCHVISION=1
-python3 scripts/test_gemma.py
-```
-
-During environment setup on Jetson Thor, standard PyTorch CUDA wheels were incompatible with the Thor GPU architecture (sm_110), causing kernel execution errors. We resolved this by installing Thor-specific PyTorch wheels (CUDA 13 build) and disabling TorchVision usage within Transformers via `TRANSFORMERS_NO_TORCHVISION=1` to avoid unsupported torchvision operators.”
+**Project Status:** Active Development  
+**Last Updated:** February 2025
