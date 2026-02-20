@@ -1,0 +1,192 @@
+from __future__ import annotations
+
+import json, time, traceback
+from dataclasses import dataclass, asdict
+from pathlib import Path
+from typing import Any, Dict, Optional, List, Tuple
+
+from judge.rule_judge import rule_based_judge
+
+
+@dataclass
+class StageResult:
+    ok: bool
+    data: Dict[str, Any]
+    error: Optional[Dict[str, str]]
+    latency_ms: int
+
+
+def safe_call(name: str, fn, fallback_data: Dict[str, Any]) -> StageResult:
+    t0 = time.time()
+    try:
+        out = fn()
+        return StageResult(True, out, None, int((time.time() - t0) * 1000))
+    except Exception as e:
+        return StageResult(
+            False,
+            fallback_data,
+            {
+                "stage": name,
+                "type": type(e).__name__,
+                "message": str(e),
+                "traceback": traceback.format_exc(),
+            },
+            int((time.time() - t0) * 1000),
+        )
+
+
+def yolo_detect(image_path: str, model_name: str = "yolov8n.pt", conf: float = 0.25) -> Dict[str, Any]:
+    from ultralytics import YOLO
+
+    model = YOLO(model_name)
+    res = model(image_path, conf=conf, verbose=False)[0]
+
+    dets: List[Dict[str, Any]] = []
+    for b in res.boxes:
+        cls_id = int(b.cls.item())
+        dets.append(
+            {
+                "class": res.names[cls_id],
+                "conf": float(b.conf.item()),
+                "xyxy": [float(x) for x in b.xyxy[0].tolist()],
+            }
+        )
+
+    return {"detections": dets, "model": model_name, "conf": conf}
+
+
+def _plural(noun: str, n: int) -> str:
+    if n == 1:
+        return noun
+    if noun.endswith("s"):
+        return noun
+    return noun + "s"
+
+
+def caption_from_yolo(detections: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """
+    Grounded caption from YOLO detections only (safe, no hallucination about actions).
+    """
+    if not detections:
+        return {"caption_raw": "I could not detect any recognizable objects."}
+
+    counts: Dict[str, int] = {}
+    best: Dict[str, float] = {}
+    for d in detections:
+        cls = (d.get("class") or "object").lower()
+        conf = float(d.get("conf") or 0.0)
+        counts[cls] = counts.get(cls, 0) + 1
+        best[cls] = max(best.get(cls, 0.0), conf)
+
+    items: List[Tuple[str, int, float]] = sorted(
+        [(c, n, best.get(c, 0.0)) for c, n in counts.items()],
+        key=lambda x: (x[1], x[2]),
+        reverse=True,
+    )
+
+    # Make it more human than "Detected:"
+    parts = []
+    for cls, n, mx in items:
+        # nicer wording for person
+        noun = "person" if cls == "person" else cls
+        parts.append(f"{n} {_plural(noun, n)}")
+
+    # If persons exist, say "people" instead of "persons"
+    if "person" in counts:
+        n = counts["person"]
+        # replace "n persons" with "n people"
+        parts = [p for p in parts if not p.startswith(f"{n} person")]
+        parts.insert(0, f"{n} people" if n != 1 else "1 person")
+
+    caption = "The image shows " + ", ".join(parts) + "."
+    return {"caption_raw": caption}
+
+
+def caption_with_moondream2(image_path: str, prompt: str = "") -> Dict[str, Any]:
+    """
+    Optional: richer caption using Moondream2 (can mention actions like walking/playing).
+    If transformers/model isn't available, this may fail and we will fall back to YOLO caption.
+    """
+    from PIL import Image
+    import torch
+    from transformers import AutoTokenizer, AutoModelForCausalLM
+
+    model_id = "vikhyatk/moondream2"
+    tok = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
+    model = AutoModelForCausalLM.from_pretrained(
+        model_id,
+        trust_remote_code=True,
+        torch_dtype=torch.float32,   # CPU-friendly
+    ).eval()
+
+    img = Image.open(image_path).convert("RGB")
+
+    if not prompt:
+        prompt = (
+            "Write a detailed caption describing what is visible in the image. "
+            "Only mention things you are confident are present. "
+            "If you are unsure about an action, describe the scene without guessing."
+        )
+
+    with torch.inference_mode():
+        emb = model.encode_image(img)
+        text = model.answer_question(emb, prompt, tok)
+
+    return {"caption_raw": str(text).strip(), "model": model_id}
+
+
+def run(image_path: str, use_vlm: bool = True) -> Dict[str, Any]:
+    image_path = str(Path(image_path).resolve())
+    out: Dict[str, Any] = {"image_path": image_path, "stages": {}}
+
+    det = safe_call("detect", lambda: yolo_detect(image_path), {"detections": [], "model": None, "conf": None})
+    out["stages"]["detect"] = asdict(det)
+    out["detections"] = out["stages"]["detect"]["data"].get("detections", [])
+
+    # Try VLM caption first (for actions/detail), else fall back to YOLO caption
+    if use_vlm:
+        cap = safe_call(
+            "caption_vlm",
+            lambda: caption_with_moondream2(image_path),
+            {"caption_raw": ""},
+        )
+        out["stages"]["caption_vlm"] = asdict(cap)
+        cap_text = out["stages"]["caption_vlm"]["data"].get("caption_raw", "").strip()
+    else:
+        cap_text = ""
+
+    if not cap_text:
+        cap2 = safe_call("caption_yolo", lambda: caption_from_yolo(out["detections"]), {"caption_raw": ""})
+        out["stages"]["caption"] = asdict(cap2)
+        out["caption_raw"] = out["stages"]["caption"]["data"].get("caption_raw", "")
+    else:
+        out["stages"]["caption"] = out["stages"]["caption_vlm"]
+        out["caption_raw"] = cap_text
+
+    judge = safe_call(
+        "judge_rule",
+        lambda: {"rule_based": rule_based_judge(out["caption_raw"], out["detections"])},
+        {"rule_based": {"claims": {}, "violations": [], "hallucination_score": None, "grounding_score": None}},
+    )
+    out["stages"]["judge_rule"] = asdict(judge)
+    out["judge"] = out["stages"]["judge_rule"]["data"]
+
+    return out
+
+
+if __name__ == "__main__":
+    import argparse
+
+    p = argparse.ArgumentParser()
+    p.add_argument("--image", required=True)
+    p.add_argument("--out", default="outputs/result.json")
+    p.add_argument("--no_vlm", action="store_true", help="Disable VLM captioning; use YOLO-only caption.")
+    args = p.parse_args()
+
+    Path("outputs").mkdir(exist_ok=True)
+
+    result = run(args.image, use_vlm=(not args.no_vlm))
+    Path(args.out).write_text(json.dumps(result, indent=2))
+    print("Saved:", args.out)
+    print("Caption:", result.get("caption_raw"))
+    print("Num detections:", len(result.get("detections", [])))
