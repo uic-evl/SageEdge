@@ -32,6 +32,9 @@ import os
 import argparse
 import time
 from pathlib import Path
+import hashlib
+import platform
+import sys
 
 import ollama
 
@@ -43,6 +46,11 @@ NUM_RUNS      = 5
 
 PROMPT = "Describe what you see in this image."
 
+# Generation options for reproducibility
+TEMPERATURE   = 0.0
+TOP_P         = 1.0
+MAX_TOKENS    = 256
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--device", required=True, help="Device name (e.g. thor, dell_gb10)")
@@ -51,7 +59,25 @@ args = parser.parse_args()
 
 DEVICE_NAME  = args.device
 MODEL_NAME   = args.model
-OUTPUT_FILE  = os.path.join(OUTPUT_DIR, f"results_{DEVICE_NAME}.jsonl")
+
+SAFE_MODEL_NAME = MODEL_NAME.replace("/", "_").replace(":", "-")
+
+EXPERIMENT_DATE = time.strftime("%Y%m%d")
+
+EXPERIMENT_ID = hashlib.md5(
+    f"{MODEL_NAME}|{PROMPT}|{TEMPERATURE}|{TOP_P}|{MAX_TOKENS}|{EMBED_MODEL}".encode()
+).hexdigest()[:10]
+
+OUTPUT_FILE  = os.path.join(
+    OUTPUT_DIR,
+    f"results_{DEVICE_NAME}_{EXPERIMENT_DATE}_{SAFE_MODEL_NAME}_{EXPERIMENT_ID}.jsonl",
+)
+
+RUNTIME_INFO = {
+    "python": sys.version.split()[0],
+    "platform": platform.platform(),
+    "ollama_python_package": getattr(ollama, "__version__", "unknown"),
+}
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
@@ -74,6 +100,7 @@ with open(SAMPLE_FILE) as f:
 remaining = [s for s in samples if s["image_id"] not in completed_ids]
 print(f"Images to process: {len(remaining)} / {len(samples)}")
 print(f"Device: {DEVICE_NAME}  |  Model: {MODEL_NAME}  |  Runs per image: {NUM_RUNS}")
+print(f"Experiment ID: {EXPERIMENT_ID}")
 print(f"Output: {OUTPUT_FILE}\n")
 
 
@@ -89,7 +116,12 @@ def generate_response(image_path: str, prompt: str) -> str:
             "role": "user",
             "content": prompt,
             "images": [image_path]
-        }]
+        }],
+        options={
+            "temperature": TEMPERATURE,
+            "top_p": TOP_P,
+            "num_predict": MAX_TOKENS
+        }
     )
     return response["message"]["content"].strip()
 
@@ -126,27 +158,76 @@ with open(OUTPUT_FILE, "a") as out_f:
 
         run_outputs = []
         for run_i in range(NUM_RUNS):
-            t0   = time.time()
-            text = generate_response(image_path, PROMPT)
-            emb  = get_embedding(text)
-            elapsed = time.time() - t0
+            text = None
+            emb = None
+            gen_latency = None
+            emb_latency = None
+            total_latency = None
+            error = None
+
+            for attempt in range(2):
+                try:
+                    t_gen = time.time()
+                    text = generate_response(image_path, PROMPT)
+                    gen_latency = time.time() - t_gen
+
+                    t_emb = time.time()
+                    emb = get_embedding(text)
+                    emb_latency = time.time() - t_emb
+
+                    total_latency = gen_latency + emb_latency
+                    break
+                except Exception as e:
+                    error = str(e)
+                    print(f"  run {run_i+1}/{NUM_RUNS} attempt {attempt+1} failed: {e}")
+                    if attempt == 0:
+                        print("    retrying once...")
+                        time.sleep(2)
+
+            if total_latency is not None:
+                preview = (text or "").replace("\n", " ")[:60]
+                print(f"  run {run_i+1}/{NUM_RUNS}  ({total_latency:.2f}s)  \"{preview}...\"")
+            else:
+                print(f"  run {run_i+1}/{NUM_RUNS}  FAILED after retries")
 
             run_outputs.append({
-                "run":       run_i,
-                "text":      text,
+                "run": run_i,
+                "text": text,
+                "text_lower": text.lower() if text is not None else None,
                 "embedding": emb,
-                "latency_s": round(elapsed, 3)
+                "gen_latency_s": gen_latency,
+                "embed_latency_s": emb_latency,
+                "total_latency_s": total_latency,
+                "gen_latency_s_3dp": round(gen_latency, 3) if gen_latency is not None else None,
+                "embed_latency_s_3dp": round(emb_latency, 3) if emb_latency is not None else None,
+                "total_latency_s_3dp": round(total_latency, 3) if total_latency is not None else None,
+                "error": error,
             })
-            print(f"  run {run_i+1}/{NUM_RUNS}  ({elapsed:.2f}s)  \"{text[:60]}...\"")
+
+        # Compute per-image total latency
+        image_total_latency = sum(
+            (o["total_latency_s"] for o in run_outputs if o["total_latency_s"] is not None),
+            0.0,
+        )
 
         record = {
-            "image_id":          image_id,
-            "file_name":         sample["file_name"],
-            "device":            DEVICE_NAME,
-            "model":             MODEL_NAME,
-            "prompt":            PROMPT,
-            "expected_entities": expected,
-            "outputs":           run_outputs
+            "image_id":           image_id,
+            "file_name":          sample["file_name"],
+            "device":             DEVICE_NAME,
+            "model":              MODEL_NAME,
+            "embedding_model":    EMBED_MODEL,
+            "experiment_id":      EXPERIMENT_ID,
+            "prompt":             PROMPT,
+            "expected_entities":  expected,
+            "generation_options": {
+                "temperature": TEMPERATURE,
+                "top_p": TOP_P,
+                "max_tokens": MAX_TOKENS
+            },
+            "runtime":            RUNTIME_INFO,
+            "timestamp":          time.strftime("%Y-%m-%dT%H:%M:%S"),
+            "image_total_latency_s": round(image_total_latency, 3),
+            "outputs":            run_outputs
         }
 
         out_f.write(json.dumps(record) + "\n")
