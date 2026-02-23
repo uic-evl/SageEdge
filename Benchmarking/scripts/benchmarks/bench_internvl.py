@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-# benchmark gemma-3n (image->text) with a standardized 5-task suite
+# benchmark internvl (image->text) with a standardized 5-task suite
 # logs per task per image to jsonl + summary json
-# designed to be launched by the orchestrator inside the gemma venv
+# designed to be launched by the orchestrator inside the internvl venv
 
 import argparse
 import gc
@@ -15,14 +15,17 @@ from pathlib import Path
 
 import torch
 import psutil
+import torchvision.transforms as T
 from PIL import Image
-from transformers import AutoProcessor, AutoModelForImageTextToText
+from torchvision.transforms.functional import InterpolationMode
+from transformers import AutoModel, AutoTokenizer
 
-# avoid torchvision on jetson / thor (safe elsewhere too)
-os.environ.setdefault("TRANSFORMERS_NO_TORCHVISION", "1")
+MODEL_KEY = "internvl"
+MODEL_ID = "OpenGVLab/InternVL2-2B"
 
-MODEL_KEY = "gemma3n"
-MODEL_ID = "google/gemma-3n-E4B-it"
+# imagenet normalization (from internvl examples)
+IMAGENET_MEAN = (0.485, 0.456, 0.406)
+IMAGENET_STD = (0.229, 0.224, 0.225)
 
 # Try to import pynvml for GPU monitoring
 try:
@@ -32,7 +35,7 @@ except ImportError:
     PYNVML_AVAILABLE = False
 
 
-def parse_args():b
+def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--manifest", required=True, help="text file with one image path per line")
     p.add_argument("--output_dir", required=True, help="base outputs dir")
@@ -46,6 +49,7 @@ def parse_args():b
     p.add_argument("--batch_size", type=int, default=1)
     p.add_argument("--resume", action="store_true", help="resume from existing runs.jsonl")
     p.add_argument("--power_sample_interval_ms", type=int, default=100, help="power sampling interval in ms")
+    p.add_argument("--max_num_tiles", type=int, default=12, help="maximum number of tiles for InternVL dynamic preprocessing")
     return p.parse_args()
 
 
@@ -273,26 +277,85 @@ def percentile(sorted_vals, p):
     return sorted_vals[k]
 
 
-def std_dev(values: list[float]) -> float | None:
-    if not values:
-        return None
-    if len(values) == 1:
-        return 0.0
-    mean_val = sum(values) / len(values)
-    var = sum((v - mean_val) ** 2 for v in values) / len(values)
-    return var ** 0.5
+def build_transform(input_size: int):
+    return T.Compose([
+        T.Lambda(lambda img: img.convert("RGB") if img.mode != "RGB" else img),
+        T.Resize((input_size, input_size), interpolation=InterpolationMode.BICUBIC),
+        T.ToTensor(),
+        T.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD),
+    ])
 
 
-def gpu_mem_gb_from_cuda_stats(cuda_stats: dict) -> float | None:
-    if not cuda_stats or not cuda_stats.get("cuda"):
-        return None
-    max_alloc = cuda_stats.get("gpu_max_mem_alloc_mb")
-    max_reserved = cuda_stats.get("gpu_max_mem_reserved_mb")
-    candidates = [v for v in [max_alloc, max_reserved] if isinstance(v, (int, float))]
-    if not candidates:
-        return None
-    peak_mb = max(candidates)
-    return round(peak_mb / 1024.0, 3)
+def find_closest_aspect_ratio(aspect_ratio, target_ratios, width, height, image_size):
+    best_ratio_diff = float("inf")
+    best_ratio = (1, 1)
+    area = width * height
+    for ratio in target_ratios:
+        target_aspect_ratio = ratio[0] / ratio[1]
+        ratio_diff = abs(aspect_ratio - target_aspect_ratio)
+        if ratio_diff < best_ratio_diff:
+            best_ratio_diff = ratio_diff
+            best_ratio = ratio
+        elif ratio_diff == best_ratio_diff:
+            if area > 0.5 * image_size * image_size * ratio[0] * ratio[1]:
+                best_ratio = ratio
+    return best_ratio
+
+
+def dynamic_preprocess(image, min_num=1, max_num=12, image_size=448, use_thumbnail=False):
+    """InternVL's dynamic image preprocessing with adaptive tiling
+    
+    Uses HuggingFace defaults: max_num_tiles=12, use_thumbnail=False.
+    Tile count varies naturally per image aspect ratio for defensible, reproducible benchmarking.
+    """
+    orig_width, orig_height = image.size
+    aspect_ratio = orig_width / orig_height
+
+    target_ratios = set(
+        (i, j)
+        for n in range(min_num, max_num + 1)
+        for i in range(1, n + 1)
+        for j in range(1, n + 1)
+        if i * j <= max_num and i * j >= min_num
+    )
+    target_ratios = sorted(target_ratios, key=lambda x: x[0] * x[1])
+
+    target_aspect_ratio = find_closest_aspect_ratio(
+        aspect_ratio, target_ratios, orig_width, orig_height, image_size
+    )
+
+    target_width = image_size * target_aspect_ratio[0]
+    target_height = image_size * target_aspect_ratio[1]
+    blocks = target_aspect_ratio[0] * target_aspect_ratio[1]
+
+    resized_img = image.resize((target_width, target_height))
+    processed_images = []
+    for i in range(blocks):
+        box = (
+            (i % (target_width // image_size)) * image_size,
+            (i // (target_width // image_size)) * image_size,
+            ((i % (target_width // image_size)) + 1) * image_size,
+            ((i // (target_width // image_size)) + 1) * image_size,
+        )
+        processed_images.append(resized_img.crop(box))
+
+    if use_thumbnail and len(processed_images) != 1:
+        processed_images.append(image.resize((image_size, image_size)))
+
+    return processed_images
+
+
+def load_image(image_file: Path, input_size=448, max_num=12):
+    """Load and preprocess image for InternVL using HuggingFace defaults"""
+    image = Image.open(image_file).convert("RGB")
+    transform = build_transform(input_size=input_size)
+    tiles = dynamic_preprocess(image, image_size=input_size, use_thumbnail=False, max_num=max_num)
+    pixel_values = torch.stack([transform(t) for t in tiles])
+    
+    # Get original image resolution
+    img_resolution = get_image_resolution(image)
+    
+    return pixel_values, len(tiles), img_resolution
 
 
 def build_tasks():
@@ -327,63 +390,33 @@ def build_tasks():
     }
 
 
-def gemma_generate(
-    processor,
+def internvl_generate(
+    tokenizer,
     model,
-    image: Image.Image,
+    pixel_values,
     user_text: str,
     device: str,
-    max_new_tokens: int,
-) -> tuple[str, str | None, int, int]:
+    max_new_tokens: int
+) -> tuple[str, str | None, int | None, int | None]:
     """
-    Generate text from image using Gemma 3n model.
+    Generate text from image using InternVL's custom .chat() method.
     
-    IMPORTANT: Do not pass pad_token_id or eos_token_id to generate().
-    Gemma 3n generates only PAD tokens when these are explicitly set.
+    Note: InternVL uses a custom chat interface, not standard HuggingFace generation.
     """
+    generation_config = {
+        "max_new_tokens": max_new_tokens,
+        "do_sample": False,
+    }
 
-    messages = [
-        {
-            "role": "user",
-            "content": [
-                {"type": "image"},
-                {"type": "text", "text": user_text},
-            ],
-        }
-    ]
-
-    prompt = processor.apply_chat_template(
-        messages, add_generation_prompt=True, tokenize=False
-    )
-
-    inputs = processor(text=prompt, images=[image], return_tensors="pt")
-    if device == "cuda":
-        for k, v in inputs.items():
-            if torch.is_floating_point(v):
-                inputs[k] = v.to(device="cuda", dtype=model.dtype)
-            else:
-                inputs[k] = v.to("cuda")
-
-    # CRITICAL: Do NOT pass pad_token_id or eos_token_id
-    with torch.inference_mode():
-        outputs = model.generate(
-            **inputs,
-            max_new_tokens=max_new_tokens,
-            do_sample=False,
-        )
-
-    input_len = int(inputs["input_ids"].shape[-1])
-    gen_ids = outputs[0, input_len:]
-    gen_len = int(gen_ids.numel())
-
-    # Decode with skip_special_tokens=True for clean output
-    text = processor.decode(gen_ids, skip_special_tokens=True).strip()
-
-    err = None
-    if text == "":
-        err = "empty_generation"
-
-    return text, err, input_len, gen_len
+    try:
+        with torch.inference_mode():
+            response = model.chat(tokenizer, pixel_values, user_text, generation_config)
+        # Estimate token counts (InternVL doesn't return exact counts)
+        user_prompt_tokens_est = len(tokenizer.encode(user_text))
+        response_tokens_est = len(tokenizer.encode(response))
+        return response, None, user_prompt_tokens_est, response_tokens_est
+    except Exception as e:
+        return "", str(e), None, None
 
 
 def main():
@@ -427,6 +460,12 @@ def main():
         "batch_size": args.batch_size,
         "repeats": args.repeats,
         "suite": "week5_5tasks_bounded",
+        "preprocessing": {
+            "max_num_tiles": args.max_num_tiles,
+            "use_thumbnail": False,
+            "image_size": 448,
+            "note": "Uses HuggingFace documented defaults. Tile count varies naturally per image aspect ratio for reproducible, defensible benchmarking."
+        },
         "power_monitoring_available": power_monitor.available,
         "power_sample_interval_ms": args.power_sample_interval_ms if power_monitor.available else None,
     }
@@ -436,14 +475,33 @@ def main():
     print(f"loading {MODEL_ID} on {device} (dtype={dtype})")
     print(f"power monitoring: {'enabled' if power_monitor.available else 'not available'}")
 
-    processor = AutoProcessor.from_pretrained(MODEL_ID)
-    model = AutoModelForImageTextToText.from_pretrained(
+    tokenizer = AutoTokenizer.from_pretrained(
         MODEL_ID,
-        torch_dtype=dtype,
-        device_map="cuda" if device == "cuda" else None,
-        attn_implementation="eager",
+        trust_remote_code=True,
+        use_fast=False,
     )
-    model.eval()
+
+    # Note: InternVL uses trust_remote_code, so attn_implementation may not work
+    # Try to set it anyway for consistency, but it might be ignored
+    try:
+        model = AutoModel.from_pretrained(
+            MODEL_ID,
+            trust_remote_code=True,
+            low_cpu_mem_usage=True,
+            torch_dtype=dtype,
+            attn_implementation="eager",  # For consistency with Gemma
+        ).eval()
+    except Exception as e:
+        print(f"Warning: Could not set attn_implementation='eager', using default: {e}")
+        model = AutoModel.from_pretrained(
+            MODEL_ID,
+            trust_remote_code=True,
+            low_cpu_mem_usage=True,
+            torch_dtype=dtype,
+        ).eval()
+
+    if device == "cuda":
+        model = model.cuda()
 
     tasks = build_tasks()
     tasks["caption_brief"]["prompt"] = args.prompt
@@ -464,26 +522,31 @@ def main():
             print("nothing left to do (all images already complete).")
             return
 
+    max_num_tiles = args.max_num_tiles
+
     # warmup (first image + first task, then full pass through all tasks)
     if args.warmup > 0:
         try:
-            img0 = Image.open(image_paths[0]).convert("RGB")
+            pixel_values, n_tiles, img_resolution = load_image(Path(image_paths[0]), max_num=max_num_tiles)
+            pixel_values = pixel_values.to(dtype)
+            if device == "cuda":
+                pixel_values = pixel_values.cuda()
             first_task = next(iter(tasks.values()))
             for _ in range(args.warmup):
-                _ = gemma_generate(
-                    processor=processor,
+                _ = internvl_generate(
+                    tokenizer=tokenizer,
                     model=model,
-                    image=img0,
+                    pixel_values=pixel_values,
                     user_text=first_task["prompt"],
                     device=device,
                     max_new_tokens=args.max_new_tokens,
                 )
             # plus one pass of all tasks on first image
             for task_name, task_cfg in tasks.items():
-                _ = gemma_generate(
-                    processor=processor,
+                _ = internvl_generate(
+                    tokenizer=tokenizer,
                     model=model,
-                    image=img0,
+                    pixel_values=pixel_values,
                     user_text=task_cfg["prompt"],
                     device=device,
                     max_new_tokens=args.max_new_tokens,
@@ -503,7 +566,7 @@ def main():
     with open(runs_path, "a") as f:
         global_i = 0
         for batch_i, batch in enumerate(chunked(image_paths, args.batch_size), start=1):
-            # Print batch header (keeping Dell's format)
+            # Print batch header
             print()
             print(f"[{MODEL_KEY}] batch {batch_i} ({len(batch)} images)")
             
@@ -515,8 +578,10 @@ def main():
 
                 # load once per image; reuse for all tasks
                 try:
-                    img = Image.open(img_path).convert("RGB")
-                    img_resolution = get_image_resolution(img)
+                    pixel_values, n_tiles, img_resolution = load_image(Path(img_path), max_num=max_num_tiles)
+                    pixel_values = pixel_values.to(dtype)
+                    if device == "cuda":
+                        pixel_values = pixel_values.cuda()
                 except Exception as e:
                     # log one record per task even if the image failed to load
                     for task_name in tasks.keys():
@@ -527,9 +592,6 @@ def main():
                             "task": task_name,
                             "latency_ms": None,
                             "images_per_second": None,
-                            "power_watts": None,
-                            "power_std": None,
-                            "gpu_mem_gb": None,
                             "output_text": "",
                             "error": f"image_load_failed: {e}",
                             "sys_before": system_snapshot(),
@@ -547,8 +609,8 @@ def main():
                 for task_name, task_cfg in tasks.items():
                     total_runs += 1
                     latencies_for_task = []
-                    input_len = None
-                    gen_len = None
+                    user_prompt_tokens_est = None
+                    response_tokens_est = None
                     txt = ""
                     err = None
                     before_sys = system_snapshot()
@@ -560,10 +622,10 @@ def main():
                     for repeat in range(args.repeats):
                         def call():
                             try:
-                                result = gemma_generate(
-                                    processor=processor,
+                                result = internvl_generate(
+                                    tokenizer=tokenizer,
                                     model=model,
-                                    image=img,
+                                    pixel_values=pixel_values,
                                     user_text=task_cfg["prompt"],
                                     device=device,
                                     max_new_tokens=args.max_new_tokens,
@@ -572,10 +634,10 @@ def main():
                             except Exception as e:
                                 return "", str(e), None, None
 
-                        (txt_rep, err_rep, input_len_rep, gen_len_rep), ms = timed_call(call, device=device)
+                        (txt_rep, err_rep, user_prompt_tokens_est_rep, response_tokens_est_rep), ms = timed_call(call, device=device)
                         latencies_for_task.append(ms)
                         if repeat == 0:
-                            txt, err, input_len, gen_len = txt_rep, err_rep, input_len_rep, gen_len_rep
+                            txt, err, user_prompt_tokens_est, response_tokens_est = txt_rep, err_rep, user_prompt_tokens_est_rep, response_tokens_est_rep
                         if err_rep is None:
                             latencies.append(ms)
 
@@ -584,14 +646,6 @@ def main():
 
                     after_sys = system_snapshot()
                     cuda_stats = cuda_snapshot()
-                    gpu_mem_gb = gpu_mem_gb_from_cuda_stats(cuda_stats)
-
-                    power_watts = None
-                    power_std = None
-                    if power_stats:
-                        power_watts = power_stats.get("power_watts_avg")
-                        samples = power_stats.get("power_watts_samples") or []
-                        power_std = std_dev(samples)
 
                     mean_latency = sum(latencies_for_task) / len(latencies_for_task) if latencies_for_task else None
 
@@ -615,12 +669,9 @@ def main():
                         "latency_ms": round(mean_latency, 3) if mean_latency else None,
                         "latencies_ms": [round(l, 3) for l in latencies_for_task],
                         "images_per_second": round(images_per_sec, 3) if images_per_sec else None,
-                        "input_len": input_len,
-                        "gen_len": gen_len,
-                        "power_watts": round(power_watts, 3) if power_watts is not None else None,
-                        "power_std": round(power_std, 3) if power_std is not None else None,
-                        "gpu_mem_gb": gpu_mem_gb,
-                        "n_tiles": 1,
+                        "user_prompt_tokens_est": user_prompt_tokens_est,
+                        "response_tokens_est": response_tokens_est,
+                        "n_tiles": n_tiles,
                         "output_text": txt,
                         "error": err,
                         "sys_before": before_sys,
@@ -631,7 +682,7 @@ def main():
                     }
                     append_jsonl(f, rec)
 
-                    # Keep Dell's preferred terminal format
+                    # Match Dell's terminal format
                     status = "ok" if err is None else "error"
                     throughput_str = f" ({images_per_sec:.2f} img/s)" if images_per_sec else ""
                     if mean_latency:
@@ -667,7 +718,6 @@ def main():
         "latency_ms_max": round(max(latencies), 3) if latencies else None,
         "latency_ms_p50": round(percentile(lat_sorted, 50), 3) if lat_sorted else None,
         "latency_ms_p90": round(percentile(lat_sorted, 90), 3) if lat_sorted else None,
-        "latency_ms_p99": round(percentile(lat_sorted, 99), 3) if lat_sorted else None,
         "images_per_second_mean": round(sum(throughputs) / len(throughputs), 3) if throughputs else None,
         "images_per_second_min": round(min(throughputs), 3) if throughputs else None,
         "images_per_second_max": round(max(throughputs), 3) if throughputs else None,
@@ -694,10 +744,11 @@ def main():
     # cleanup
     power_monitor.cleanup()
     del model
-    del processor
+    del tokenizer
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
+
 
 if __name__ == "__main__":
     main()

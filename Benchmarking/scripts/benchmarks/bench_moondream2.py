@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-# benchmark gemma-3n (image->text) with a standardized 5-task suite
+# benchmark moondream2 (image->text) with a standardized 5-task suite
 # logs per task per image to jsonl + summary json
-# designed to be launched by the orchestrator inside the gemma venv
+# designed to be launched by the orchestrator inside the moondream venv
 
 import argparse
 import gc
@@ -16,13 +16,10 @@ from pathlib import Path
 import torch
 import psutil
 from PIL import Image
-from transformers import AutoProcessor, AutoModelForImageTextToText
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
-# avoid torchvision on jetson / thor (safe elsewhere too)
-os.environ.setdefault("TRANSFORMERS_NO_TORCHVISION", "1")
-
-MODEL_KEY = "gemma3n"
-MODEL_ID = "google/gemma-3n-E4B-it"
+MODEL_KEY = "moondream2"
+MODEL_ID = "vikhyatk/moondream2"
 
 # Try to import pynvml for GPU monitoring
 try:
@@ -32,7 +29,7 @@ except ImportError:
     PYNVML_AVAILABLE = False
 
 
-def parse_args():b
+def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--manifest", required=True, help="text file with one image path per line")
     p.add_argument("--output_dir", required=True, help="base outputs dir")
@@ -46,6 +43,7 @@ def parse_args():b
     p.add_argument("--batch_size", type=int, default=1)
     p.add_argument("--resume", action="store_true", help="resume from existing runs.jsonl")
     p.add_argument("--power_sample_interval_ms", type=int, default=100, help="power sampling interval in ms")
+    p.add_argument("--num_crops", type=int, default=4, help="crop grid size (not used by moondream, for compatibility)")
     return p.parse_args()
 
 
@@ -98,7 +96,7 @@ def load_completed_images(runs_path: Path, task_names: set[str]) -> set[str]:
 
 def chunked(lst, n):
     for i in range(0, len(lst), n):
-        yield lst[i:i+n]
+        yield lst[i : i + n]
 
 
 def system_snapshot() -> dict:
@@ -273,30 +271,7 @@ def percentile(sorted_vals, p):
     return sorted_vals[k]
 
 
-def std_dev(values: list[float]) -> float | None:
-    if not values:
-        return None
-    if len(values) == 1:
-        return 0.0
-    mean_val = sum(values) / len(values)
-    var = sum((v - mean_val) ** 2 for v in values) / len(values)
-    return var ** 0.5
-
-
-def gpu_mem_gb_from_cuda_stats(cuda_stats: dict) -> float | None:
-    if not cuda_stats or not cuda_stats.get("cuda"):
-        return None
-    max_alloc = cuda_stats.get("gpu_max_mem_alloc_mb")
-    max_reserved = cuda_stats.get("gpu_max_mem_reserved_mb")
-    candidates = [v for v in [max_alloc, max_reserved] if isinstance(v, (int, float))]
-    if not candidates:
-        return None
-    peak_mb = max(candidates)
-    return round(peak_mb / 1024.0, 3)
-
-
 def build_tasks():
-    # bounded outputs, no <end> tokens that models may ignore
     return {
         "caption_brief": {
             "prompt": "Write one sentence caption describing the image.",
@@ -327,63 +302,16 @@ def build_tasks():
     }
 
 
-def gemma_generate(
-    processor,
-    model,
-    image: Image.Image,
-    user_text: str,
-    device: str,
-    max_new_tokens: int,
-) -> tuple[str, str | None, int, int]:
-    """
-    Generate text from image using Gemma 3n model.
-    
-    IMPORTANT: Do not pass pad_token_id or eos_token_id to generate().
-    Gemma 3n generates only PAD tokens when these are explicitly set.
-    """
-
-    messages = [
-        {
-            "role": "user",
-            "content": [
-                {"type": "image"},
-                {"type": "text", "text": user_text},
-            ],
-        }
-    ]
-
-    prompt = processor.apply_chat_template(
-        messages, add_generation_prompt=True, tokenize=False
-    )
-
-    inputs = processor(text=prompt, images=[image], return_tensors="pt")
-    if device == "cuda":
-        for k, v in inputs.items():
-            if torch.is_floating_point(v):
-                inputs[k] = v.to(device="cuda", dtype=model.dtype)
-            else:
-                inputs[k] = v.to("cuda")
-
-    # CRITICAL: Do NOT pass pad_token_id or eos_token_id
-    with torch.inference_mode():
-        outputs = model.generate(
-            **inputs,
-            max_new_tokens=max_new_tokens,
-            do_sample=False,
-        )
-
-    input_len = int(inputs["input_ids"].shape[-1])
-    gen_ids = outputs[0, input_len:]
-    gen_len = int(gen_ids.numel())
-
-    # Decode with skip_special_tokens=True for clean output
-    text = processor.decode(gen_ids, skip_special_tokens=True).strip()
-
-    err = None
-    if text == "":
-        err = "empty_generation"
-
-    return text, err, input_len, gen_len
+def moondream_generate(model, tokenizer, image: Image.Image, user_text: str, device: str, max_new_tokens: int) -> tuple[str, str | None, int | None, int | None]:
+    try:
+        with torch.no_grad():
+            image_emb = model.encode_image(image)
+            answer = model.answer_question(image_emb, user_text, tokenizer)
+        prompt_tokens = len(tokenizer.encode(user_text))
+        response_tokens_est = len(tokenizer.encode(answer))
+        return answer, None, prompt_tokens, response_tokens_est
+    except Exception as e:
+        return "", str(e), None, None
 
 
 def main():
@@ -426,6 +354,7 @@ def main():
         "max_new_tokens": args.max_new_tokens,
         "batch_size": args.batch_size,
         "repeats": args.repeats,
+        "num_crops": args.num_crops,
         "suite": "week5_5tasks_bounded",
         "power_monitoring_available": power_monitor.available,
         "power_sample_interval_ms": args.power_sample_interval_ms if power_monitor.available else None,
@@ -436,12 +365,12 @@ def main():
     print(f"loading {MODEL_ID} on {device} (dtype={dtype})")
     print(f"power monitoring: {'enabled' if power_monitor.available else 'not available'}")
 
-    processor = AutoProcessor.from_pretrained(MODEL_ID)
-    model = AutoModelForImageTextToText.from_pretrained(
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
+    model = AutoModelForCausalLM.from_pretrained(
         MODEL_ID,
         torch_dtype=dtype,
-        device_map="cuda" if device == "cuda" else None,
-        attn_implementation="eager",
+        device_map="auto" if device == "cuda" else None,
+        trust_remote_code=True,
     )
     model.eval()
 
@@ -464,15 +393,15 @@ def main():
             print("nothing left to do (all images already complete).")
             return
 
-    # warmup (first image + first task, then full pass through all tasks)
+    # warmup
     if args.warmup > 0:
         try:
             img0 = Image.open(image_paths[0]).convert("RGB")
             first_task = next(iter(tasks.values()))
             for _ in range(args.warmup):
-                _ = gemma_generate(
-                    processor=processor,
+                _ = moondream_generate(
                     model=model,
+                    tokenizer=tokenizer,
                     image=img0,
                     user_text=first_task["prompt"],
                     device=device,
@@ -480,9 +409,9 @@ def main():
                 )
             # plus one pass of all tasks on first image
             for task_name, task_cfg in tasks.items():
-                _ = gemma_generate(
-                    processor=processor,
+                _ = moondream_generate(
                     model=model,
+                    tokenizer=tokenizer,
                     image=img0,
                     user_text=task_cfg["prompt"],
                     device=device,
@@ -497,16 +426,16 @@ def main():
     errors = 0
     total_runs = 0
     
+    # Moondream uses a fixed tile count of 1 (no multi-crop)
+    num_tiles = 1
+    
     # Track total benchmark time
     benchmark_start = time.perf_counter()
 
     with open(runs_path, "a") as f:
         global_i = 0
         for batch_i, batch in enumerate(chunked(image_paths, args.batch_size), start=1):
-            # Print batch header (keeping Dell's format)
-            print()
-            print(f"[{MODEL_KEY}] batch {batch_i} ({len(batch)} images)")
-            
+            print(f"\n[{MODEL_KEY}] batch {batch_i} ({len(batch)} images)")
             for img_path in batch:
                 img_i = global_i
                 global_i += 1
@@ -527,9 +456,6 @@ def main():
                             "task": task_name,
                             "latency_ms": None,
                             "images_per_second": None,
-                            "power_watts": None,
-                            "power_std": None,
-                            "gpu_mem_gb": None,
                             "output_text": "",
                             "error": f"image_load_failed: {e}",
                             "sys_before": system_snapshot(),
@@ -545,10 +471,9 @@ def main():
                     continue
 
                 for task_name, task_cfg in tasks.items():
-                    total_runs += 1
                     latencies_for_task = []
-                    input_len = None
-                    gen_len = None
+                    prompt_tokens = None
+                    response_tokens_est = None
                     txt = ""
                     err = None
                     before_sys = system_snapshot()
@@ -560,9 +485,9 @@ def main():
                     for repeat in range(args.repeats):
                         def call():
                             try:
-                                result = gemma_generate(
-                                    processor=processor,
+                                result = moondream_generate(
                                     model=model,
+                                    tokenizer=tokenizer,
                                     image=img,
                                     user_text=task_cfg["prompt"],
                                     device=device,
@@ -572,37 +497,28 @@ def main():
                             except Exception as e:
                                 return "", str(e), None, None
 
-                        (txt_rep, err_rep, input_len_rep, gen_len_rep), ms = timed_call(call, device=device)
+                        (txt_rep, err_rep, prompt_tok_rep, resp_tok_rep), ms = timed_call(call, device=device)
                         latencies_for_task.append(ms)
                         if repeat == 0:
-                            txt, err, input_len, gen_len = txt_rep, err_rep, input_len_rep, gen_len_rep
+                            txt, err, prompt_tokens, response_tokens_est = txt_rep, err_rep, prompt_tok_rep, resp_tok_rep
                         if err_rep is None:
                             latencies.append(ms)
 
-                    # Stop power monitoring
+                    # Stop power monitoring (after all repeats)
                     power_stats = power_monitor.stop()
 
                     after_sys = system_snapshot()
                     cuda_stats = cuda_snapshot()
-                    gpu_mem_gb = gpu_mem_gb_from_cuda_stats(cuda_stats)
-
-                    power_watts = None
-                    power_std = None
-                    if power_stats:
-                        power_watts = power_stats.get("power_watts_avg")
-                        samples = power_stats.get("power_watts_samples") or []
-                        power_std = std_dev(samples)
-
-                    mean_latency = sum(latencies_for_task) / len(latencies_for_task) if latencies_for_task else None
-
-                    # Calculate throughput
-                    images_per_sec = 1000.0 / mean_latency if mean_latency and mean_latency > 0 else None
 
                     if err is not None:
                         errors += 1
-                    else:
-                        if images_per_sec is not None:
-                            throughputs.append(images_per_sec)
+
+                    mean_latency = sum(latencies_for_task) / len(latencies_for_task) if latencies_for_task else None
+                    
+                    # Calculate throughput
+                    images_per_sec = 1000.0 / mean_latency if mean_latency and mean_latency > 0 else None
+                    if images_per_sec is not None and err is None:
+                        throughputs.append(images_per_sec)
 
                     rec = {
                         "image_index": img_i,
@@ -615,12 +531,9 @@ def main():
                         "latency_ms": round(mean_latency, 3) if mean_latency else None,
                         "latencies_ms": [round(l, 3) for l in latencies_for_task],
                         "images_per_second": round(images_per_sec, 3) if images_per_sec else None,
-                        "input_len": input_len,
-                        "gen_len": gen_len,
-                        "power_watts": round(power_watts, 3) if power_watts is not None else None,
-                        "power_std": round(power_std, 3) if power_std is not None else None,
-                        "gpu_mem_gb": gpu_mem_gb,
-                        "n_tiles": 1,
+                        "prompt_tokens": prompt_tokens,
+                        "response_tokens_est": response_tokens_est,
+                        "n_tiles": num_tiles,
                         "output_text": txt,
                         "error": err,
                         "sys_before": before_sys,
@@ -630,14 +543,14 @@ def main():
                         "timestamp": datetime.now().isoformat(),
                     }
                     append_jsonl(f, rec)
+                    total_runs += 1
 
-                    # Keep Dell's preferred terminal format
                     status = "ok" if err is None else "error"
                     throughput_str = f" ({images_per_sec:.2f} img/s)" if images_per_sec else ""
                     if mean_latency:
-                        print(f"[{MODEL_KEY}] img {img_i+1}/{len(image_paths)} task {task_name:30} {status} {mean_latency:.1f} ms{throughput_str}")
+                        print(f"[{MODEL_KEY}] img {img_i+1}/{len(image_paths)} task {task_name:25s} {status} {mean_latency:.1f} ms{throughput_str}")
                     else:
-                        print(f"[{MODEL_KEY}] img {img_i+1}/{len(image_paths)} task {task_name:30} {status}")
+                        print(f"[{MODEL_KEY}] img {img_i+1}/{len(image_paths)} task {task_name:25s} {status}")
 
     lat_sorted = sorted(latencies)
     throughput_sorted = sorted(throughputs)
@@ -667,7 +580,6 @@ def main():
         "latency_ms_max": round(max(latencies), 3) if latencies else None,
         "latency_ms_p50": round(percentile(lat_sorted, 50), 3) if lat_sorted else None,
         "latency_ms_p90": round(percentile(lat_sorted, 90), 3) if lat_sorted else None,
-        "latency_ms_p99": round(percentile(lat_sorted, 99), 3) if lat_sorted else None,
         "images_per_second_mean": round(sum(throughputs) / len(throughputs), 3) if throughputs else None,
         "images_per_second_min": round(min(throughputs), 3) if throughputs else None,
         "images_per_second_max": round(max(throughputs), 3) if throughputs else None,
@@ -694,10 +606,11 @@ def main():
     # cleanup
     power_monitor.cleanup()
     del model
-    del processor
+    del tokenizer
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
+
 
 if __name__ == "__main__":
     main()

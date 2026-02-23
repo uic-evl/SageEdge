@@ -1,0 +1,59 @@
+\begin{table*}[!t]
+\centering
+\caption{Performance metrics for compact VLMs across three edge systems. All models tested on 500 COCO validation images with 5 tasks per image (2500 total inferences). Each model tested with both fp16 and bf16 precision.}
+\label{tab:benchmark-results}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lcccccccccccc@{}}
+\toprule
+\textbf{Model} & \textbf{System} & \textbf{Dtype} & \textbf{Latency} & \textbf{Throughput} & \textbf{GPU} & \textbf{CPU} & \textbf{RAM} & \textbf{Power} & \textbf{Tokens/} & \textbf{TPS/} & \textbf{J/} & \textbf{Total} \\
+& & & \textbf{(ms)} & \textbf{(img/s)} & \textbf{(\%)} & \textbf{(\%)} & \textbf{(GB)} & \textbf{(W)} & \textbf{sec} & \textbf{Watt} & \textbf{Token} & \textbf{Tokens} \\
+\midrule
+gemma3n & Dell GB10 & bf16 & 4700.7 & 0.221 & 73.0 & 3.2 & 23.1 & 25.7 & 72.4 & 2.82 & 0.35 & 869134 \\
+gemma3n & Dell GB10 & fp16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+gemma3n & Thor & bf16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+gemma3n & Thor & fp16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+gemma3n & Orin & bf16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+gemma3n & Orin & fp16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+\midrule
+internvl & Dell GB10 & bf16 & 2329.7 & 0.502 & 85.6 & 1.3 & 20.6 & 44.7 & 22.4 & 0.5 & 1.93 & 135809 \\
+internvl & Dell GB10 & fp16 & 2279.7 & 0.51 & 85.3 & 1.3 & 20.8 & 45.0 & 22.9 & 0.51 & 1.9 & 135760 \\
+internvl & Thor & bf16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+internvl & Thor & fp16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+internvl & Orin & bf16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+internvl & Orin & fp16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+\midrule
+llava & Dell GB10 & bf16 & 8072.1 & 0.186 & 91.7 & 1.5 & 26.6 & 39.3 & 10.4 & 0.26 & 3.75 & 211293 \\
+llava & Dell GB10 & fp16 & 8073.6 & 0.186 & 91.5 & 1.5 & 26.3 & 39.4 & 10.4 & 0.26 & 3.76 & 211293 \\
+llava & Thor & bf16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+llava & Thor & fp16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+llava & Orin & bf16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+llava & Orin & fp16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+\midrule
+moondream2 & Dell GB10 & bf16 & 953.6 & 1.118 & 79.5 & 1.5 & 12.0 & 41.5 & 55.9 & 1.35 & 0.7 & 141078 \\
+moondream2 & Dell GB10 & fp16 & 951.7 & 1.12 & 80.3 & 1.5 & 12.8 & 41.6 & 55.9 & 1.34 & 0.71 & 140952 \\
+moondream2 & Thor & bf16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+moondream2 & Thor & fp16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+moondream2 & Orin & bf16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+moondream2 & Orin & fp16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+\midrule
+phi & Dell GB10 & bf16 & 7739.1 & 0.147 & 56.1 & 2.5 & 25.8 & 32.4 & 13.7 & 0.42 & 2.3 & 267371 \\
+phi & Dell GB10 & fp16 & 7680.1 & 0.149 & 55.8 & 2.6 & 22.7 & 32.3 & 13.7 & 0.43 & 2.27 & 266948 \\
+phi & Thor & bf16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+phi & Thor & fp16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+phi & Orin & bf16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+phi & Orin & fp16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+\midrule
+smolvlm2 & Dell GB10 & bf16 & 1419.5 & 0.789 & 78.8 & 1.5 & 13.2 & 42.9 & 795.7 & 18.55 & 0.05 & 2957026 \\
+smolvlm2 & Dell GB10 & fp16 & 1462.9 & 0.765 & 79.6 & 1.5 & 13.2 & 42.9 & 773.3 & 18.03 & 0.05 & 2961196 \\
+smolvlm2 & Thor & bf16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+smolvlm2 & Thor & fp16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+smolvlm2 & Orin & bf16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+smolvlm2 & Orin & fp16 & --- & --- & --- & --- & --- & --- & --- & --- & --- & --- \\
+\bottomrule
+\end{tabular}%
+}
+\begin{flushleft}
+\footnotesize
+\textbf{Metrics:} Latency = mean per-image inference time. Throughput = images per second. GPU\% = average GPU compute utilization (via pynvml on Dell GB10; not available on Thor/Orin). CPU\% = average CPU utilization. RAM = average system memory used. Power = average power draw (Thor/Orin use tegrastats VDD\_GPU, Dell uses pynvml). Tokens/sec = total tokens / duration. TPS/Watt = efficiency (Tokens/sec per Watt). J/Token = energy cost. --- = Not tested or not available.
+\end{flushleft}
+\end{table*}

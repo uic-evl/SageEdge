@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-# benchmark gemma-3n (image->text) with a standardized 5-task suite
+# benchmark llava (image->text) with a standardized 5-task suite
 # logs per task per image to jsonl + summary json
-# designed to be launched by the orchestrator inside the gemma venv
+# designed to be launched by the orchestrator inside the llava venv
+# Dell version: uses device_map="auto"
 
 import argparse
 import gc
@@ -10,19 +11,42 @@ import os
 import platform
 import threading
 import time
+import warnings
 from datetime import datetime
 from pathlib import Path
 
 import torch
 import psutil
 from PIL import Image
-from transformers import AutoProcessor, AutoModelForImageTextToText
 
-# avoid torchvision on jetson / thor (safe elsewhere too)
-os.environ.setdefault("TRANSFORMERS_NO_TORCHVISION", "1")
+# -----------------------------
+# QUIET MODE SETUP
+# -----------------------------
 
-MODEL_KEY = "gemma3n"
-MODEL_ID = "google/gemma-3n-E4B-it"
+# Suppress HF + PyTorch warnings
+warnings.filterwarnings("ignore", message="Some weights of the model checkpoint")
+warnings.filterwarnings("ignore", message="Found GPU0")
+warnings.filterwarnings("ignore", category=UserWarning)
+
+# Disable HF progress bars + logging noise
+os.environ["TRANSFORMERS_NO_ADVISORY_WARNINGS"] = "1"
+os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
+os.environ["HF_HUB_DISABLE_TELEMETRY"] = "1"
+
+from transformers.utils import logging as hf_logging
+hf_logging.set_verbosity_error()
+
+# -----------------------------
+# LLaVA imports (after quiet mode)
+# -----------------------------
+
+from llavamini.model.builder import load_pretrained_model
+from llavamini.mm_utils import get_model_name_from_path, process_images
+from llavamini.constants import IMAGE_TOKEN_INDEX
+from llavamini.mm_utils import tokenizer_image_token
+
+MODEL_KEY = "llava"
+MODEL_ID = "ICTNLP/llava-mini-llama-3.1-8b"
 
 # Try to import pynvml for GPU monitoring
 try:
@@ -32,7 +56,7 @@ except ImportError:
     PYNVML_AVAILABLE = False
 
 
-def parse_args():b
+def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--manifest", required=True, help="text file with one image path per line")
     p.add_argument("--output_dir", required=True, help="base outputs dir")
@@ -40,7 +64,7 @@ def parse_args():b
     p.add_argument("--max_new_tokens", type=int, default=128)
     p.add_argument("--warmup", type=int, default=5)
     p.add_argument("--limit", type=int, default=0)
-    p.add_argument("--dtype", choices=["fp16", "bf16", "fp32"], default="fp16")
+    p.add_argument("--dtype", choices=["fp16", "bf16", "fp32"], default="bf16")
     p.add_argument("--run_group", required=True, help="experiment tag + timestamp from orchestrator")
     p.add_argument("--repeats", type=int, default=1)
     p.add_argument("--batch_size", type=int, default=1)
@@ -273,30 +297,7 @@ def percentile(sorted_vals, p):
     return sorted_vals[k]
 
 
-def std_dev(values: list[float]) -> float | None:
-    if not values:
-        return None
-    if len(values) == 1:
-        return 0.0
-    mean_val = sum(values) / len(values)
-    var = sum((v - mean_val) ** 2 for v in values) / len(values)
-    return var ** 0.5
-
-
-def gpu_mem_gb_from_cuda_stats(cuda_stats: dict) -> float | None:
-    if not cuda_stats or not cuda_stats.get("cuda"):
-        return None
-    max_alloc = cuda_stats.get("gpu_max_mem_alloc_mb")
-    max_reserved = cuda_stats.get("gpu_max_mem_reserved_mb")
-    candidates = [v for v in [max_alloc, max_reserved] if isinstance(v, (int, float))]
-    if not candidates:
-        return None
-    peak_mb = max(candidates)
-    return round(peak_mb / 1024.0, 3)
-
-
 def build_tasks():
-    # bounded outputs, no <end> tokens that models may ignore
     return {
         "caption_brief": {
             "prompt": "Write one sentence caption describing the image.",
@@ -327,63 +328,76 @@ def build_tasks():
     }
 
 
-def gemma_generate(
-    processor,
-    model,
-    image: Image.Image,
-    user_text: str,
-    device: str,
-    max_new_tokens: int,
-) -> tuple[str, str | None, int, int]:
+def llava_generate(model, tokenizer, image_processor, image: Image.Image, user_text: str, device: str, max_new_tokens: int) -> tuple[str, str | None, int | None, int | None]:
     """
-    Generate text from image using Gemma 3n model.
+    Generate text from image using LLaVA model.
     
-    IMPORTANT: Do not pass pad_token_id or eos_token_id to generate().
-    Gemma 3n generates only PAD tokens when these are explicitly set.
+    ACTUALLY FIXED: Decode full output, then use string matching to remove the user prompt.
+    This handles image token expansion correctly.
     """
+    try:
+        # Process image and text
+        image_tensor = process_images(
+            [image],
+            image_processor,
+            model.config,
+        ).unsqueeze(1)
 
-    messages = [
-        {
-            "role": "user",
-            "content": [
-                {"type": "image"},
-                {"type": "text", "text": user_text},
-            ],
+        prompt = f"<image>\n{user_text}"
+
+        input_ids = tokenizer_image_token(
+            prompt,
+            tokenizer,
+            IMAGE_TOKEN_INDEX,
+            return_tensors="pt",
+        ).unsqueeze(0)
+
+        # Store the text token length (before image expansion)
+        text_token_len = input_ids.shape[1]
+
+        inputs = {
+            "input_ids": input_ids,
+            "images": image_tensor,
         }
-    ]
 
-    prompt = processor.apply_chat_template(
-        messages, add_generation_prompt=True, tokenize=False
-    )
+        # Move to device with proper dtype handling
+        if device == "cuda":
+            for k, v in inputs.items():
+                if torch.is_floating_point(v):
+                    inputs[k] = v.to(device="cuda", dtype=model.dtype)
+                else:
+                    inputs[k] = v.to("cuda")
 
-    inputs = processor(text=prompt, images=[image], return_tensors="pt")
-    if device == "cuda":
-        for k, v in inputs.items():
-            if torch.is_floating_point(v):
-                inputs[k] = v.to(device="cuda", dtype=model.dtype)
-            else:
-                inputs[k] = v.to("cuda")
+        with torch.no_grad():
+            output_ids = model.generate(
+                inputs["input_ids"],
+                images=inputs["images"],
+                max_new_tokens=max_new_tokens,
+                do_sample=False,
+            )
 
-    # CRITICAL: Do NOT pass pad_token_id or eos_token_id
-    with torch.inference_mode():
-        outputs = model.generate(
-            **inputs,
-            max_new_tokens=max_new_tokens,
-            do_sample=False,
-        )
+        # THE REAL FIX: Decode the full output (prompt + response)
+        full_text = tokenizer.decode(output_ids[0], skip_special_tokens=True).strip()
+        
+        # Remove the user prompt text using string matching
+        # The <image> token doesn't appear in decoded text, so we only need to remove user_text
+        if user_text in full_text:
+            # Find and remove the prompt
+            idx = full_text.find(user_text)
+            answer = full_text[idx + len(user_text):].strip()
+        else:
+            # Fallback: if prompt not found, the full text IS the answer
+            answer = full_text
 
-    input_len = int(inputs["input_ids"].shape[-1])
-    gen_ids = outputs[0, input_len:]
-    gen_len = int(gen_ids.numel())
-
-    # Decode with skip_special_tokens=True for clean output
-    text = processor.decode(gen_ids, skip_special_tokens=True).strip()
-
-    err = None
-    if text == "":
-        err = "empty_generation"
-
-    return text, err, input_len, gen_len
+        # Token counts
+        full_output_len = output_ids.shape[1]
+        user_prompt_tokens_est = text_token_len
+        response_tokens_est = full_output_len - text_token_len
+        
+        return answer, None, user_prompt_tokens_est, response_tokens_est
+        
+    except Exception as e:
+        return "", str(e), None, None
 
 
 def main():
@@ -436,13 +450,30 @@ def main():
     print(f"loading {MODEL_ID} on {device} (dtype={dtype})")
     print(f"power monitoring: {'enabled' if power_monitor.available else 'not available'}")
 
-    processor = AutoProcessor.from_pretrained(MODEL_ID)
-    model = AutoModelForImageTextToText.from_pretrained(
+    model_name = get_model_name_from_path(MODEL_ID)
+
+    # Load with device_map="auto" for automatic placement
+    tokenizer, model, image_processor, _ = load_pretrained_model(
         MODEL_ID,
+        None,
+        model_name,
         torch_dtype=dtype,
-        device_map="cuda" if device == "cuda" else None,
-        attn_implementation="eager",
+        device_map="auto",
     )
+
+    # Try to force eager attention after loading
+    try:
+        if hasattr(model.config, '_attn_implementation'):
+            model.config._attn_implementation = 'eager'
+            print("Set attention implementation to: eager")
+        elif hasattr(model.config, 'attn_implementation'):
+            model.config.attn_implementation = 'eager'
+            print("Set attention implementation to: eager")
+        else:
+            print("Warning: Could not set attention implementation (using default)")
+    except Exception as e:
+        print(f"Warning: Could not set attention implementation: {e}")
+
     model.eval()
 
     tasks = build_tasks()
@@ -470,9 +501,10 @@ def main():
             img0 = Image.open(image_paths[0]).convert("RGB")
             first_task = next(iter(tasks.values()))
             for _ in range(args.warmup):
-                _ = gemma_generate(
-                    processor=processor,
+                _ = llava_generate(
                     model=model,
+                    tokenizer=tokenizer,
+                    image_processor=image_processor,
                     image=img0,
                     user_text=first_task["prompt"],
                     device=device,
@@ -480,9 +512,10 @@ def main():
                 )
             # plus one pass of all tasks on first image
             for task_name, task_cfg in tasks.items():
-                _ = gemma_generate(
-                    processor=processor,
+                _ = llava_generate(
                     model=model,
+                    tokenizer=tokenizer,
+                    image_processor=image_processor,
                     image=img0,
                     user_text=task_cfg["prompt"],
                     device=device,
@@ -503,14 +536,14 @@ def main():
     with open(runs_path, "a") as f:
         global_i = 0
         for batch_i, batch in enumerate(chunked(image_paths, args.batch_size), start=1):
-            # Print batch header (keeping Dell's format)
+            # Print batch header
             print()
             print(f"[{MODEL_KEY}] batch {batch_i} ({len(batch)} images)")
             
             for img_path in batch:
                 img_i = global_i
                 global_i += 1
-
+                
                 img_name = Path(img_path).name
 
                 # load once per image; reuse for all tasks
@@ -527,9 +560,6 @@ def main():
                             "task": task_name,
                             "latency_ms": None,
                             "images_per_second": None,
-                            "power_watts": None,
-                            "power_std": None,
-                            "gpu_mem_gb": None,
                             "output_text": "",
                             "error": f"image_load_failed: {e}",
                             "sys_before": system_snapshot(),
@@ -547,8 +577,8 @@ def main():
                 for task_name, task_cfg in tasks.items():
                     total_runs += 1
                     latencies_for_task = []
-                    input_len = None
-                    gen_len = None
+                    user_prompt_tokens_est = None
+                    response_tokens_est = None
                     txt = ""
                     err = None
                     before_sys = system_snapshot()
@@ -560,9 +590,10 @@ def main():
                     for repeat in range(args.repeats):
                         def call():
                             try:
-                                result = gemma_generate(
-                                    processor=processor,
+                                result = llava_generate(
                                     model=model,
+                                    tokenizer=tokenizer,
+                                    image_processor=image_processor,
                                     image=img,
                                     user_text=task_cfg["prompt"],
                                     device=device,
@@ -572,10 +603,10 @@ def main():
                             except Exception as e:
                                 return "", str(e), None, None
 
-                        (txt_rep, err_rep, input_len_rep, gen_len_rep), ms = timed_call(call, device=device)
+                        (txt_rep, err_rep, user_prompt_tokens_est_rep, response_tokens_est_rep), ms = timed_call(call, device=device)
                         latencies_for_task.append(ms)
                         if repeat == 0:
-                            txt, err, input_len, gen_len = txt_rep, err_rep, input_len_rep, gen_len_rep
+                            txt, err, user_prompt_tokens_est, response_tokens_est = txt_rep, err_rep, user_prompt_tokens_est_rep, response_tokens_est_rep
                         if err_rep is None:
                             latencies.append(ms)
 
@@ -584,17 +615,9 @@ def main():
 
                     after_sys = system_snapshot()
                     cuda_stats = cuda_snapshot()
-                    gpu_mem_gb = gpu_mem_gb_from_cuda_stats(cuda_stats)
-
-                    power_watts = None
-                    power_std = None
-                    if power_stats:
-                        power_watts = power_stats.get("power_watts_avg")
-                        samples = power_stats.get("power_watts_samples") or []
-                        power_std = std_dev(samples)
 
                     mean_latency = sum(latencies_for_task) / len(latencies_for_task) if latencies_for_task else None
-
+                    
                     # Calculate throughput
                     images_per_sec = 1000.0 / mean_latency if mean_latency and mean_latency > 0 else None
 
@@ -615,11 +638,8 @@ def main():
                         "latency_ms": round(mean_latency, 3) if mean_latency else None,
                         "latencies_ms": [round(l, 3) for l in latencies_for_task],
                         "images_per_second": round(images_per_sec, 3) if images_per_sec else None,
-                        "input_len": input_len,
-                        "gen_len": gen_len,
-                        "power_watts": round(power_watts, 3) if power_watts is not None else None,
-                        "power_std": round(power_std, 3) if power_std is not None else None,
-                        "gpu_mem_gb": gpu_mem_gb,
+                        "user_prompt_tokens_est": user_prompt_tokens_est,
+                        "response_tokens_est": response_tokens_est,
                         "n_tiles": 1,
                         "output_text": txt,
                         "error": err,
@@ -631,7 +651,7 @@ def main():
                     }
                     append_jsonl(f, rec)
 
-                    # Keep Dell's preferred terminal format
+                    # Terminal output
                     status = "ok" if err is None else "error"
                     throughput_str = f" ({images_per_sec:.2f} img/s)" if images_per_sec else ""
                     if mean_latency:
@@ -667,7 +687,6 @@ def main():
         "latency_ms_max": round(max(latencies), 3) if latencies else None,
         "latency_ms_p50": round(percentile(lat_sorted, 50), 3) if lat_sorted else None,
         "latency_ms_p90": round(percentile(lat_sorted, 90), 3) if lat_sorted else None,
-        "latency_ms_p99": round(percentile(lat_sorted, 99), 3) if lat_sorted else None,
         "images_per_second_mean": round(sum(throughputs) / len(throughputs), 3) if throughputs else None,
         "images_per_second_min": round(min(throughputs), 3) if throughputs else None,
         "images_per_second_max": round(max(throughputs), 3) if throughputs else None,
@@ -690,14 +709,17 @@ def main():
     if throughputs:
         print(f"Throughput (mean): {summary['images_per_second_mean']:.2f} img/s")
     print(f"Results saved to: {out_dir}")
+    print("=" * 60)
 
     # cleanup
     power_monitor.cleanup()
     del model
-    del processor
+    del tokenizer
+    del image_processor
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
+
 
 if __name__ == "__main__":
     main()

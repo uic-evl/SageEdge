@@ -201,6 +201,7 @@ Benchmarking/output/
 Benchmarking/env_info/
 Benchmarking/scripts/hf_benchmark_logs
 Benchmarking/envs/
-Benchmarking/data/
-Benchmarking/scripts/
+Benchmarking/data/        
 Benchmarking/outputs/
+Benchmarking/scripts/benchmarks/outputs/
+Benchmarking/scripts/smoke_tests/
