@@ -36,6 +36,9 @@ OBJECT_SYNONYMS = {
     "women":"person",
     "kids":"person",
     "kid":"person",
+    "cars":"car",
+    "dogs":"dog",
+    "bicycles":"bicycle",
 }
 OBJECT_VOCAB: Set[str] = {
     # start small; expand later (or replace with COCO classes)
@@ -43,6 +46,10 @@ OBJECT_VOCAB: Set[str] = {
     "bicycle","car","bus","truck","motorcycle",
     "dog","cat","bird","horse",
     "tree","trees","park","field"
+    "car","cars",
+    "dog","dogs",
+    "bicycle","bicycles",
+    "street","road"
 }
 def normalize_token(t: str) -> str:
     t = t.lower().strip()

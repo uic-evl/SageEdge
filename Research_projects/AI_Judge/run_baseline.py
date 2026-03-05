@@ -163,6 +163,12 @@ if __name__ == "__main__":
     Path("outputs").mkdir(exist_ok=True)
 
     result = run(args.image, use_vlm=(not args.no_vlm))
+    # --- FAKE CAPTION TEST ---
+    from judge.rule_judge import rule_based_judge
+
+    #fake = "A person."
+    #result["caption_raw"] = fake
+    #result["judge"] = {"rule_based": rule_based_judge(fake, result.get("detections", []))}
     # ---- Week7 benchmark logging ----
     run_dir = Path("runs/test_run")
     run_dir.mkdir(parents=True, exist_ok=True)

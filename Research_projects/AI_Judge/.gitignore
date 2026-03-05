@@ -1,4 +1,10 @@
-# Byte-compiled / cache
+# AI_Judge local artifacts
+val2017/
+coco_subset/
+runs/
+outputs/
+val2017.zip
+runs/test_run/predictions.jsonl
 __pycache__/
 *.py[cod]
 *$py.class
@@ -55,7 +61,6 @@ processed_data/
 models/
 checkpoints/
 logs/
-outputs/
 predictions/
 *.pt
 *.pth
