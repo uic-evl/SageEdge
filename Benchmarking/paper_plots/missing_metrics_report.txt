@@ -1,0 +1,10 @@
+metrics availability across normalized runs
+-------------------------------------------
+ips_mean: missing 1 / 29
+lat_ms_mean: missing 1 / 29
+lat_ms_p50: missing 1 / 29
+lat_ms_p90: missing 1 / 29
+avg_power_w: missing 29 / 29
+ips_per_watt: missing 29 / 29
+joules_per_image: missing 29 / 29
+params_b: missing 29 / 29
