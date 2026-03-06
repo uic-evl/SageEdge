@@ -203,3 +203,4 @@ AI_Programs/Movement_Tracking/yolov8m.pt
 AI_Programs/Movement_Tracking/yolov8n.pt
 AI_Programs/Movement_Tracking/people_walking.mp4
 Benchmarking/coco_val2017/
+./DS_Store
