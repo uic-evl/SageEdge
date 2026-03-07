@@ -1,68 +1,113 @@
 # SAGE Edge: Compact VLM Benchmarking Suite
 
-Deployment-oriented benchmarking of compact vision-language models on edge computing platforms for the NSF SAGE testbed.
+Deployment-oriented benchmarking of compact vision-language models (VLMs) on edge computing platforms for the NSF SAGE testbed.
 
 ## Overview
 
-This repository contains benchmarking scripts and results for evaluating six compact vision-language models (VLMs) across three edge computing platforms. Rather than focusing on accuracy leaderboards, we measure **deployment-critical metrics**: latency, throughput, memory consumption, power usage, and execution reliability under real-world constraints.
+This repository contains benchmarking scripts and results used to evaluate **six compact vision-language models (VLMs)** across **three representative edge computing platforms** used in the SAGE testbed.
 
-**Key Findings:**
-- **Moondream2** achieves lowest latency (895ms on Thor, 2.3s on Orin) with minimal memory footprint (12GB)
-- **SmolVLM2** exhibits extreme token generation (3M tokens/run), limiting practical deployment despite competitive latency
-- **InternVL2-2B** offers balanced performance across platforms
-- Memory pressure becomes the primary constraint on embedded devices (Jetson AGX Orin)
+Rather than focusing on traditional accuracy leaderboards, this project evaluates **deployment-critical metrics** including:
+
+* Latency (including tail latency)
+* Throughput
+* Memory footprint
+* Platform-specific power signals
+* Execution reliability under constrained hardware conditions
+
+The goal is to better understand **model-device trade-offs for edge deployment**, where memory, power, and latency constraints often determine feasibility.
+
+The evaluation uses a **standardized five-task workload across 500 COCO validation images**, enabling consistent comparison across model and hardware configurations.
 
 ## Models Evaluated
 
-| Model | Parameters | Key Characteristics |
-|-------|-----------|---------------------|
-| **Moondream2** | 1.8B | Efficient vision encoder, compact language model |
-| **SmolVLM2** | 2B | Dense vision encoding, high token generation |
-| **LLaVA-Mini** | 9B | Smaller LLaVA variant, higher memory requirements |
-| **Gemma 3n (E4B-IT)** | 8B/4B eff. | Instruction-tuned with selective parameter activation |
+Six compact VLMs were selected to balance **model size, accessibility, and architectural diversity**.
+
+| Model | Parameters | Notes |
+|-------|-----------|-------|
+| **Moondream2** | 1.8B | Compact vision encoder + lightweight language model |
+| **SmolVLM2** | 2B | Dense visual tokenization, high token output |
+| **LLaVA-Mini** | 9B | Smaller LLaVA architecture |
+| **Gemma 3n (E4B-IT)** | ~8B / 4B effective | Selective parameter activation |
 | **InternVL2-2B** | 2B | Balanced vision-language architecture |
-| **Phi-3.5-Vision** | 4.2B | Microsoft's compact multimodal model |
+| **Phi-3.5-Vision** | 4.2B | Microsoft multimodal model |
+
+These models represent a range of compact multimodal architectures commonly considered for edge deployment.
 
 ## Hardware Platforms
 
+The experiments were conducted across three representative SAGE environments.
+
 ### Dell Pro Max (GB10)
-- **GPU:** NVIDIA RTX A2000 (12GB VRAM)
-- **CPU:** Intel Xeon
-- **RAM:** 64GB
-- **Role:** Development/near-edge environment
+
+Development / near-edge workstation used for comparison experiments.
+
+* Workstation-class GPU
+* High-memory host system
+* Used to compare edge results with a development environment
 
 ### NVIDIA Jetson Thor
-- **Memory:** 32GB unified memory
-- **Role:** Higher-performance edge inference
-- **Status:** JetPack 7 (experimental)
+
+Next-generation embedded AI platform designed for robotics and edge AI.
+
+* Unified memory architecture
+* Used for higher-performance edge inference
+* JetPack 7 experimental environment
 
 ### NVIDIA Jetson AGX Orin
-- **Memory:** 32GB unified memory
-- **Power Limit:** 50W
-- **Role:** Power-constrained embedded deployment
+
+Embedded platform representing **power-constrained edge deployments**.
+
+* 32 GB unified memory
+* Configured with a 50W power limit
+* Common platform for edge robotics and sensing systems
 
 ## Evaluation Methodology
 
-### Tasks
-Five vision-language tasks reflecting realistic edge use cases, each with 128-token generation limit:
-
-1. **caption_brief** - Concise 1-2 sentence factual captioning
-2. **objects_and_counts** - Object detection with approximate counts
-3. **spatial_relationships** - Relative spatial grounding (left/right, near/far)
-4. **scene_context** - Scene type classification (urban, indoor, landscape)
-5. **attributes** - Visual attributes (color, lighting, materials)
-
 ### Dataset
-- **500 images** from COCO validation split
-- **2,500 total inferences** (5 tasks × 500 images)
-- Both **fp16** and **bf16** precision tested where supported
 
-### Metrics
-- **Latency:** Mean and tail (P90, P99) per-image inference time
-- **Throughput:** Images processed per second
-- **Memory:** Peak RAM usage
-- **Power:** GPU-specific (NVML on Dell, VDD_GPU rail on Jetson)
-- **Token metrics:** Total tokens, tokens/sec, energy per token
+Experiments use a subset of the **COCO (Common Objects in Context) validation dataset**.
+
+* **500 images**
+* Reused across all experiments
+* Enables consistent comparison across models and hardware
+
+### Task Suite
+
+Each image is evaluated with a standardized **five-task vision-language workload** designed to reflect typical edge inference scenarios.
+
+1. **caption_brief** - Short factual caption describing the scene
+2. **objects_and_counts** - Identification of visible objects and approximate counts
+3. **spatial_relationships** - Description of spatial relations (left/right, near/far, etc.)
+4. **scene_context** - Classification of the overall scene type
+5. **attributes** - Description of visual attributes such as color, lighting, or materials
+
+All tasks use a **128-token generation limit** to maintain consistency across models.
+
+## Metrics Collected
+
+The benchmark focuses on **deployment-relevant system metrics** rather than task accuracy.
+
+### Latency
+* Mean latency
+* Tail latency (P90 / P99)
+
+### Throughput
+* Images processed per second
+
+### Memory Usage
+* Peak RAM usage
+* GPU memory footprint
+
+### Power Signals
+Platform-specific telemetry:
+* **NVML** on workstation GPUs
+* **tegrastats / VDD_GPU rail** on Jetson platforms
+
+### Token Statistics
+* Total tokens generated
+* Tokens per second
+
+These metrics help capture **runtime behavior and resource pressure** during inference.
 
 ## Repository Structure
 
@@ -74,27 +119,25 @@ Benchmarking/
 ├── Thor/
 │   ├── scripts/          # Benchmarking scripts for Jetson Thor
 │   └── outputs/          # Results and logs
-|── Orin/
-|   ├── scripts/          # Benchmarking scripts for Jetson AGX Orin
-|   └── outputs/          # Results and logs
-|── datat/testsets/       # manifest files for COCO images
+├── Orin/
+│   ├── scripts/          # Benchmarking scripts for Jetson AGX Orin
+│   └── outputs/          # Results and logs
+└── data/testsets/        # COCO manifest files
 ```
 
 ## Setup & Requirements
 
 ### Software Environment
-- **OS:** Ubuntu (20.04+ recommended)
-- **CUDA:** 12.x
-- **Python:** 3.10+
-- **PyTorch:** 2.5.1
-- **Transformers:** 4.48.1
-
+* **OS:** Ubuntu 20.04+
+* **CUDA:** 12.x
+* **Python:** 3.10+
+* **PyTorch:** 2.5.1
+* **Transformers:** 4.48.1
 
 ### Dataset Preparation
 
 Download COCO validation images:
 ```bash
-# Download and extract COCO val2017
 wget http://images.cocodataset.org/zips/val2017.zip
 unzip val2017.zip
 ```
@@ -116,55 +159,58 @@ python benchmark_moondream2.py \
 
 Each script includes:
 - Standardized 5-task evaluation suite
-- Power monitoring (platform-specific)
+- Platform-specific power monitoring
 - GPU utilization tracking
 - JSONL logging with resume capability
-- Comprehensive warmup procedures
+- Warmup procedures
 
-## Key Findings
+## Observations from Initial Experiments
 
-| Model | Platform | Latency (ms) | RAM (GB) | Power (W) | Total Tokens |
-|-------|----------|--------------|----------|-----------|--------------|
-| Moondream2 | Thor | 895 | 24.9 | 27.2 | 140,867 |
-| Moondream2 | Orin | 2,276 | 12.2 | 14.2 | 140,863 |
-| SmolVLM2 | Thor | 2,079 | 26.6 | 29.5 | 2,956,750 |
-| InternVL2-2B | Thor | 2,658 | 24.4 | 31.6 | 185,571 |
-| InternVL2-2B | Orin | 5,071 | 18.2 | 21.9 | 192,957 |
+Several deployment-relevant patterns emerged during exploratory evaluation:
 
+### Low-Latency Model
+**Moondream2**
+* Lowest observed latency across platforms
+* Small memory footprint
+* Stable runtime behavior under repeated inference
 
-## Deployment Insights
+### High Token Generation
+**SmolVLM2**
+* Very high token output relative to other models
+* Increases downstream buffering and scheduling pressure
 
-### Best for Resource-Constrained Edge
-**Moondream2** - Lowest latency, smallest memory footprint, stable tail behavior
+### Balanced Deployment Candidate
+**InternVL2-2B**
+* Moderate latency
+* Moderate memory requirements
+* Consistent behavior across devices
 
-### Best for Balanced Performance
-**InternVL2-2B** - Good latency with moderate memory, works well on Thor and Dell
+## Limitations
 
-### Avoid for Production Edge
-**SmolVLM2** - Despite fast inference, 30× token generation creates downstream bottlenecks
+This benchmark focuses on **deployment feasibility rather than task correctness**.
 
-## Implementation Notes
+Current limitations include:
+* No quantitative evaluation of caption accuracy or VQA performance
+* Power measurement inconsistencies on early JetPack 7 builds
+* GPU telemetry limitations on Jetson Thor
 
-- **Attention Backend:** Eager mode for consistency across devices
-- **Precision Control:** Explicit dtype management (fp16/bf16)
-- **Power Telemetry:** Device-specific (NVML vs. tegrastats)
-- **No Ollama:** Direct Transformers implementation for precise control
+## Future Work
 
-## Limitations & Future Work
-
-Current limitations:
-- No task correctness/accuracy evaluation at VQA benchmark level
-- Power measurement inconsistencies on JetPack 7 (Thor)
-- GPU utilization monitoring challenges on Thor: jtop is incompatible with JetPack 7, and tegrastats GPU metrics extraction requires further investigation
-
-Planned extensions:
-1. Quantitative accuracy evaluation against VQA benchmarks
+Planned extensions include:
+1. Accuracy evaluation using VQA benchmarks
+2. Additional deployment scenarios
+3. Improved GPU telemetry on Jetson platforms
+4. Expanded datasets and workloads
 
 ## Acknowledgments
 
-This work was supported by NSF grant OAC-2331263 (SAGE Testbed), with additional support from:
-- Electronic Visualization Laboratory at UIC
-- Argonne National Laboratory
+This work is supported by:
 
-**Project Status:** Active Development  
-**Last Updated:** February 2026
+**NSF SAGE Testbed — Grant OAC-2331263**
+
+With additional support from:
+* Electronic Visualization Laboratory (UIC)
+* Argonne National Laboratory
+
+**Project Status:** Active research project  
+**Last Updated:** March 2026
