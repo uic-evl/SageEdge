@@ -5,10 +5,9 @@
 # - Short-term bbox smoothing
 # - Configurable direction threshold (DIR_THRESH, default 100)
 #
-#
 # Usage:
 #   DIR_THRESH=100 python beta_ultralytics_tracking_patched.py
-# /home/waggle/AI_Test/SageEdge/AI_Programs/Movement_Tracking
+
 
 import os
 import requests
@@ -183,8 +182,10 @@ stat_queue = queue.Queue()
 
 # -------------------------------
 # Logging Function
-# -------------------------------
+# --------------------------------
+
 def log_stats(direction=None, x_start=None, x_end=None):
+    # Timestamp
     cdt = datetime.datetime.now()
     date = cdt.strftime("%Y-%m-%d")
     time = cdt.strftime("%H:%M:%S")
@@ -196,51 +197,67 @@ def log_stats(direction=None, x_start=None, x_end=None):
     temps_parsed = {"cpu": None, "gpu": None}
 
     try:
-        with jtop() as jetson:
-            if jetson.ok():
-                gpu_util = jetson.stats.get('GPU', 0)
-                cpu_util = jetson.stats.get('CPU', 0)
-                
-                ram_data = jetson.memory.get('RAM', {})
-                if 'used' in ram_data:
-                    ram_used = int(ram_data['used'] / 1048576)
-                if 'tot' in ram_data:
-                    ram_total = int(ram_data['tot'] / 1048576)
+        proc = subprocess.Popen(["tegrastats", "--interval", "1000"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out = proc.stdout.readline().decode("utf-8").strip()
+        proc.kill()
 
-                temps = jetson.temperature
-                if 'CPU' in temps:
-                    temps_parsed["cpu"] = temps['CPU'].get('temp')
-                if 'GPU' in temps:
-                    temps_parsed["gpu"] = temps['GPU'].get('temp')
-            else:
-                raise Exception("jtop daemon not responding")
+        # RAM
+        ram_match = re.search(r"RAM (\d+)/(\d+)MB", out)
+        ram_used = int(ram_match.group(1)) if ram_match else -1
+        ram_total = int(ram_match.group(2)) if ram_match else -1
+
+        # CPU average across cores
+        cpu_match = re.search(r"CPU \[([^\]]+)\]", out)
+        if cpu_match:
+            core_usages = re.findall(r"(\d+)%", cpu_match.group(1))
+            if core_usages:
+                core_usages = list(map(int, core_usages))
+                cpu_util = sum(core_usages) / len(core_usages)
+
+        # Temperature 
+        temps = {
+            "cpu": re.search(r"cpu@([\d\.]+)C", out, re.IGNORECASE),
+            "gpu": re.search(r"gpu@([\d\.]+)C", out, re.IGNORECASE),
+        }
+        temps_parsed = {k: float(v.group(1)) if v else None for k, v in temps.items()}
 
     except Exception as e:
+        print(f"Error collecting stats: {e}")
         cpu_util = psutil.cpu_percent()
         mem = psutil.virtual_memory()
         ram_used = int(mem.used / 1024**2)
         ram_total = int(mem.total / 1024**2)
-        temps_parsed = {"cpu": None, "gpu": None}
-        gpu_util = None
+        temps_parsed = {"cpu": -1, "gpu": -1}
 
+    try:
+        with jtop() as jetson:
+            if jetson.ok():
+                gpu_util = jetson.stats.get('GPU', -1)
+    except Exception as e:
+        print(f"Error collecting jtop stats: {e}")
+        gpu_util = -1
+    
     row_data = [
         date, 
         time, 
-        direction if direction is not None else "None", # Strings can be "None"
-        x_start if x_start is not None else 0,          # Numbers should fallback to 0
-        x_end if x_end is not None else 0,
-        round(cpu_util, 1) if cpu_util is not None else 0.0,
-        ram_used if ram_used is not None else 0,
-        ram_total if ram_total is not None else 0,
-        gpu_util if gpu_util is not None else 0.0,
-        temps_parsed["cpu"] if temps_parsed["cpu"] is not None else 0.0,
-        temps_parsed["gpu"] if temps_parsed["gpu"] is not None else 0.0
+        direction,  
+        x_start , 
+        x_end, 
+        round(cpu_util, 1) if cpu_util is not None else -1, 
+        gpu_util if gpu_util is not None else -1, 
+        ram_used if ram_used is not None else -1, 
+        ram_total if ram_total is not None else -1,
+        temps_parsed["cpu"] if temps_parsed["cpu"] is not None else -1,
+        temps_parsed["gpu"] if temps_parsed["gpu"] is not None else -1
     ]
 
-    csv_data = ",".join(map(str, row_data))
+    try:
+        csv_writer.writerow(row_data)
+        data_file.flush()
+    except Exception as e:
+        print(f"Error writing to CSV: {e}")
 
-    csv_writer.writerow(row_data)
-    data_file.flush()
+    csv_data = ",".join(map(str, row_data))
     
     payload = {
         "name": "TestUser",
@@ -249,9 +266,9 @@ def log_stats(direction=None, x_start=None, x_end=None):
     
     try:
         response = requests.post(url, headers=headers, json=payload, timeout=5)
-    
+        
         if response.status_code == 200:
-            print("Success:", response.json())
+            print(f"Success: Data saved to database! Server response: {response.json()}")
         else:
             print("Failed:", response.text)
     except Exception as e:
