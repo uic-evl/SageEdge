@@ -7,6 +7,8 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Any, Dict, Optional, List, Tuple
 
+from run_ollama_caption import caption_ollama
+
 from judge.rule_judge_v2 import rule_based_judge_v2
 
 
@@ -128,14 +130,21 @@ def run(image_path: str, use_vlm: bool = True) -> Dict[str, Any]:
 
     cap_text = ""
     if use_vlm:
-        cap_vlm = safe_call("caption_vlm", lambda: caption_with_moondream2(image_path), {"caption_raw": ""})
+        cap_vlm = safe_call(
+            "caption_vlm",
+            lambda: {"caption_raw": caption_ollama(image_path, model="moondream")},
+            {"caption_raw": ""}
+        )
         out["stages"]["caption_vlm"] = asdict(cap_vlm)
         cap_text = out["stages"]["caption_vlm"]["data"].get("caption_raw", "").strip()
+    if not cap_vlm.ok:
+        print("VLM ERROR:")
+        print(cap_vlm.error["type"])
+        print(cap_vlm.error["message"])
+        print(cap_vlm.error["traceback"])
 
     if not cap_text:
-        cap = safe_call("caption_yolo", lambda: caption_from_yolo(out["detections"]), {"caption_raw": ""})
-        out["stages"]["caption"] = asdict(cap)
-        out["caption_raw"] = out["stages"]["caption"]["data"].get("caption_raw", "")
+        raise RuntimeError("VLM caption failed; stopping to avoid YOLO-caption leakage.")
     else:
         out["stages"]["caption"] = out["stages"]["caption_vlm"]
         out["caption_raw"] = cap_text
@@ -171,13 +180,12 @@ if __name__ == "__main__":
     #result["caption_raw"] = fake
     #result["judge"] = {"rule_based": rule_based_judge(fake, result.get("detections", []))}
     # ---- Week7 benchmark logging ----
-    run_dir = Path("runs/week10")
-    run_dir.mkdir(parents=True, exist_ok=True)
+    out_path = Path(args.out)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
 
     rb = (result.get("judge") or {}).get("rule_based_v2", {})
 
-    with open(run_dir / "predictions_v2.jsonl", "a") as f:
-        record = {
+    record = {
         "image": args.image,
         "caption": result.get("caption_raw"),
         "detections": result.get("detections", []),
@@ -193,11 +201,12 @@ if __name__ == "__main__":
         "checked_claim_count": rb.get("checked_claim_count"),
         "supported_claim_count": rb.get("supported_claim_count"),
         "unsupported_claim_count": rb.get("unsupported_claim_count"),
-        }
+    }
+
+    with open(out_path, "a") as f:
         f.write(json.dumps(record) + "\n")
     # ---------------------------------
     
-    Path(args.out).write_text(json.dumps(result, indent=2))
     print("Saved:", args.out)
     print("Caption:", result.get("caption_raw"))
     print("Num detections:", len(result.get("detections", [])))

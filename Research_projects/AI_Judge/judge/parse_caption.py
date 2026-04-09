@@ -27,30 +27,54 @@ OBJECT_SYNONYMS = {
     "kids": "person",
     "boy": "person",
     "girl": "person",
-    "bike":"bicycle",
-    "bikes":"bicycle",
-    "man":"person",
-    "woman":"person",
-    "people":"person",
-    "men":"person",
-    "women":"person",
-    "kids":"person",
-    "kid":"person",
-    "cars":"car",
-    "dogs":"dog",
-    "bicycles":"bicycle",
+    "man": "person",
+    "woman": "person",
+    "people": "person",
+    "men": "person",
+    "women": "person",
+
+    "bike": "bicycle",
+    "bikes": "bicycle",
+    "bicycles": "bicycle",
+
+    "cars": "car",
+    "dogs": "dog",
+    "cats": "cat",
+    "birds": "bird",
+    "horses": "horse",
+    "trucks": "truck",
+    "buses": "bus",
+    "motorcycles": "motorcycle",
+
+    "chairs": "chair",
+    "tables": "table",
+    "tvs": "tv",
+    "clocks": "clock",
+    "vases": "vase",
+    "plants": "plant",
+    "refrigerators": "refrigerator",
 }
+
 OBJECT_VOCAB: Set[str] = {
-    # start small; expand later (or replace with COCO classes)
     "person","child","children","man","woman","boy","girl",
     "bicycle","car","bus","truck","motorcycle",
     "dog","cat","bird","horse",
-    "tree","trees","park","field"
-    "car","cars",
-    "dog","dogs",
-    "bicycle","bicycles",
-    "street","road"
+    "tree","trees","park","field","street","road",
+
+    "chair","table","tv","clock","vase","plant","refrigerator",
 }
+
+MULTI_WORD_OBJECTS = {
+    "dining table": "dining table",
+    "dining tables": "dining table",
+    "potted plant": "potted plant",
+    "potted plants": "potted plant",
+    "teddy bear": "teddy bear",
+    "teddy bears": "teddy bear",
+    "stop sign": "stop sign",
+    "stop signs": "stop sign",
+}
+
 def normalize_token(t: str) -> str:
     t = t.lower().strip()
     t = re.sub(r"[^a-z0-9_ -]", "", t)
@@ -58,9 +82,18 @@ def normalize_token(t: str) -> str:
 
 def parse_caption(caption: str) -> Dict[str, Any]:
     text = normalize_token(caption)
-    tokens = [tok for tok in re.split(r"\s+", text) if tok]
 
+    objects: List[str] = []
+        # --- detect multi-word objects first ---
+    for phrase in MULTI_WORD_OBJECTS:
+        if phrase in text:
+            objects.append(phrase)
+            text = text.replace(phrase, "")
+
+    tokens = [tok for tok in re.split(r"\s+", text) if tok]
+    tokens = [t for t in tokens if len(t) > 1]
     colors = sorted({t for t in tokens if t in COLORS})
+    
 
     counts = []
     for t in tokens:
@@ -68,13 +101,14 @@ def parse_caption(caption: str) -> Dict[str, Any]:
             counts.append({"word": t, "value": COUNT_WORDS[t]})
 
     # naive object extraction: scan tokens and map synonyms
-    objects: List[str] = []
+    
     for t in tokens:
         if t in STOP:
             continue
 
         t2 = OBJECT_SYNONYMS.get(t, t)
-
+        if t2.endswith("s") and t2[:-1] in OBJECT_VOCAB:
+            t2 = t2[:-1]
         # only keep if it looks like a real object word
         if t2 in COLORS or t2 in COUNT_WORDS:
             continue
