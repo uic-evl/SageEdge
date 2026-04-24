@@ -7,7 +7,8 @@
 #
 # Usage:
 #   DIR_THRESH=100 python beta_ultralytics_tracking_patched.py
-
+# rtsp://admin:SageWaggle@10.42.0.188:554
+# /home/waggle/AI_Test/SageEdge/AI_Programs/Movement_Tracking
 
 import os
 import requests
@@ -178,77 +179,115 @@ bbox_history  = defaultdict(lambda: deque(maxlen=5))   # track_id -> last N boxe
 # Initialize psutil
 psutil.cpu_percent(interval=None)
 
-stat_queue = queue.Queue()
+data_queue = queue.Queue()
+
+last_jtop_time = 0.0
+cached_gpu_util = -1
+
+last_tegra_time = 0.0
+cached_tegra_data = {
+    "cpu": -1.0, 
+    "ram_used": -1, 
+    "ram_total": -1, 
+    "cpu_temp": -1.0, 
+    "gpu_temp": -1.0
+}
+
+def stats_worker():
+    while True:
+        item = data_queue.get()
+        if item is None:
+            break
+        
+        direction, x_start, x_end, det_date, det_time = item
+        
+        try:
+            log_stats(direction, x_start, x_end, det_date, det_time)
+        except Exception as e:
+            print(f"[Worker Error] Failed to log stats: {e}")
+            
+        data_queue.task_done()
+
+threading.Thread(target=stats_worker, daemon=True).start()
 
 # -------------------------------
 # Logging Function
 # --------------------------------
+def log_stats(direction=None, x_start=None, x_end=None, date=None, time_str=None):
+    global last_jtop_time, cached_gpu_util
+    global last_tegra_time, cached_tegra_data
 
-def log_stats(direction=None, x_start=None, x_end=None):
-    # Timestamp
-    cdt = datetime.datetime.now()
-    date = cdt.strftime("%Y-%m-%d")
-    time = cdt.strftime("%H:%M:%S")
+    # Timestamp fallback: if not provided, use current time (from queue)
+    if date is None or time_str is None:
+        cdt = datetime.datetime.now()
+        date = cdt.strftime("%Y-%m-%d")
+        time_str = cdt.strftime("%H:%M:%S")
 
-    cpu_util = None
-    ram_used = None
-    ram_total = None
-    gpu_util = None
-    temps_parsed = {"cpu": None, "gpu": None}
+    current_time = time.time()
+    if current_time - last_tegra_time >= 1.0:
+        try:
+            proc = subprocess.Popen(["tegrastats", "--interval", "1000"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            out = proc.stdout.readline().decode("utf-8").strip()
+            proc.kill()
 
-    try:
-        proc = subprocess.Popen(["tegrastats", "--interval", "1000"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out = proc.stdout.readline().decode("utf-8").strip()
-        proc.kill()
+            # RAM
+            ram_match = re.search(r"RAM (\d+)/(\d+)MB", out)
+            if ram_match:
+                cached_tegra_data["ram_used"] = int(ram_match.group(1))
+                cached_tegra_data["ram_total"] = int(ram_match.group(2))
 
-        # RAM
-        ram_match = re.search(r"RAM (\d+)/(\d+)MB", out)
-        ram_used = int(ram_match.group(1)) if ram_match else -1
-        ram_total = int(ram_match.group(2)) if ram_match else -1
+            # CPU average across cores
+            cpu_match = re.search(r"CPU \[([^\]]+)\]", out)
+            if cpu_match:
+                core_usages = re.findall(r"(\d+)%", cpu_match.group(1))
+                if core_usages:
+                    core_usages = list(map(int, core_usages))
+                    cached_tegra_data["cpu"] = sum(core_usages) / len(core_usages)
 
-        # CPU average across cores
-        cpu_match = re.search(r"CPU \[([^\]]+)\]", out)
-        if cpu_match:
-            core_usages = re.findall(r"(\d+)%", cpu_match.group(1))
-            if core_usages:
-                core_usages = list(map(int, core_usages))
-                cpu_util = sum(core_usages) / len(core_usages)
+            # Temperature 
+            cpu_temp = re.search(r"cpu@([\d\.]+)C", out, re.IGNORECASE)
+            gpu_temp = re.search(r"gpu@([\d\.]+)C", out, re.IGNORECASE)
+            
+            if cpu_temp: cached_tegra_data["cpu_temp"] = float(cpu_temp.group(1))
+            if gpu_temp: cached_tegra_data["gpu_temp"] = float(gpu_temp.group(1))
+        
+        except Exception as e:
+            print(f"Error collecting tegrastats: {e}")
+            cached_tegra_data["cpu"] = psutil.cpu_percent()
+            mem = psutil.virtual_memory()
+            cached_tegra_data["ram_used"] = int(mem.used / 1024**2)
+            cached_tegra_data["ram_total"] = int(mem.total / 1024**2)
+            cached_tegra_data["cpu_temp"] = -1
+            cached_tegra_data["gpu_temp"] = -1
+        finally:
+            last_tegra_time = current_time
 
-        # Temperature 
-        temps = {
-            "cpu": re.search(r"cpu@([\d\.]+)C", out, re.IGNORECASE),
-            "gpu": re.search(r"gpu@([\d\.]+)C", out, re.IGNORECASE),
-        }
-        temps_parsed = {k: float(v.group(1)) if v else None for k, v in temps.items()}
-
-    except Exception as e:
-        print(f"Error collecting stats: {e}")
-        cpu_util = psutil.cpu_percent()
-        mem = psutil.virtual_memory()
-        ram_used = int(mem.used / 1024**2)
-        ram_total = int(mem.total / 1024**2)
-        temps_parsed = {"cpu": -1, "gpu": -1}
-
-    try:
-        with jtop() as jetson:
-            if jetson.ok():
-                gpu_util = jetson.stats.get('GPU', -1)
-    except Exception as e:
-        print(f"Error collecting jtop stats: {e}")
-        gpu_util = -1
+    if current_time - last_jtop_time >= (60.0 * 5):
+        try:
+            with jtop() as jetson:
+                if jetson.ok():
+                    time.sleep(0.8)
+                    cached_gpu_util = jetson.stats.get('GPU', -1)
+                else:
+                    cached_gpu_util = -1
+        except Exception as e:
+            print(f"Error collecting jtop stats: {e}")
+            cached_gpu_util = -1
+        finally:
+            last_jtop_time = current_time
     
     row_data = [
         date, 
-        time, 
+        time_str, 
         direction,  
         x_start , 
         x_end, 
-        round(cpu_util, 1) if cpu_util is not None else -1, 
-        gpu_util if gpu_util is not None else -1, 
-        ram_used if ram_used is not None else -1, 
-        ram_total if ram_total is not None else -1,
-        temps_parsed["cpu"] if temps_parsed["cpu"] is not None else -1,
-        temps_parsed["gpu"] if temps_parsed["gpu"] is not None else -1
+        round(cached_tegra_data["cpu"], 1), 
+        cached_gpu_util, 
+        cached_tegra_data["ram_used"], 
+        cached_tegra_data["ram_total"], 
+        cached_tegra_data["cpu_temp"], 
+        cached_tegra_data["gpu_temp"]    
     ]
 
     try:
@@ -292,31 +331,6 @@ def blur_roi(frame, x1, y1, x2, y2):
     blurred = cv2.GaussianBlur(roi, (kx, ky), 0)
     roi[:] = blurred
 
-DEVICE_NAME = "Arcade Waggle"
-INTERVAL = 4 * 60 # 4 minutes
-# -------------------------------
-# Heartbeat function
-# -------------------------------
-def send_heartbeat():
-    payload = {
-        "device": DEVICE_NAME
-    }
-    while True:
-        try:
-            response = requests.post(API_URL, headers=headers, json=payload, timeout=2)
-            if response.status_code == 200:
-                print(f"Heartbeat sent successfully at {datetime.datetime.now()}")
-            else:
-                print(f"Server returned error: {response.status_code}")
-                
-        except requests.exceptions.ConnectionError:
-            print("Could not connect to server. Heartbeat failed.")
-        except Exception as e:
-            print(f"An error occurred: {e}")
-        time.sleep(INTERVAL)
-
-# h = threading.Thread(target=send_heartbeat, daemon=True)
-# h.start()
 
 # -------------------------------
 # Open video stream
@@ -447,7 +461,9 @@ try:
 
         # Draw detections and update histories
         ids_tensor = results[0].boxes.id
+        
         if ids_tensor is not None and len(ids_tensor):
+            current_ids = set(ids_tensor.int().cpu().numpy().tolist())
             for box, track_id in zip(results[0].boxes.xyxy.cpu().numpy(),
                                      ids_tensor.int().cpu().numpy()):
                 x1, y1, x2, y2 = map(int, box[:4])
@@ -464,7 +480,7 @@ try:
                 # -- end --  
                 
                 # Draw
-                if not headless:
+                if not headless or save_video:
                     cv2.rectangle(frame, (x1, y1), (x2, y2), (0,255,0), 2)
                     # direction hint (based on recent centers)
                     if len(track_history[track_id]) >= 2:
@@ -474,30 +490,34 @@ try:
                         dir_txt = ""
                     cv2.putText(frame, f"ID {int(track_id)} {dir_txt}", (x1, y1 - 7),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 2)
+        else:
+            current_ids = set() # Camera empty (no people)
 
-            # Disappearance-based counting (compare known vs current IDs)
-            current_ids = set(ids_tensor.int().cpu().numpy().tolist())
-            disappeared = set(track_history.keys()) - current_ids
-            for tid in disappeared:
-                if len(track_history[tid]) >= 2:
-                    x_start = track_history[tid][0][0]
-                    x_end   = track_history[tid][-1][0]
-                    x_diff  = x_end - x_start
-                    if x_diff > direction_threshold:
-                        numRight += 1
-                        t = threading.Thread(target=log_stats, args=("Right", x_start, x_end))
-                        t.start()
-                    elif x_diff < -direction_threshold:
-                        numLeft += 1
-                        t = threading.Thread(target=log_stats, args=("Left", x_start, x_end))
-                        t.start()
-                # cleanup after counting
-                del track_history[tid]
-                if tid in bbox_history:
-                    del bbox_history[tid]
-        # else: skip disappearance logic this frame if no IDs
+        disappeared = set(track_history.keys()) - current_ids
+        for tid in disappeared:
+            if len(track_history[tid]) >= 2:
+                x_start = track_history[tid][0][0]
+                x_end   = track_history[tid][-1][0]
+                x_diff  = x_end - x_start
 
-        if not headless:
+                #used to grab correct time for queue
+                cdt = datetime.datetime.now()
+                det_date = cdt.strftime("%Y-%m-%d")
+                det_time = cdt.strftime("%H:%M:%S")
+
+                if x_diff > direction_threshold:
+                    numRight += 1
+                    data_queue.put(("Right", x_start, x_end, det_date, det_time))
+                elif x_diff < -direction_threshold:
+                    numLeft += 1
+                    data_queue.put(("Left", x_start, x_end, det_date, det_time))
+            
+            # cleanup after counting
+            del track_history[tid]
+            if tid in bbox_history:
+                del bbox_history[tid]
+
+        if not headless or save_video:
             # Overlay totals
             cv2.putText(frame, f'Left: {numLeft}, Right: {numRight}', (10, 30),
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
@@ -539,10 +559,9 @@ try:
         
         prev_frame_time = new_frame_time
 
-        if not headless:
+        if not headless or save_video:
             cv2.putText(frame, f"FPS: {int(fps)}", (10, 70), 
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
-            cv2.imshow("Live People Tracking", frame)
     
         # Optional: Print to terminal every 100 frames so you don't spam logs
         if frame_idx % 1000 == 0:
@@ -551,9 +570,11 @@ try:
         if save_video:
             out.write(frame)
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            print("Quit requested by user.")
-            break
+        if not headless:
+            cv2.imshow("Live People Tracking", frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                print("Quit requested by user.")
+                break
 
         if frame_idx % 1000 == 0:
             print(f"Processed frame {frame_idx}")
@@ -570,6 +591,7 @@ finally:
     # Cleanup resources
     # -------------------------------
     print("Releasing resources...")
+    data_queue.put(None)
     end_time = time.time()   # Stop the clock
     total_seconds = end_time - start_time
     print(f"Total execution time: {total_seconds:.2f} seconds")
