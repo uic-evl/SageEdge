@@ -1,0 +1,10 @@
+coco_subset/000000000139.jpg
+coco_subset/000000000285.jpg
+coco_subset/000000000632.jpg
+coco_subset/000000000724.jpg
+coco_subset/000000000776.jpg
+coco_subset/000000000785.jpg
+coco_subset/000000000802.jpg
+coco_subset/000000000872.jpg
+coco_subset/000000000885.jpg
+coco_subset/000000001000.jpg

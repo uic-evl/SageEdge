@@ -1,0 +1,75 @@
+# AI_Judge local artifacts
+val2017/
+coco_subset/
+runs/
+outputs/
+val2017.zip
+runs/test_run/predictions.jsonl
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter
+.ipynb_checkpoints
+
+# IDEs / editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python packaging / build
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# Tests / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Type checkers / caches
+.mypy_cache/
+.pyre/
+.ruff_cache/
+.cache/
+
+# Logs / databases
+*.log
+*.sqlite3
+
+# Data, models, outputs (large/binary artifacts)
+data/
+datasets/
+raw_data/
+processed_data/
+models/
+checkpoints/
+logs/
+predictions/
+*.pt
+*.pth
+*.ckpt
+*.h5
+*.hdf5
+*.npz
+*.npy
+
+# Misc
+*.so
+*.egg

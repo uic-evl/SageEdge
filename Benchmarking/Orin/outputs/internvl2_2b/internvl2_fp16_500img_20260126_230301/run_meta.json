@@ -1,0 +1,23 @@
+{
+  "model_key": "internvl2_2b",
+  "model_id": "OpenGVLab/InternVL2-2B",
+  "run_group": "internvl2_2b_fp16_500img_20260126_230301",
+  "host": "ubuntu",
+  "device": "cuda",
+  "dtype": "torch.float16",
+  "torch_version": "2.8.0",
+  "timestamp": "2026-01-26T23:03:05.628258",
+  "manifest": "/home/waggle/SageEdge/Benchmarking/data/testsets/coco_val2017_500.txt",
+  "num_images": 500,
+  "warmup": 5,
+  "max_new_tokens": 128,
+  "batch_size": 1,
+  "repeats": 1,
+  "suite": "week5_5tasks_bounded",
+  "max_num_tiles": 12,
+  "use_thumbnail": false,
+  "power_monitoring_available": true,
+  "power_monitoring_method": "tegrastats",
+  "power_sample_interval_ms": 100,
+  "preprocessing_note": "HF default settings: max_num_tiles=12, use_thumbnail=False. Tile count varies naturally per image aspect ratio."
+}

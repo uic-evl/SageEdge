@@ -1,0 +1,25 @@
+{
+  "model_key": "internvl",
+  "model_id": "OpenGVLab/InternVL2-2B",
+  "run_group": "test_fp16_500_20260114_214335",
+  "host": "dellgb10",
+  "device": "cuda",
+  "dtype": "torch.float16",
+  "torch_version": "2.11.0.dev20251226+cu130",
+  "timestamp": "2026-01-14T21:43:37.104982",
+  "manifest": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/testsets/coco_val2017_500.txt",
+  "num_images": 500,
+  "warmup": 5,
+  "max_new_tokens": 128,
+  "batch_size": 1,
+  "repeats": 1,
+  "suite": "week5_5tasks_bounded",
+  "preprocessing": {
+    "max_num_tiles": 12,
+    "use_thumbnail": false,
+    "image_size": 448,
+    "note": "Uses HuggingFace documented defaults. Tile count varies naturally per image aspect ratio for reproducible, defensible benchmarking."
+  },
+  "power_monitoring_available": true,
+  "power_sample_interval_ms": 100
+}

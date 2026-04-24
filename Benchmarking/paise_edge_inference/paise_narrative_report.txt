@@ -1,0 +1,168 @@
+
+PAISE 2026: EDGE INFERENCE FEASIBILITY STUDY
+═════════════════════════════════════════════
+
+FRAMING: On shared edge resources with limited memory, what actually runs reliably?
+Why implementation choices (fp16 vs bf16, tokenization) matter for sustainable edge AI.
+
+────────────────────────────────────────────────────────────────────────────────
+
+PLOT 1: MEMORY BOTTLENECK
+────────────────────────
+Key Question: Which models fit on which devices?
+
+Finding: Memory is the hard constraint. Models with >20B parameters struggle on Jetson devices.
+
+Deployment Implication:
+  - Dell (GPU with ample VRAM): Can run anything (gemma3n, internvl, llava)
+  - Jetson Thor (shared memory): Medium models only (moondream2, phi, smolvlm2)
+  - Jetson Orin (LPDDR5): Tiny models only (internvl_2b, moondream2, phi, smolvlm2)
+
+→ Story: "Memory is the bottleneck. Tokenizer + model size = non-negotiable constraint."
+
+────────────────────────────────────────────────────────────────────────────────
+
+PLOT 2: LATENCY CONSISTENCY UNDER CONTENTION
+──────────────────────────────────────────────
+Key Question: Under shared edge resources, which models have predictable latency?
+
+Finding: High CV (Coefficient of Variation) indicates contention sensitivity.
+  - Jetson devices show higher CV than Dell (shared system load)
+  - Small models (smolvlm2, moondream2) are more predictable
+  - Large models (internvl, llava) have high latency jitter
+
+Deployment Implication: If you need SLA guarantees, avoid large models on shared Jetson devices.
+Predictability matters as much as throughput for real-world deployments.
+
+→ Story: "Shared edge resources create contention. Small, efficient models win on reliability."
+
+────────────────────────────────────────────────────────────────────────────────
+
+PLOT 3: ENERGY-PER-TOKEN + POWER STABILITY
+──────────────────────────────────────────
+Key Question: What's the energy cost, and how stable is power delivery?
+
+Finding: 
+  - smolvlm2: ~0.05 J/tok (most efficient)
+  - moondream2: ~0.6 J/tok (good balance)
+  - Large models: 1.5–3.7 J/tok (energy-hungry)
+
+Power stability (error bands): Indicates thermal throttling.
+  - Jetson devices show larger power variance (thermal-limited)
+  - Dell: stable power, can sustain load
+
+Deployment Implication: For battery/power-constrained edge, optimize for J/token.
+Thermal throttling on Jetson limits burst capacity.
+
+→ Story: "Energy efficiency + thermal stability are sustainability metrics. Small models outperform."
+
+────────────────────────────────────────────────────────────────────────────────
+
+PLOT 4: LATENCY TAIL METRICS (P90 vs P99)
+───────────────────────────────────────────
+Key Question: What's the worst-case latency? Do users ever see huge spikes?
+
+Finding: Large gap between P90 and P99 = unpredictable tails.
+  - smolvlm2, moondream2: tight P90/P99 (predictable tails)
+  - Jetson devices: larger tails (resource contention)
+  - Large models: severe tail risk
+
+Deployment Implication: For real-time constraints (interactive apps), tail latency matters.
+Mean latency ≠ user experience.
+
+→ Story: "Tail latency is deployment-critical. Small models provide predictable worst-case."
+
+────────────────────────────────────────────────────────────────────────────────
+
+PLOT 5: TOKENIZATION/PRECISION IMPACT
+──────────────────────────────────────
+Key Question: Are token metrics apples-to-apples across models?
+
+Finding: Token counts vary significantly by model and precision.
+  - Different tokenizers → different token counts for same content
+  - FP16 vs BF16 affects token generation counts
+  - "Tokens per second" comparisons are model-specific, not universal
+
+Deployment Implication: Benchmark YOUR use case with YOUR tokenizer.
+Don't trust published "tokens/sec" metrics across models.
+Implementation choices (HF version, eager backend, dtype) matter.
+
+→ Story: "Implementation choices are critical. Same workload ≠ same token count across models."
+
+────────────────────────────────────────────────────────────────────────────────
+
+PLOT 6: DEVICE RESOURCE TRADE-OFF SPACE
+──────────────────────────────────────────
+Key Question: What's the Pareto frontier on each device?
+
+Finding: No single "best" model. Trade-offs depend on constraints:
+  - Lowest latency: smolvlm2 (but large memory footprint)
+  - Lowest power: moondream2 (good balance)
+  - Most memory-efficient: moondream2, phi
+  - Most consistent: moondream2, phi
+
+Deployment Implication: Choose based on YOUR priority:
+  - Real-time responsiveness? → smolvlm2 (if memory allows)
+  - Battery-constrained? → moondream2 or phi
+  - Shared system reliability? → moondream2 (small, consistent)
+  - Max throughput? → smolvlm2 on Dell only
+
+→ Story: "The deployment design space is device-specific. No universal 'best' model."
+
+────────────────────────────────────────────────────────────────────────────────
+
+RECOMMENDED DEPLOYMENT DECISIONS BY SCENARIO
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║ Scenario                    │ Best Model           │ Device         │ Precision║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║ Real-time (SLA <1.2s)       │ Moondream2           │ Any            │ BF16    ║
+║ Battery-constrained         │ Moondream2 / Phi     │ Orin           │ FP16    ║
+║ Shared edge (unpredictable) │ Moondream2 / Phi     │ Thor           │ BF16    ║
+║ Maximum throughput          │ SmolVLM2             │ Dell           │ BF16    ║
+║ Highest efficiency (J/tok)  │ SmolVLM2             │ Thor/Dell      │ BF16    ║
+║ Memory-constrained (bare metal) │ Phi / Moondream2 │ Orin           │ FP16    ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+────────────────────────────────────────────────────────────────────────────────
+
+KEY INSIGHTS FOR PAISE REVIEW
+
+1. MEMORY IS DESTINY
+   Resource-constrained edge systems hit memory limits first.
+   Model architecture + tokenizer + precision = non-negotiable constraints.
+
+2. SHARED RESOURCES CREATE CONTENTION
+   Jetson devices show 30–40% higher latency variance than dedicated GPU.
+   Small, predictable models (moondream2, phi) handle contention better.
+
+3. ENERGY ≠ POWER
+   Energy efficiency (J/token) is the sustainability metric.
+   Thermal stability (power draw variance) indicates throttling risk.
+
+4. LATENCY TAILS MATTER
+   P99 latencies 2–3× P90 on Jetson devices.
+   Mean latency is misleading; apps need worst-case guarantees.
+
+5. IMPLEMENTATION CHOICES DOMINATE
+   FP16 vs BF16 changes tokenization.
+   Different HF library versions yield different token counts.
+   Benchmark YOUR setup; don't trust cross-model "tokens/sec" comparisons.
+
+6. NO UNIVERSAL "BEST" MODEL
+   Pareto frontiers are device + workload specific.
+   Choose by priority: latency? Energy? Memory? Reliability?
+
+────────────────────────────────────────────────────────────────────────────────
+
+PAPER NARRATIVE ARC
+
+Figure 1 (Memory Bottleneck):    "Here's the constraint space"
+Figure 2 (Consistency):          "Here's the reliability problem"
+Figure 3 (Energy + Stability):   "Here's the sustainability concern"
+Figure 4 (Tail Latency):         "Here's why mean metrics lie"
+Figure 5 (Tokenization Impact):  "Here's why benchmarks are model-specific"
+Figure 6 (Trade-off Space):      "Here's how to choose"
+
+Narrative: Edge deployment success requires understanding constraints, not chasing max throughput.
+

@@ -29,7 +29,8 @@ rm -rf tracking || true
 
 # Create and activate virtual environment
 sudo apt install python3-pip python3-dev
-sudo -H pip3 install virtualenv
+sudo apt install python3-virtualenv
+#sudo -H pip3 install virtualenv
 virtualenv ./tracking
 source tracking/bin/activate
 pip install --upgrade pip setuptools wheel
@@ -40,16 +41,13 @@ pip install "numpy==1.26.4"
 # Install OpenCV with GUI support
 pip install "opencv-python==4.9.0.80"
 
-# Install PyTorch for Jetson
-wget https://developer.download.nvidia.com/compute/redist/jp/v61/pytorch/torch-2.5.0a0+872d972e41.nv24.08.17622132-cp310-cp310-linux_aarch64.whl -O torch-2.5.0a0+872d972e41.nv24.08.17622132-cp310-cp310-linux_aarch64.whl
-pip install torch-2.5.0a0+872d972e41.nv24.08.17622132-cp310-cp310-linux_aarch64.whl
+# Install PyTorch and torchvision for Jetson orin nx
+pip uninstall torch torchvision torchaudio -y
+pip install --upgrade pip setuptools wheel
 
-# Install torchvision
-git clone --depth 1 --branch v0.20.0 https://github.com/pytorch/vision.git
-cd vision
-pip install .
-cd ..
-rm -rf vision
+pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 \
+--index-url https://pypi.jetson-ai-lab.io/jp6/cu126
+
 
 # Install deep-person-reid
 git clone --depth 1 https://github.com/KaiyangZhou/deep-person-reid.git
@@ -69,7 +67,8 @@ pip install \
     matplotlib \
     pandas \
     tqdm \
-    psutil
+    psutil \
+    lap
 
 # Fix any potential numpy conflicts
 pip install --force-reinstall "numpy==1.26.4"

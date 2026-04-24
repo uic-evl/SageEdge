@@ -7,8 +7,7 @@
 #
 # Usage:
 #   DIR_THRESH=100 python beta_ultralytics_tracking_patched.py
-# rtsp://admin:SageWaggle@10.42.0.188:554
-# /home/waggle/AI_Test/SageEdge/AI_Programs/Movement_Tracking
+
 
 import os
 import requests

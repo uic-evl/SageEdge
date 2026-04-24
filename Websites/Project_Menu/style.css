@@ -1,0 +1,239 @@
+/* CSS Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    padding-top: 80px; /* Space for fixed navbar */
+    background-color: #f9fafb;
+}
+
+/* NAVIGATION BAR */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 100px; /* Match body padding */
+}
+
+/* Logo styles */
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-img {
+    height: 40px;
+    width: auto;
+}
+
+.logo-text {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    letter-spacing: -0.025em;
+}
+
+/* Navigation links */
+.nav-links {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+}
+
+.nav-link {
+    color: #4b5563;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 8px 0;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #111827;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #111827;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* HEADER SECTION */
+.header {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 100px 20px 100px; /* Match left/right padding with navbar */
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 20px;
+}
+
+.header-line {
+    border: none;
+    border-top: 2px solid #e5e7eb;
+    margin: 0;
+}
+
+/* PROJECTS CONTAINER */
+.projects-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Fixed 3 columns */
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 100px; /* Match left/right padding with navbar */
+}
+
+/* Project Card - Updated */
+.project-card {
+    /* Removed display: block, text-decoration, and color from here */
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+/* NEW: Project Link styles - Option 1 implementation */
+.project-link {
+    display: block; /* Ensures the entire card area is clickable */
+    text-decoration: none; /* Removes underline from the link */
+    color: inherit; /* Keeps text color consistent */
+}
+
+.project-link:hover {
+    text-decoration: none; /* Ensures no underline on hover */
+}
+
+/* Remove underline from all text elements inside the link */
+.project-link .project-title,
+.project-link .project-description {
+    text-decoration: none;
+}
+
+.project-card:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.project-card:focus {
+    outline: 3px solid rgba(17, 24, 39, 0.08);
+    outline-offset: 2px;
+}
+
+/* Project Image Container - NO padding here */
+.image-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10; /* Wider, less tall for slimmer cards */
+    overflow: hidden;
+    background-color: #f3f4f6;
+}
+
+.project-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    display: block;
+}
+
+.project-card:hover .project-image {
+    transform: scale(1.05);
+}
+
+/* Project Content - Padding ONLY applied here */
+.project-content {
+    padding: 20px;
+}
+
+.project-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 10px;
+}
+
+.project-description {
+    color: #4b5563;
+    line-height: 1.6;
+    font-size: 0.9rem;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+    .projects-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+        padding: 40px 50px;
+    }
+    
+    .header {
+        padding: 40px 50px 20px 50px;
+    }
+    
+    .nav-container {
+        padding: 0 50px;
+    }
+}
+
+@media (max-width: 640px) {
+    .projects-container {
+        grid-template-columns: 1fr; /* 1 column on small screens */
+        padding: 20px;
+    }
+    
+    .header {
+        padding: 30px 20px 15px 20px;
+    }
+    
+    .header h1 {
+        font-size: 2rem;
+    }
+    
+    .nav-container {
+        padding: 0 20px;
+    }
+    
+    .project-content {
+        padding: 16px;
+    }
+    
+    .project-title {
+        font-size: 1.1rem;
+    }
+}
