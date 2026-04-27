@@ -1,0 +1,73 @@
+name: "privacy-layer"
+namespace: "fmora22"
+version: "1.0.0"
+
+description: "A privacy-preserving image and video capture plugin for the Sage edge environment. Detects human faces in real time using YuNet (OpenCV DNN, CPU-friendly) and applies a configurable masking method — Gaussian blur, box blur, median blur, pixelation, or full block-out — before any frames leave the node. Lets researchers collect data from public spaces using Waggle cameras, RTSP streams, or recorded video while protecting the identities of bystanders. Frames are blurred locally on the edge device; nothing identifiable is ever transmitted to Beehive or written to disk."
+authors: "Michael Cortez; Om Patel; Elizabeth Cardoso; Fatima Mora Garcia"
+collaborators: "The Sage Team"
+funding: "NSF Grants: 2436842, 1935984, 2331263"
+license: "MIT License"
+keywords: "privacy, face-blur, anonymization, YuNet, OpenCV, edge AI, ethical-AI, public-space-monitoring"
+homepage: "https://github.com/fmora22/privacy_layer"
+
+source:
+  url: "https://github.com/fmora22/privacy_layer"
+  branch: "main"
+  dockerfile: "Dockerfile"
+  directory: ""
+  architectures:
+    - "linux/amd64"
+    - "linux/arm64"
+
+inputs:
+  # ---------- source ----------
+  - id: "stream"
+    type: "string"
+    description: "File path or RTSP/HTTP URL of the video source. Takes precedence over camera. Use this for pre-recorded video or external IP cameras."
+
+  - id: "camera"
+    type: "string"
+    description: "Waggle camera name (e.g., left, right, top). Used when stream is not set. If both are empty, the node's default camera is opened."
+
+  - id: "snapshot_only"
+    type: "int"
+    description: "If 1, capture a single frame, blur faces, and exit. Useful for cron-scheduled periodic sampling. If 0, run continuously over the stream."
+
+  # ---------- detection ----------
+  - id: "conf"
+    type: "float"
+    description: "Face detection confidence threshold (0.0–1.0). Higher values reduce false positives but may miss faces. Default 0.6."
+
+  - id: "detect_width"
+    type: "int"
+    description: "Resize frame to this width before face detection to save compute on edge devices. The full-resolution frame is still used for blurring. Set to 0 to detect at full resolution. Default 640."
+
+  # ---------- privacy mask ----------
+  - id: "method"
+    type: "string"
+    description: "Face masking method. Options: box (fast, default), gaussian (smooth, slower), median (posterized), pixelate (mosaic), solid (full block-out / strongest privacy)."
+
+  - id: "blur_strength"
+    type: "int"
+    description: "Intensity of the masking effect. Higher = more aggressive obscuring. Ignored for the solid method. Default 25."
+
+  - id: "pad_frac"
+    type: "float"
+    description: "Fraction of padding added around each detected face box before masking, to cover hairlines, ears, and detection wobble. Default 0.15 (15%)."
+
+  # ---------- output ----------
+  - id: "publish_count"
+    type: "int"
+    description: "If 1, publish per-frame face count (privacy.faces.count) to Beehive. Useful for activity quantification but produces continuous measurements. Default 0 (silent — pure blur, no telemetry)."
+
+  - id: "output"
+    type: "string"
+    description: "What to do with blurred frames. Options: none (process and discard, lowest cost), file (save blurred mp4 locally), upload (periodic blurred snapshot to Beehive — recommended for live deployments), both (file + upload). Default none."
+
+  - id: "out_path"
+    type: "string"
+    description: "Output mp4 filename when output mode includes 'file'. Saved under output/{timestamp}/. Default blurred.mp4."
+
+  - id: "upload_every"
+    type: "int"
+    description: "When output includes 'upload', upload one blurred snapshot to Beehive every N frames. At 30 FPS, 150 ≈ one upload every 5 seconds. Default 150."

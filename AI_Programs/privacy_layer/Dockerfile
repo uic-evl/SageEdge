@@ -1,39 +1,37 @@
-# thor (amd64, gpu) dockerfile for left-right-tracker
-# tested on environment using nvcr.io/nvidia/pytorch:25.08-py3
-# adds pywaggle so it can run as a sage plugin
+# CPU-only Sage edge plugin for face blurring.
+# Works on amd64 and arm64 (Thor, Jetson, Pi, x86 dev nodes).
+# YuNet runs through OpenCV's DNN module — no GPU, no PyTorch needed.
 
-FROM nvcr.io/nvidia/pytorch:25.08-py3
+FROM python:3.12-slim-bookworm
 
 ENV DEBIAN_FRONTEND=noninteractive \
     PIP_NO_CACHE_DIR=1 \
     PYTHONUNBUFFERED=1
 
-# system packages
+# Runtime libs OpenCV needs (FFMPEG for RTSP/mp4, plus the usual image libs).
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git cmake pkg-config build-essential gfortran \
-    libgeos-dev sqlite3 \
-    libjpeg-dev libpng-dev libtiff-dev \
-    libopenblas0-pthread liblapack-dev libhdf5-dev libomp-dev libopenmpi-dev \
-    python3-venv python3-dev python3-pip \
-    gstreamer1.0-tools gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
-    gstreamer1.0-plugins-bad gstreamer1.0-libav \
+    ca-certificates \
+    ffmpeg \
+    libglib2.0-0 \
+    libgomp1 \
+    libjpeg62-turbo \
+    libopenblas0 \
+    libpng16-16 \
+    libsm6 \
+    libxext6 \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# install python deps (torch / cuda already provided by base image)
 COPY requirements.txt .
-
 RUN python -m pip install --upgrade pip setuptools wheel && \
-    python -m pip install --no-cache-dir --prefer-binary --only-binary=:all: \
-        -r requirements.txt
+    python -m pip install --no-cache-dir -r requirements.txt
 
-# TODO: pre-download yolov8 weights so first run does not need internet ? saw a comment about this on sage 
-RUN python - << 'PY'
-from ultralytics import YOLO
-for size in ("n", "s", "m"):
-    YOLO(f"yolov8{size}.pt")
-PY
+# Pre-download YuNet ONNX so the container runs offline on edge nodes.
+RUN mkdir -p /app/models && \
+    python -c "import urllib.request; urllib.request.urlretrieve(\
+'https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx', \
+'/app/models/face_detection_yunet_2023mar.onnx')"
 
 COPY . .
 
