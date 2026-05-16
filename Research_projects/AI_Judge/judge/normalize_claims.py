@@ -140,6 +140,29 @@ SYNONYM_MAP = {
     "table": "dining table",
 
     "traffic signal": "traffic light",
+    "chairs": "chair",
+    "chair": "chair",
+
+    "books": "book",
+    "book": "book",
+
+    "tables": "dining table",
+    "table": "dining table",
+
+    "plants": "potted plant",
+    "plant": "potted plant",
+
+    "clocks": "clock",
+    "clock": "clock",
+
+    "vases": "vase",
+    "vase": "vase",
+
+    "refrigerators": "refrigerator",
+    "refrigerator": "refrigerator",
+
+    "tvs": "tv",
+    "tv": "tv",
 }
 
 STOPWORDS = {

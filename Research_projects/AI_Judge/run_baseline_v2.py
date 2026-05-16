@@ -9,8 +9,7 @@ from typing import Any, Dict, Optional, List, Tuple
 
 from run_ollama_caption import caption_ollama
 
-from judge.rule_judge_v2 import rule_based_judge_v2
-
+from judge.hybrid_judge_v3 import hybrid_judge_v3
 
 @dataclass
 class StageResult:
@@ -150,14 +149,25 @@ def run(image_path: str, use_vlm: bool = True) -> Dict[str, Any]:
         out["caption_raw"] = cap_text
 
     judge = safe_call(
-    "judge_rule_v2",
-    lambda: {"rule_based_v2": rule_based_judge_v2(out["caption_raw"], out["detections"])},
-    {"rule_based_v2": {"claims": {}, "violations": [], "hallucination_score": None, "grounding_score": None}},
-    )
+    "judge_hybrid_v3",
+    lambda: {"hybrid_v3": hybrid_judge_v3(out["caption_raw"], out["detections"])},
+    {
+        "hybrid_v3": {
+            "claims": {},
+            "violations": [],
+      	    "hallucination_score": None,
+            "grounding_score": None,
+            "retrieval_grounding_score": None,
+            "retrieval_hallucination_score": None,
+            "hybrid_grounding_score": None,
+            "hybrid_hallucination_score": None,
+            }
+    },
+    )    
     
-    out["stages"]["judge_rule"] = asdict(judge)
-    out["judge"] = out["stages"]["judge_rule"]["data"]
-
+    out["stages"]["judge_hybrid"] = asdict(judge)
+    out["judge"] = out["stages"]["judge_hybrid"]["data"]
+    
     return out
 
 
@@ -174,7 +184,6 @@ if __name__ == "__main__":
 
     result = run(args.image, use_vlm=(not args.no_vlm))
     # --- FAKE CAPTION TEST ---
-    from judge.rule_judge import rule_based_judge
 
     #fake = "A person."
     #result["caption_raw"] = fake
@@ -183,15 +192,26 @@ if __name__ == "__main__":
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    rb = (result.get("judge") or {}).get("rule_based_v2", {})
+    rb = (result.get("judge") or {}).get("hybrid_v3", {})
+
 
     record = {
         "image": args.image,
         "caption": result.get("caption_raw"),
         "detections": result.get("detections", []),
 
-        "hallucination": rb.get("hallucination_score"),
-        "grounding": rb.get("grounding_score"),
+        # Rule-based scores
+        "rule_hallucination": rb.get("rule_hallucination_score"),
+        "rule_grounding": rb.get("rule_grounding_score"),
+
+         # Retrieval scores
+        "retrieval_hallucination": rb.get("retrieval_hallucination_score"),
+        "retrieval_grounding": rb.get("retrieval_grounding_score"),
+
+         # Final hybrid scores
+        "hallucination": rb.get("hybrid_hallucination_score"),
+        "grounding": rb.get("hybrid_grounding_score"),
+
         "violations": rb.get("violations", []),
 
         "claims": ((rb.get("claims") or {}).get("objects", [])),
@@ -201,7 +221,12 @@ if __name__ == "__main__":
         "checked_claim_count": rb.get("checked_claim_count"),
         "supported_claim_count": rb.get("supported_claim_count"),
         "unsupported_claim_count": rb.get("unsupported_claim_count"),
+
+        # Retrieval neighbors
+        "retrieval_neighbors": rb.get("retrieval_neighbors", []),
     }
+
+
 
     with open(out_path, "a") as f:
         f.write(json.dumps(record) + "\n")

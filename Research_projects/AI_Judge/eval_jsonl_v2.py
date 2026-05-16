@@ -39,8 +39,12 @@ def main():
         for v in (r.get("violations") or []):
             if isinstance(v, str):
                 vc[v] += 1
-            elif isinstance(v, dict) and "claim" in v:
-                vc[str(v["claim"])] += 1
+            if isinstance(v, str):
+                vc[v] += 1
+            elif isinstance(v, dict):
+                claim = v.get("claim_normalized") or v.get("claim_raw") or v.get("claim")
+                if claim:
+                    vc[str(claim)] += 1
 
     print(f"N = {n}")
     print(f"claim_coverage = {n_cov}/{n} ({(n_cov/n*100 if n else 0):.1f}%)")
