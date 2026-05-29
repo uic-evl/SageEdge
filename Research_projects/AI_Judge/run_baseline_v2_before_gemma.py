@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional, List, Tuple
 
 from run_ollama_caption import caption_ollama
-from run_gemma3n_hf_caption import caption_gemma3n_hf
+
 from judge.hybrid_judge_v3 import hybrid_judge_v3
 
 @dataclass
@@ -119,7 +119,7 @@ def caption_with_moondream2(image_path: str, prompt: str = "") -> Dict[str, Any]
     return {"caption_raw": str(text).strip(), "model": model_id}
 
 
-def run(image_path: str, use_vlm: bool = True, vlm_model: str = "moondream") -> Dict[str, Any]:
+def run(image_path: str, use_vlm: bool = True) -> Dict[str, Any]:
     image_path = str(Path(image_path).resolve())
     out: Dict[str, Any] = {"image_path": image_path, "stages": {}}
 
@@ -129,24 +129,11 @@ def run(image_path: str, use_vlm: bool = True, vlm_model: str = "moondream") -> 
 
     cap_text = ""
     if use_vlm:
-        if vlm_model == "gemma3n-hf":
-            cap_vlm = safe_call(
-                "caption_vlm",
-                lambda: {
-                    "caption_raw": caption_gemma3n_hf(
-                        image_path,
-                        model_id="google/gemma-3n-E2B-it"
-                    )
-                },
-                {"caption_raw": ""}
-            )
-        else:
-            cap_vlm = safe_call(
-                "caption_vlm",
-                lambda: {"caption_raw": caption_ollama(image_path, model=vlm_model)},
-                    {"caption_raw": ""}
-            )
-
+        cap_vlm = safe_call(
+            "caption_vlm",
+            lambda: {"caption_raw": caption_ollama(image_path, model="moondream")},
+            {"caption_raw": ""}
+        )
         out["stages"]["caption_vlm"] = asdict(cap_vlm)
         cap_text = out["stages"]["caption_vlm"]["data"].get("caption_raw", "").strip()
     if not cap_vlm.ok:
@@ -191,12 +178,11 @@ if __name__ == "__main__":
     p.add_argument("--image", required=True)
     p.add_argument("--out", default="outputs/result.json")
     p.add_argument("--no_vlm", action="store_true", help="Disable VLM captioning; use YOLO-only caption.")
-    p.add_argument("--vlm", default="moondream", help="Ollama VLM model name, e.g., moondream, llava, gemma3:4b, gemma3n:e4b")
     args = p.parse_args()
 
     Path("outputs").mkdir(exist_ok=True)
 
-    result = run(args.image, use_vlm=(not args.no_vlm), vlm_model=args.vlm)
+    result = run(args.image, use_vlm=(not args.no_vlm))
     # --- FAKE CAPTION TEST ---
 
     #fake = "A person."
