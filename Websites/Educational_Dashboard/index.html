@@ -8,10 +8,38 @@
 </head>
 <body>
 
+  <nav class="navbar">
+    <div class="nav-container">
+        <!-- Logo on the left -->
+        <div class="nav-logo">
+            <img src="images/EVL_small_logo.png" alt="Logo" class="logo-img">
+            
+        </div>
+        
+        <!-- Navigation links on the right -->
+        <div class="nav-links">
+          <a href="https://sage.evl.uic.edu/web/project-menu/" target="_blank" class="nav-link">Projects Menu</a>
+            
+          Add more links as need
+        </div>
+    </div>
+    </nav>
+
   <!-- edit here for header in top blue part -->
 
-  <h1 style="font-size: 30px;">UIC-EVL Sage Pedestrian Flow</h1>
-  <p style="font-size: 20px;">Developed as part of the NSF-funded SAGE research project, this system uses edge AI to observe movement patterns. As people walk by, video is analyzed locally to detect left and right motion. No video is captured or stored; only motion information is displayed.</p>
+  
+  <div class="header">
+    <div class="header-content">
+      <h1>UIC-EVL Sage Pedestrian Flow</h1>
+      <p>
+        Developed as part of the NSF-funded SAGE research project, 
+        this system uses edge AI to observe movement patterns. 
+        As people walk by, video is analyzed locally to detect left and right motion. 
+        No video is captured or stored; only motion information is displayed.
+      </p>
+    </div>
+  </div>
+  
 
   <div class="card">
 
@@ -45,8 +73,79 @@
 
   </div>
 
-  <!-- footer here  -->
+  <div class="card">
+    <div class="box-header">Data Analysis</div>
+    <div class="box-content">
+      <div id="custom-tooltip" style="margin-top: 10px; background: #f8f9fa; padding: 5px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="box-header">System Statistics</div>
+    <div class="box-content">
+      <div id="custom-tooltip" style="margin-top: 10px; background: #f8f9fa; padding: 5px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>
+    </div>
+  </div>
+
+
+  <div class="box">
+    <div class="box-header">About Our Educational Waggle</div>
+    <div id="box-content">
+      
+      <p>
+        The UIC team, led by Michael E. Papka, will collaboratively work 
+        with Northwestern University and other participating institutions to 
+        lead the following:
+      </p>
+       
+      <p>
+        i. Low-Cost Sage Node Development: UIC will oversee a 
+        team of undergraduate students who will research and develop low-cost Sage 
+        nodes for use in classroom settings. These nodes will be designed to 
+        provide accessible and affordable access to the Sage platform for 
+        educational purposes. Deliverables include designing and developing 
+        low-cost Sage nodes, documentation, and evaluating their performance and 
+        usability in classroom settings.
+      </p>
+
+      <p>
+        ii. Jupyter Notebook Examples for Education 
+        and Outreach: The UIC team will lead the development of educational examples 
+        using Jupyter notebooks to support the project’s education and outreach 
+        objectives. These examples will demonstrate the capabilities of the Sage 
+        platform and provide accessible learning resources for students and educators 
+        interested in AI techniques, algorithms, and AI-driven climate understanding. 
+        Deliverables include the creation of Jupyter notebook examples, user guides, 
+        and instructional materials to support their use in educational settings, as 
+        well as reports detailing the impact and effectiveness of these resources in 
+        achieving the project’s education and outreach objectives.
+      </p>
+
+      <div class="image-placeholder">
+        <span class="bracket left">(</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+          <circle cx="12" cy="13" r="3"/>
+        </svg>
+        <span class="bracket right">)</span>
+      </div>
+    
+    </div>
+  </div>
+
+
   <div class="footer">
+    <div class="footer-qr-codes">
+      <div class="footer-qr-card">
+        <img src="images/project_description.png" alt="Project" class="footer-qr-image">
+        <div class="footer-qr-label">Project</div>
+      </div>
+      <div class="footer-qr-card">
+        <img src="images/sageWeb.png" alt="SAGE" class="footer-qr-image">
+        <div class="footer-qr-label">SAGE</div>
+      </div>
+    </div>
+
     <div class="footer-content">
       <div class="footer-title">Scan for More Information</div>
       <div class="footer-subtitle">University of Illinois Chicago | Electronic Visualization Laboratory</div>
@@ -54,6 +153,9 @@
 
     </div>
   </div>
+
+  <!-- footer here  -->
+  
 
   <script>
     let data = [], filteredData = [], selectedMonth = "All Data", selectedDay = null, selectedHour = null
@@ -103,6 +205,18 @@
       }
     }
 
+    function showNewDataNotification(left, right) {
+      const notification = document.getElementById('newDataNotification')
+      if (!notification) return // Safety check
+      
+      notification.textContent = `New data: ${left} left, ${right} right`
+      notification.style.display = 'block'
+      
+      setTimeout(() => {
+        notification.style.display = 'none'
+      }, 3000)
+    }
+
     // Load historical data ONCE on page load
     async function loadInitialHistory() {
       try {
@@ -130,7 +244,9 @@
               left: entry.direction_left,
               right: entry.direction_right,
               cpu_temp: entry.CPU_temp,
+              gpu_temp: entry.GPU_temp,
               cpu_usage: entry.CPU_usage,
+              mem_usage: entry.mem_usage
             };
         });
         
@@ -192,64 +308,6 @@
           reconnectTimeout = null;
         }
       };
-      
-      // eventSource.onmessage = (event) => {
-      //   try {
-      //     const newRows = JSON.parse(event.data);
-          
-      //     if (newRows && newRows.length > 0) {
-      //       console.log("New data received:", newRows);
-            
-      //       // Transform the new data
-      //       const transformedRows = newRows.map(entry => {
-      //         const dateObj = new Date(entry.Date);
-      //         const [hours, minutes] = entry.Time.split(':');
-
-      //         return {
-      //           date: entry.Date.trim(),
-      //           time: entry.Time,
-      //           hour: parseInt(hours),
-      //           minute: parseInt(minutes),
-      //           displayDate: dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }),
-      //           year: dateObj.getFullYear(),
-      //           displayTime: entry.Time,
-      //           left: entry.direction_left,
-      //           right: entry.direction_right,
-      //           cpu_temp: entry.CPU_temp,
-      //           cpu_usage: entry.CPU_usage,
-      //         };
-      //       });
-            
-      //       // Add new data to the END of the array (most recent at end)
-      //       data = [...data, ...transformedRows];
-            
-      //       // Keep data sorted by date and time
-      //       data.sort((a, b) => {
-      //         const dateCompare = new Date(a.date) - new Date(b.date);
-      //         if (dateCompare !== 0) return dateCompare;
-      //         return a.hour * 60 + a.minute - (b.hour * 60 + b.minute);
-      //       });
-            
-      //       // Limit data size (keep last 30 days)
-      //       const thirtyDaysAgo = new Date();
-      //       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      //       data = data.filter(d => new Date(d.date) >= thirtyDaysAgo);
-            
-      //       // Re-render with updated data
-      //       filterAndRender();
-            
-      //       // Optional: Show a subtle notification
-      //       // Calculate total new left and right counts
-      //       const totalLeft = transformedRows.reduce((sum, row) => sum + row.left, 0);
-      //       const totalRight = transformedRows.reduce((sum, row) => sum + row.right, 0);
-
-      //       // Show popup with counts
-      //       showNewDataNotification(totalLeft, totalRight);
-      //     }
-      //   } catch (error) {
-      //     console.error("Error parsing stream data:", error);
-      //   }
-      // };
 
       eventSource.onmessage = (event) => {
         try {
@@ -278,13 +336,15 @@
                 displayDate: dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }),
                 year: dateObj.getFullYear(),
                 displayTime: entry.Time,
-                // Handle both possible field name formats
-                left: entry.direction_left || entry.Direction_left || 0,
-                right: entry.direction_right || entry.Direction_right || 0,
-                cpu_temp: entry.CPU_temp_C || entry.CPU_temp || 0,
-                cpu_usage: entry.CPU_percent || entry.CPU_usage || 0,
+                left: entry.direction_left || 0,
+                right: entry.direction_right || 0,
+                cpu_temp: entry.CPU_temp || 0,
+                gpu_temp: entry.GPU_temp || 0,
+                cpu_usage: entry.CPU_usage || 0,
+                mem_usage: entry.mem_usage || 0
               };
             });
+            
             
             console.log("Transformed rows:", transformedRows);
             
@@ -307,7 +367,9 @@
                 data[existingIndex].left = newRow.left;
                 data[existingIndex].right = newRow.right;
                 data[existingIndex].cpu_temp = newRow.cpu_temp;
+                data[existingIndex].gpu_temp = newRow.gpu_temp;
                 data[existingIndex].cpu_usage = newRow.cpu_usage;
+                data[existingIndex].mem_usage = newRow.mem_usage;
                 
                 // Track the delta (difference from old values)
                 const deltaLeft = newRow.left - oldLeft;
@@ -374,32 +436,6 @@
         }, 5000);
       };
     }
-
-    // Visual notification when new data arrives
-    // function showNewDataNotification(leftCount, rightCount) {
-    //   const chartContainer = document.getElementById('chart-container');
-      
-    //   // Create popup
-    //   const popup = document.createElement('div');
-    //   popup.className = 'data-update-popup';
-    //   popup.innerHTML = `
-    //     <div class="popup-content">
-    //       <div class="popup-title" style="color: white;">✨ New Data Received!</div>
-    //       <div class="popup-counters">
-    //         <div class="counter-box counter-left">Left: ${leftCount}</div>
-    //         <div class="counter-box counter-right">Right: ${rightCount}</div>
-    //       </div>
-    //     </div>
-    //   `;
-      
-    //   chartContainer.appendChild(popup);
-      
-    //   // Remove after 3 seconds
-    //   setTimeout(() => {
-    //     popup.style.animation = 'fadeOut 0.3s ease-out';
-    //     setTimeout(() => popup.remove(), 300);
-    //   }, 3000);
-    // }
 
     window.onload = () => {
       const monthSelect = document.getElementById("monthSelect");
@@ -581,6 +617,10 @@
           left: 0,
           right: 0,
           count: 0,
+          cpu_temp: 0,
+          gpu_temp: 0,
+          cpu_usage: 0,
+          mem_usage: 0,
           date: dataToAggregate.length > 0 ? dataToAggregate[0].date : '',
           displayDate: dataToAggregate.length > 0 ? dataToAggregate[0].displayDate : ''
         }
@@ -590,7 +630,21 @@
         const key = d.hour
         hourlyData[key].left += d.left
         hourlyData[key].right += d.right
+        hourlyData[key].cpu_temp += d.cpu_temp || 0
+        hourlyData[key].gpu_temp += d.gpu_temp || 0
+        hourlyData[key].cpu_usage += d.cpu_usage || 0
+        hourlyData[key].mem_usage += d.mem_usage || 0
         hourlyData[key].count++
+      })
+      
+      // Average the system metrics
+      Object.values(hourlyData).forEach(h => {
+        if (h.count > 0) {
+          h.cpu_temp = (h.cpu_temp / h.count).toFixed(1)
+          h.gpu_temp = (h.gpu_temp / h.count).toFixed(1)
+          h.cpu_usage = (h.cpu_usage / h.count).toFixed(1)
+          h.mem_usage = (h.mem_usage / h.count).toFixed(1)
+        }
       })
       
       return Object.values(hourlyData).sort((a, b) => a.hour - b.hour)
@@ -607,7 +661,11 @@
           date: date,
           displayTime: `${hour.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`,
           left: 0,
-          right: 0
+          right: 0,
+          cpu_temp: 0,
+          gpu_temp: 0,
+          cpu_usage: 0,
+          mem_usage: 0
         }
       }
       
@@ -615,6 +673,10 @@
         const key = d.minute
         minuteData[key].left = d.left
         minuteData[key].right = d.right
+        minuteData[key].cpu_temp = d.cpu_temp || 0
+        minuteData[key].gpu_temp = d.gpu_temp || 0
+        minuteData[key].cpu_usage = d.cpu_usage || 0
+        minuteData[key].mem_usage = d.mem_usage || 0
       })
       
       return Object.values(minuteData).sort((a, b) => a.minute - b.minute)
@@ -631,12 +693,30 @@
             date: d.date,
             left: 0,
             right: 0,
+            cpu_temp: 0,
+            gpu_temp: 0,
+            cpu_usage: 0,
+            mem_usage: 0,
             count: 0
           }
         }
         dailyData[key].left += d.left
         dailyData[key].right += d.right
+        dailyData[key].cpu_temp += d.cpu_temp || 0
+        dailyData[key].gpu_temp += d.gpu_temp || 0
+        dailyData[key].cpu_usage += d.cpu_usage || 0
+        dailyData[key].mem_usage += d.mem_usage || 0
         dailyData[key].count++
+      })
+      
+      // Average the system metrics
+      Object.values(dailyData).forEach(d => {
+        if (d.count > 0) {
+          d.cpu_temp = (d.cpu_temp / d.count).toFixed(1)
+          d.gpu_temp = (d.gpu_temp / d.count).toFixed(1)
+          d.cpu_usage = (d.cpu_usage / d.count).toFixed(1)
+          d.mem_usage = (d.mem_usage / d.count).toFixed(1)
+        }
       })
       
       return Object.values(dailyData).sort((a, b) => new Date(a.date) - new Date(b.date))
@@ -868,6 +948,7 @@
         tooltipEl.innerHTML = `
           <div style="display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; align-items: center; font-size: 25px; color: black;">
             <span style="background: #e3f2fd; padding: 8px 16px; border-radius: 20px; font-weight: bold;">Data Analysis</span>
+
             <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Date:</strong> --</span>
             <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Left:</strong> --</span>
             <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Right:</strong> --</span>
@@ -875,6 +956,13 @@
             <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Total Right:</strong> --</span>
             <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Peak:</strong> --</span>
             <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Average:</strong> --</span>
+            
+
+            <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>CPU Temp:</strong> --</span>
+            <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>CPU Usage:</strong> --</span>
+            <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>GPU Temp:</strong> --</span>
+            <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Memory Usage:</strong> --</span>
+
           </div>
         `
         return
@@ -913,6 +1001,7 @@
       tooltipEl.innerHTML = `
         <div style="display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; align-items: center; font-size: 25px; font-weight: bold; color: black;">
           <span style="background: #e3f2fd; padding: 8px 16px; border-radius: 20px; font-weight: bold;">Data Analysis</span>
+
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Time:</strong> ${displayLabel}</span>
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Left:</strong> ${currentPoint.left}</span>
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Right:</strong> ${currentPoint.right}</span>
@@ -920,6 +1009,13 @@
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Total Right:</strong> ${totalRight}</span>
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Peak:</strong> ${peakLabel}</span>
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Average:</strong> ${avg}</span>
+
+
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>CPU Temp:</strong> ${parseFloat(currentPoint.cpu_temp || 0).toFixed(1)}°C</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>CPU Usage:</strong> ${parseFloat(currentPoint.cpu_usage || 0).toFixed(1)}%</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>GPU Temp:</strong> ${parseFloat(currentPoint.gpu_temp || 0).toFixed(1)}°C</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Memory Usage:</strong> ${parseFloat(currentPoint.mem_usage || 0).toFixed(1)}%</span>
+          
         </div>
       `
     }
@@ -963,6 +1059,11 @@
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Total Right:</strong> ${totalRight}</span>
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Peak:</strong> ${peakLabel}</span>
           <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Average:</strong> ${avg}</span>
+
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>CPU Temp:</strong> ${parseFloat(point.cpu_temp || 0).toFixed(1)}°C</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>CPU Usage:</strong> ${parseFloat(point.cpu_usage || 0).toFixed(1)}%</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>GPU Temp:</strong> ${parseFloat(point.gpu_temp || 0).toFixed(1)}°C</span>
+          <span style="background: white; padding: 8px 16px; border-radius: 20px; border: 2px solid #e0e0e0;"><strong>Memory Usage:</strong> ${parseFloat(point.mem_usage || 0).toFixed(1)}%</span>
         </div>
       `
     }
