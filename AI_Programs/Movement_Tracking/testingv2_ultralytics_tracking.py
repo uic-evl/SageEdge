@@ -165,8 +165,8 @@ data_file = open("data.csv", "w", newline="")
 csv_writer = csv.writer(data_file)
 csv_writer.writerow([
     "Date", "Time", "Direction", "X_start", "X_end",
-    "CPU%", "RAM_used_MB", "RAM_total_MB",
-    "GPU%", "CPU_temp_C", "GPU_temp_C"
+    "CPU%", "GPU%", "RAM_used_MB", "RAM_total_MB",
+    "CPU_temp_C", "GPU_temp_C"
 ])
 
 # Initialize movement counters and histories
