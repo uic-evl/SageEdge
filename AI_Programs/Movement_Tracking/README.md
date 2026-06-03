@@ -47,4 +47,5 @@ Make sure to have the exact file location for the video or live stream you would
 - video file: `/media/waggle/New Volume/park_walking.mp4`
 - live stream: `http://11.222.33.44:8080/live/live.mp4`
 >Note: Make sure you are in the same directory as the Python script.
+
 >Note: Script needs constant wifi for API service to the server.
