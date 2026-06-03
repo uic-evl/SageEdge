@@ -15,6 +15,9 @@ load_dotenv()
 app = FastAPI()
 update_status = 0
 
+class StatusInput(BaseModel):
+    status: int
+
 class nodeInput(BaseModel):
     name: str
     data: str
@@ -37,10 +40,10 @@ def get_latest_minute_data():
         with sqlite3.connect('direction_evl_min.db') as conn:
             cursor = conn.cursor()
 
-            # Get the very latest entry (the one currently being updated)
+            # Updated to include GPU_usage
             sql = """
                 SELECT Date, Time, direction_left, direction_right, 
-                       CPU_temp, CPU_usage 
+                       CPU_temp, CPU_usage, GPU_usage, GPU_temp, mem_usage
                 FROM directional_data 
                 ORDER BY Date DESC, Time DESC 
                 LIMIT 1
@@ -56,7 +59,10 @@ def get_latest_minute_data():
                     "direction_left": row[2],
                     "direction_right": row[3],
                     "CPU_temp": row[4],
-                    "CPU_usage": row[5]
+                    "CPU_usage": row[5],
+                    "GPU_usage": row[6],
+                    "GPU_temp": row[7],
+                    "mem_usage": row[8]
                 }
             return None
             
@@ -65,36 +71,30 @@ def get_latest_minute_data():
         return None
 
 async def event_stream():
-    """
-    SSE generator that watches for CHANGES in the active minute
-    """
     print("SSE Stream (Aggregated) starting...")
     yield f"data: {json.dumps({'type': 'connected', 'message': 'Stream established'})}\n\n"
     
-    # keep track of the last data we successfully sent
     last_sent_data = None
     
     try:
         while True:
             current_data = await asyncio.to_thread(get_latest_minute_data)
             
-            if current_data and current_data != last_sent_data:
-                
-                print(f"[STREAM] Detected change at {current_data['Time']}. Sending update...")
-                
-                last_sent_data = current_data
-                
-                json_payload = json.dumps({
-                    'type': 'data',
-                    'count': 1,
-                    'data': [current_data],
-                    'timestamp': datetime.now().isoformat()
-                })
-                
-                yield f"data: {json_payload}\n\n"
+            if current_data:
+                if current_data != last_sent_data:
+                    print(f"[STREAM] Change detected at {current_data['Time']}. Sending...")
+                    
+                    last_sent_data = current_data
+                    
+                    json_payload = json.dumps({
+                        'type': 'data',
+                        'count': 1,
+                        'data': [current_data],
+                        'timestamp': datetime.now().isoformat()
+                    })
+                    yield f"data: {json_payload}\n\n"
             
-            # Heartbeat (keep connection alive)
-            await asyncio.sleep(2)
+            await asyncio.sleep(1)
             
     except asyncio.CancelledError:
         print("SSE Stream cancelled")
@@ -106,7 +106,6 @@ async def event_stream():
 async def stream_data():
     """
     SSE endpoint for 24/7 live data streaming
-    No authentication required for read-only stream
     """
     return StreamingResponse(
         event_stream(),
@@ -122,32 +121,67 @@ async def stream_data():
 def send_data(node_input: nodeInput, api_key: str = Depends(api_key_header)):
     if api_key != API_KEY:
         raise HTTPException(status_code=403, detail="Invalid API Key")
-    
-    Date = node_input.data.split(',')[0]
-    Time = node_input.data.split(',')[1]
+
+    parts = node_input.data.split(',')
+
+    Date = parts[0]
+    Time = parts[1]
     date_time_remember = Time[:5]
-    Direction = node_input.data.split(',')[2]
-    X_start = node_input.data.split(',')[3]
-    X_end = node_input.data.split(',')[4]
-    CPU_percent = node_input.data.split(',')[5]
-    RAM_used_MB = node_input.data.split(',')[6]
-    GPU_percent = node_input.data.split(',')[8]
-    CPU_temp_C = node_input.data.split(',')[9]
-    GPU_temp_C = node_input.data.split(',')[10]
+    Direction = parts[2]
+    X_start = parts[3]
+    X_end = parts[4]
+    
+    def safe_float(val):
+        try:
+            return float(val) if val and str(val).strip() else 0.0
+        except ValueError:
+            return 0.0
+
+    # Matching the 11-item array sent by your Jetson
+    CPU_percent = safe_float(parts[5])
+    GPU_percent = safe_float(parts[6])  # Now capturing GPU Usage
+    RAM_used_MB = safe_float(parts[7])
+    # parts[8] is RAM_total, which we ignore for the DB
+    CPU_temp_C = safe_float(parts[9])
+    GPU_temp_C = safe_float(parts[10]) 
 
     conn = sqlite3.connect('direction_evl.db')
     cursor = conn.cursor()
-    sql_insert = "INSERT INTO directional_data VALUES (?,?,?,?,?,?,?,?,?)"
-    cursor.execute(sql_insert, [Date, Time, Direction, X_start, X_end, CPU_percent, RAM_used_MB, CPU_temp_C, GPU_temp_C])
+    
+    # 10 Columns explicitly named to perfectly match direction_evl.db
+    sql_insert = """
+        INSERT INTO directional_data 
+        (Date, Time, Direction, x_start, x_end, CPU_usage, GPU_usage, mem_usage, CPU_temp, GPU_temp) 
+        VALUES (?,?,?,?,?,?,?,?,?,?)
+    """
+    
+    cursor.execute(sql_insert, [
+        Date, Time, Direction, X_start, X_end, 
+        CPU_percent, GPU_percent, RAM_used_MB, CPU_temp_C, GPU_temp_C
+    ])
+    
     conn.commit()
     conn.close()
-    update_db(Date, date_time_remember)
     
+    update_db(Date, date_time_remember)
+
     return {"status": "success", "message": "Data received and stored"}
 
 @app.get("/api/get_viz_data")
 def get_viz_data(request: Request):
     return update_status, fetch_db()
+
+@app.post("/api/send_status")
+def receive_status(status_input: StatusInput, api_key: str = Depends(api_key_header)):
+    if api_key != API_KEY:
+        raise HTTPException(status_code=403, detail="Invalid API Key")
+    
+    global update_status
+    update_status = status_input.status
+    
+    print(f"Server received new status: {update_status}")
+    
+    return {"status": "success", "message": f"Program status updated to {update_status}"}
 
 @app.get("/api/data")
 def get_data(api_key: str = Depends(api_key_header)):
@@ -156,78 +190,60 @@ def get_data(api_key: str = Depends(api_key_header)):
     return update_status, fetch_db()
 
 def update_db(target_date, target_minute):
+    """
+    Rewritten to use SQLite's native math. 
+    This automatically ignores -1 values and replaces the error-prone Python loop.
+    """
     global update_status
-    count = 0
 
+    conn_raw = sqlite3.connect('direction_evl.db')
+    cursor_raw = conn_raw.cursor()
+    
     sql_query = """
-    SELECT Date, Time, Direction, CPU_usage, mem_usage, CPU_temp, GPU_temp
+    SELECT
+        IFNULL(AVG(NULLIF(CPU_usage, -1)), -1),
+        IFNULL(AVG(NULLIF(GPU_usage, -1)), -1),
+        IFNULL(AVG(NULLIF(mem_usage, -1)), -1),
+        IFNULL(AVG(NULLIF(CPU_temp, -1)), -1),
+        IFNULL(AVG(NULLIF(GPU_temp, -1)), -1),
+        SUM(CASE WHEN Direction = 'Right' THEN 1 ELSE 0 END),
+        SUM(CASE WHEN Direction != 'Right' THEN 1 ELSE 0 END)
     FROM directional_data
     WHERE Date = ? AND substr(Time, 1, 5) = ?
     """
-
-    conn = sqlite3.connect('direction_evl.db')
-    cursor = conn.cursor()
-    cursor.execute(sql_query, (target_date, target_minute))
-
-    rows = cursor.fetchall()
-    conn.close()
-
-    dir_left_total = dir_right_total = 0
-    cpu_usage_total = mem_usage_total = cpu_temp_total = gpu_temp_total = 0.0
     
-    if rows:
-        for row in rows:
-            count += 1
-            direction = row[2]
-            cpu_usage_total += row[3]
-            mem_usage_total += row[4]
-            cpu_temp_total += row[5]
-            gpu_temp_total += row[6]
+    cursor_raw.execute(sql_query, (target_date, target_minute))
+    row = cursor_raw.fetchone()
+    conn_raw.close()
 
-            if direction == "Right":
-                dir_right_total += 1
-            else:
-                dir_left_total += 1
-        
-        conn = sqlite3.connect('direction_evl_min.db')
-        cursor = conn.cursor()
+    if row and row[0] is not None:
+        # Extract rounded results
+        avg_cpu = round(row[0], 2)
+        avg_gpu = round(row[1], 2)
+        avg_mem = round(row[2], 2)
+        avg_cpu_temp = round(row[3], 2)
+        avg_gpu_temp = round(row[4], 2)
+        right_count = row[5] or 0
+        left_count = row[6] or 0
 
-        sql_insert = """
-        UPDATE directional_data
-        SET CPU_usage = ?, mem_usage = ?, CPU_temp = ?, GPU_temp = ?, direction_left = ?, direction_right = ?
-        WHERE Date = ? AND Time = ?
+        conn_min = sqlite3.connect('direction_evl_min.db')
+        cursor_min = conn_min.cursor()
+
+        sql_upsert = """
+        INSERT OR REPLACE INTO directional_data
+        (Date, Time, CPU_usage, GPU_usage, mem_usage, CPU_temp, GPU_temp, direction_left, direction_right)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
         
-        cursor.execute(sql_insert, (
-            round(cpu_usage_total / count, 2),
-            round(mem_usage_total / count, 2),
-            round(cpu_temp_total / count, 2),
-            round(gpu_temp_total / count, 2),
-            dir_left_total,
-            dir_right_total,
-            target_date,
-            target_minute
+        cursor_min.execute(sql_upsert, (
+            target_date, target_minute, 
+            avg_cpu, avg_gpu, avg_mem, avg_cpu_temp, avg_gpu_temp, 
+            left_count, right_count
         ))
 
-        if cursor.rowcount == 0:
-            sql_insert = """
-            INSERT INTO directional_data 
-            (Date, Time, CPU_usage, mem_usage, CPU_temp, GPU_temp, direction_left, direction_right)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            """
-            cursor.execute(sql_insert, (
-                target_date,
-                target_minute,
-                round(cpu_usage_total / count, 2),
-                round(mem_usage_total / count, 2),
-                round(cpu_temp_total / count, 2),
-                round(gpu_temp_total / count, 2),
-                dir_left_total,
-                dir_right_total
-            ))
-
-        conn.commit()
-        conn.close()
+        conn_min.commit()
+        conn_min.close()
+        
         update_status = 1
 
 def fetch_db():
@@ -236,7 +252,7 @@ def fetch_db():
         conn = sqlite3.connect('direction_evl_min.db')
         conn.row_factory = sqlite3.Row 
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM directional_data")
+        cursor.execute("SELECT * FROM directional_data ORDER BY Date DESC, Time DESC")
         rows = cursor.fetchall()
         result = [dict(row) for row in rows]
         return {"data": result, "status": "success"}
