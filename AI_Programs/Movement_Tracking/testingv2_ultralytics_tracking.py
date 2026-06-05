@@ -6,8 +6,7 @@
 # - Configurable direction threshold (DIR_THRESH, default 100)
 #
 # Usage:
-#   DIR_THRESH=100 python beta_ultralytics_tracking_patched.py
-
+#   DIR_THRESH=100 python testingv2_ultralytics_tracking.py
 
 import os
 import requests
@@ -156,14 +155,14 @@ HEAD_RATIO    = float(os.getenv("HEAD_RATIO", "0.38"))   # top % of person box t
 # -------------------------------
 # Create output directory based on current timestamp
 cdt = datetime.datetime.now()
-output_dir = os.path.join(cwd, 'output', cdt.strftime("%Y%m%d%H"))
+output_dir = os.path.join("/media/waggle/New Volume", 'output', cdt.strftime("%Y%m%d%H"))
 os.makedirs(output_dir, exist_ok=True)
 os.chdir(output_dir)
 
 # Open CSV file for logging stats
 data_file = open("data.csv", "w", newline="")
 csv_writer = csv.writer(data_file)
-csv_writer.writerow([
+csv_writer.writerow([ 
     "Date", "Time", "Direction", "X_start", "X_end",
     "CPU%", "GPU%", "RAM_used_MB", "RAM_total_MB",
     "CPU_temp_C", "GPU_temp_C"
@@ -442,13 +441,17 @@ try:
         frame_idx += 1
         # -------------------------------
         
-        # Run Ultralytics tracker on this frame (ByteTrack)
         results = person_model.track(
-            frame, classes=[0], conf=0.4,
+            frame,
+            classes=[0],
+            conf=0.55,
             tracker="botsort.yaml",
-            persist=True, verbose=False,
-            device=0
+            persist=True,
+            verbose=False,
+            device=0,
+            imgsz=640
         )
+
         t_ai = time.time()
         read_ms = (t_read - t_start) * 1000
         ai_ms   = (t_ai - t_read) * 1000
@@ -471,6 +474,13 @@ try:
                 # Append center and smooth box
                 track_history[track_id].append(center)
                 bbox_history[track_id].append((x1, y1, x2, y2))
+                
+                # Only tracks the 60 frames per ID to not clog up memory
+                if len(track_history[track_id]) > 60:
+                    track_history[track_id] = [track_history[track_id][0], track_history[track_id][-1]]
+                
+                if len(bbox_history[track_id]) > 10:
+                    bbox_history[track_id].pop(0) 
                 sx1, sy1, sx2, sy2 = np.mean(bbox_history[track_id], axis=0).astype(int)
                 x1, y1, x2, y2 = sx1, sy1, sx2, sy2
 
