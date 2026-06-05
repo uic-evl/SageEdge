@@ -453,3 +453,96 @@ select {
     color: #333;
     font-weight: 600;
 }
+/* ── CAROUSEL ──────────────────────────────────────────────── */
+.carousel {
+    position: relative;
+    margin: 24px 0 4px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #f0f0ee;
+}
+
+.carousel-track-wrapper {
+    overflow: hidden;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.carousel-track {
+    display: flex;
+    will-change: transform;
+}
+
+.carousel-slide {
+    min-width: 100%;
+    height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e8e8e4;
+    overflow: hidden;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 24px;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(25, 31, 89, 0.75);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    z-index: 10;
+    backdrop-filter: blur(4px);
+}
+
+.carousel-btn:hover {
+    background: rgba(25, 31, 89, 0.95);
+    transform: translateY(-50%) scale(1.08);
+}
+
+.carousel-btn-prev { left: 12px; }
+.carousel-btn-next { right: 12px; }
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 0 10px;
+    background: #e8e8e4;
+}
+
+.carousel-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(25, 31, 89, 0.25);
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.carousel-dot.active {
+    background: #191f59;
+    transform: scale(1.25);
+}
+
+.carousel-dot:hover:not(.active) {
+    background: rgba(25, 31, 89, 0.5);
+}
