@@ -1,0 +1,202 @@
+[
+  {
+    "model": "tiny.en CPU",
+    "accuracy_percent": 100.0,
+    "avg_whisper_time_ms": 2118.378,
+    "avg_wall_time_ms": 2194.0019741654396,
+    "avg_gpu_percent": 0.0,
+    "avg_cpu_percent": 62.191929824561406,
+    "runs": [
+      {
+        "wall_time_ms": 2208.325676852837,
+        "whisper_time_ms": 2111.86,
+        "transcript": "actually use technology to make the future better and we do it because we believe that when people see those better futures they help build them so the people that you're going to be talking to are",
+        "avg_gpu_percent": 0.0,
+        "avg_cpu_percent": 60.15,
+        "accuracy_percent": 100.0
+      },
+      {
+        "wall_time_ms": 2144.351772032678,
+        "whisper_time_ms": 2073.83,
+        "transcript": "actually use technology to make the future better and we do it because we believe that when people see those better futures they help build them so the people that you're going to be talking to are",
+        "avg_gpu_percent": 0.0,
+        "avg_cpu_percent": 61.192982456140356,
+        "accuracy_percent": 100.0
+      },
+      {
+        "wall_time_ms": 2151.21782803908,
+        "whisper_time_ms": 2082.88,
+        "transcript": "actually use technology to make the future better and we do it because we believe that when people see those better futures they help build them so the people that you're going to be talking to are",
+        "avg_gpu_percent": 0.0,
+        "avg_cpu_percent": 59.375,
+        "accuracy_percent": 100.0
+      },
+      {
+        "wall_time_ms": 2201.1866581160575,
+        "whisper_time_ms": 2129.79,
+        "transcript": "actually use technology to make the future better and we do it because we believe that when people see those better futures they help build them so the people that you're going to be talking to are",
+        "avg_gpu_percent": 0.0,
+        "avg_cpu_percent": 58.96666666666666,
+        "accuracy_percent": 100.0
+      },
+      {
+        "wall_time_ms": 2264.9279357865453,
+        "whisper_time_ms": 2193.53,
+        "transcript": "actually use technology to make the future better and we do it because we believe that when people see those better futures they help build them so the people that you're going to be talking to are",
+        "avg_gpu_percent": 0.0,
+        "avg_cpu_percent": 71.275,
+        "accuracy_percent": 100.0
+      }
+    ]
+  },
+  {
+    "model": "base.en CPU",
+    "accuracy_percent": 97.2972972972973,
+    "avg_whisper_time_ms": 4045.1119999999996,
+    "avg_wall_time_ms": 4128.317252220586,
+    "avg_gpu_percent": 0.265,
+    "avg_cpu_percent": 64.13800589050591,
+    "runs": [
+      {
+        "wall_time_ms": 4284.985102014616,
+        "whisper_time_ms": 4201.58,
+        "transcript": "we actually use technology to make the future better. And we do it because we believe that when people see those better futures, they help build them. So the people that you're going to be talking to are",
+        "avg_gpu_percent": 0.0,
+        "avg_cpu_percent": 67.96153846153847,
+        "accuracy_percent": 97.2972972972973
+      },
+      {
+        "wall_time_ms": 4311.1627320759,
+        "whisper_time_ms": 4227.0,
+        "transcript": "we actually use technology to make the future better. And we do it because we believe that when people see those better futures, they help build them. So the people that you're going to be talking to are",
+        "avg_gpu_percent": 1.325,
+        "avg_cpu_percent": 66.07083333333335,
+        "accuracy_percent": 97.2972972972973
+      },
+      {
+        "wall_time_ms": 4030.6851600762457,
+        "whisper_time_ms": 3947.0,
+        "transcript": "we actually use technology to make the future better. And we do it because we believe that when people see those better futures, they help build them. So the people that you're going to be talking to are",
+        "avg_gpu_percent": 0.0,
+        "avg_cpu_percent": 61.9864864864865,
+        "accuracy_percent": 97.2972972972973
+      },
+      {
+        "wall_time_ms": 3987.4453069642186,
+        "whisper_time_ms": 3904.38,
+        "transcript": "we actually use technology to make the future better. And we do it because we believe that when people see those better futures, they help build them. So the people that you're going to be talking to are",
+        "avg_gpu_percent": 0.0,
+        "avg_cpu_percent": 62.36486486486486,
+        "accuracy_percent": 97.2972972972973
+      },
+      {
+        "wall_time_ms": 4027.3079599719495,
+        "whisper_time_ms": 3945.6,
+        "transcript": "we actually use technology to make the future better. And we do it because we believe that when people see those better futures, they help build them. So the people that you're going to be talking to are",
+        "avg_gpu_percent": 0.0,
+        "avg_cpu_percent": 62.306306306306325,
+        "accuracy_percent": 97.2972972972973
+      }
+    ]
+  },
+  {
+    "model": "tiny.en GPU",
+    "accuracy_percent": 37.83783783783784,
+    "avg_whisper_time_ms": 1267.1200000000001,
+    "avg_wall_time_ms": 1577.5336276274174,
+    "avg_gpu_percent": 28.742857142857144,
+    "avg_cpu_percent": 21.464285714285715,
+    "runs": [
+      {
+        "wall_time_ms": 1583.6424650624394,
+        "whisper_time_ms": 1279.63,
+        "transcript": "actually use technology to make the future better and we do it because we believe that when people see those better futures they help build them so the people that you're going to be talking to are ggml_cuda_init: found 1 CUDA devices (Total VRAM: 7619 MiB): Device 0: Orin, compute capability 8.7, VMM: yes, VRAM: 7619 MiB",
+        "avg_gpu_percent": 28.285714285714285,
+        "avg_cpu_percent": 21.797619047619047,
+        "accuracy_percent": 37.83783783783784
+      },
+      {
+        "wall_time_ms": 1614.9463488254696,
+        "whisper_time_ms": 1302.45,
+        "transcript": "actually use technology to make the future better and we do it because we believe that when people see those better futures they help build them so the people that you're going to be talking to are ggml_cuda_init: found 1 CUDA devices (Total VRAM: 7619 MiB): Device 0: Orin, compute capability 8.7, VMM: yes, VRAM: 7619 MiB",
+        "avg_gpu_percent": 40.42857142857143,
+        "avg_cpu_percent": 20.273809523809522,
+        "accuracy_percent": 37.83783783783784
+      },
+      {
+        "wall_time_ms": 1573.5873391386122,
+        "whisper_time_ms": 1261.62,
+        "transcript": "actually use technology to make the future better and we do it because we believe that when people see those better futures they help build them so the people that you're going to be talking to are ggml_cuda_init: found 1 CUDA devices (Total VRAM: 7619 MiB): Device 0: Orin, compute capability 8.7, VMM: yes, VRAM: 7619 MiB",
+        "avg_gpu_percent": 26.071428571428573,
+        "avg_cpu_percent": 22.166666666666664,
+        "accuracy_percent": 37.83783783783784
+      },
+      {
+        "wall_time_ms": 1554.035226115957,
+        "whisper_time_ms": 1242.06,
+        "transcript": "actually use technology to make the future better and we do it because we believe that when people see those better futures they help build them so the people that you're going to be talking to are ggml_cuda_init: found 1 CUDA devices (Total VRAM: 7619 MiB): Device 0: Orin, compute capability 8.7, VMM: yes, VRAM: 7619 MiB",
+        "avg_gpu_percent": 25.928571428571427,
+        "avg_cpu_percent": 21.678571428571427,
+        "accuracy_percent": 37.83783783783784
+      },
+      {
+        "wall_time_ms": 1561.4567589946091,
+        "whisper_time_ms": 1249.84,
+        "transcript": "actually use technology to make the future better and we do it because we believe that when people see those better futures they help build them so the people that you're going to be talking to are ggml_cuda_init: found 1 CUDA devices (Total VRAM: 7619 MiB): Device 0: Orin, compute capability 8.7, VMM: yes, VRAM: 7619 MiB",
+        "avg_gpu_percent": 23.0,
+        "avg_cpu_percent": 21.404761904761905,
+        "accuracy_percent": 37.83783783783784
+      }
+    ]
+  },
+  {
+    "model": "base.en GPU",
+    "accuracy_percent": 35.13513513513513,
+    "avg_whisper_time_ms": 1543.718,
+    "avg_wall_time_ms": 1805.7696724310517,
+    "avg_gpu_percent": 39.623480392156864,
+    "avg_cpu_percent": 19.7212962962963,
+    "runs": [
+      {
+        "wall_time_ms": 1960.8203121460974,
+        "whisper_time_ms": 1627.07,
+        "transcript": "we actually use technology to make the future better. And we do it because we believe that when people see those better futures, they help build them. So the people that you're going to be talking to are ggml_cuda_init: found 1 CUDA devices (Total VRAM: 7619 MiB): Device 0: Orin, compute capability 8.7, VMM: yes, VRAM: 7619 MiB",
+        "avg_gpu_percent": 40.666666666666664,
+        "avg_cpu_percent": 21.14814814814815,
+        "accuracy_percent": 35.13513513513513
+      },
+      {
+        "wall_time_ms": 1852.3559179157019,
+        "whisper_time_ms": 1584.03,
+        "transcript": "we actually use technology to make the future better. And we do it because we believe that when people see those better futures, they help build them. So the people that you're going to be talking to are ggml_cuda_init: found 1 CUDA devices (Total VRAM: 7619 MiB): Device 0: Orin, compute capability 8.7, VMM: yes, VRAM: 7619 MiB",
+        "avg_gpu_percent": 37.588235294117645,
+        "avg_cpu_percent": 19.500000000000004,
+        "accuracy_percent": 35.13513513513513
+      },
+      {
+        "wall_time_ms": 1703.2474530860782,
+        "whisper_time_ms": 1466.89,
+        "transcript": "we actually use technology to make the future better. And we do it because we believe that when people see those better futures, they help build them. So the people that you're going to be talking to are ggml_cuda_init: found 1 CUDA devices (Total VRAM: 7619 MiB): Device 0: Orin, compute capability 8.7, VMM: yes, VRAM: 7619 MiB",
+        "avg_gpu_percent": 41.8,
+        "avg_cpu_percent": 20.66666666666667,
+        "accuracy_percent": 35.13513513513513
+      },
+      {
+        "wall_time_ms": 1776.8159380648285,
+        "whisper_time_ms": 1540.37,
+        "transcript": "we actually use technology to make the future better. And we do it because we believe that when people see those better futures, they help build them. So the people that you're going to be talking to are ggml_cuda_init: found 1 CUDA devices (Total VRAM: 7619 MiB): Device 0: Orin, compute capability 8.7, VMM: yes, VRAM: 7619 MiB",
+        "avg_gpu_percent": 40.75,
+        "avg_cpu_percent": 17.895833333333336,
+        "accuracy_percent": 35.13513513513513
+      },
+      {
+        "wall_time_ms": 1735.6087409425527,
+        "whisper_time_ms": 1500.23,
+        "transcript": "we actually use technology to make the future better. And we do it because we believe that when people see those better futures, they help build them. So the people that you're going to be talking to are ggml_cuda_init: found 1 CUDA devices (Total VRAM: 7619 MiB): Device 0: Orin, compute capability 8.7, VMM: yes, VRAM: 7619 MiB",
+        "avg_gpu_percent": 37.3125,
+        "avg_cpu_percent": 19.395833333333336,
+        "accuracy_percent": 35.13513513513513
+      }
+    ]
+  }
+]
