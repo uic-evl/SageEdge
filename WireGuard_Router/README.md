@@ -1,0 +1,3 @@
+## IP Camera System with WireGuard VPN
+
+This project sets up a self-contained IP camera system with remote access via a WireGuard VPN tunnel. A GL.iNet GL-MT1300 "Beryl" travel router connects to the UIC network and acts as the WireGuard server, hosting the VPN tunnel on its IP. An Amcrest IP camera sits behind the Beryl on its private LAN. Remote users connect using a WireGuard client config, which routes them through the tunnel to the camera via port forwarding.
