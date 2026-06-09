@@ -13,6 +13,7 @@ This program creates a csv file of data from the video inputed. The data include
 - Date
 - Time
 - CPU usage
+- GPU usage
 - Memory usage
 - Swap memory usage
 - CPU temperature
@@ -39,7 +40,7 @@ This program creates a csv file of data from the video inputed. The data include
 
 ## How to run program
 
-To run the program simply input the command `python left_right_tracking.py`
+To run the program simply input the command `python Offline_Tracking.py`
 
 You will be prompted during the initialization of the program whether you would like live output and to save the output as a video.
 
@@ -48,4 +49,8 @@ Make sure to have the exact file location for the video or live stream you would
 - live stream: `http://11.222.33.44:8080/live/live.mp4`
 >Note: Make sure you are in the same directory as the Python script.
 
->Note: Script needs constant wifi for API service to the server.
+>Note: Script needs constant wifi for API service to the server for Live mode.
+
+>Note: Live_Tracking.py only works with a server running the API to receive data.
+
+Look into the folder EVL_docker_for_api for server side API scripts.
