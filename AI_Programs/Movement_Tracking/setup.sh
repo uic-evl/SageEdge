@@ -28,10 +28,8 @@ sudo apt -y install \
 rm -rf tracking || true
 
 # Create and activate virtual environment
-sudo apt install python3-pip python3-dev
-sudo apt install python3-virtualenv
-#sudo -H pip3 install virtualenv
-virtualenv ./tracking
+sudo apt install python3-pip python3-dev python3-venv 
+python3 -m venv tracking
 source tracking/bin/activate
 pip install --upgrade pip setuptools wheel
 
@@ -41,13 +39,14 @@ pip install "numpy==1.26.4"
 # Install OpenCV with GUI support
 pip install "opencv-python==4.9.0.80"
 
-# Install PyTorch and torchvision for Jetson orin nx
+# Install Jtop
+pip install -U jetson-stats
+
+# Install PyTorch for Jetson
 pip uninstall torch torchvision torchaudio -y
 pip install --upgrade pip setuptools wheel
-
-pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 \
---index-url https://pypi.jetson-ai-lab.io/jp6/cu126
-
+pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 onnx==1.20.0 onnxruntime-gpu==1.23.0 onnxslim==0.1.82 \
+--extra-index-url https://pypi.jetson-ai-lab.io/jp6/cu126
 
 # Install deep-person-reid
 git clone --depth 1 https://github.com/KaiyangZhou/deep-person-reid.git
@@ -58,6 +57,7 @@ cd ..
 
 # Install YOLOv8 and tracking dependencies
 pip install \
+    dotenv \
     ultralytics \
     deep-sort-realtime \
     shapely \
@@ -67,8 +67,7 @@ pip install \
     matplotlib \
     pandas \
     tqdm \
-    psutil \
-    lap
+    psutil
 
 # Fix any potential numpy conflicts
 pip install --force-reinstall "numpy==1.26.4"
