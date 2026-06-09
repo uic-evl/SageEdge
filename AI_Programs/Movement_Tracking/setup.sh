@@ -46,7 +46,7 @@ pip install -U jetson-stats
 pip uninstall torch torchvision torchaudio -y
 pip install --upgrade pip setuptools wheel
 pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 onnx==1.20.0 onnxruntime-gpu==1.23.0 onnxslim==0.1.82 \
---extra-index-url https://pypi.jetson-ai-lab.io/jp6/cu126
+--index-url https://pypi.jetson-ai-lab.io/jp6/cu126
 
 # Install deep-person-reid
 git clone --depth 1 https://github.com/KaiyangZhou/deep-person-reid.git
