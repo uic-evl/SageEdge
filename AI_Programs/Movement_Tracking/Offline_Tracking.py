@@ -6,7 +6,7 @@
 # - Configurable direction threshold (DIR_THRESH, default 100)
 #
 # Usage:
-#   DIR_THRESH=100 python Live_Tracking.py
+#   DIR_THRESH=100 python Offline_Tracking.py
 
 import os
 import requests
