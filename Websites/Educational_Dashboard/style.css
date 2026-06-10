@@ -384,6 +384,7 @@ select {
     display: flex;
     gap: 12px;
     align-items: center;
+
 }
 
 .footer-qr-card {
