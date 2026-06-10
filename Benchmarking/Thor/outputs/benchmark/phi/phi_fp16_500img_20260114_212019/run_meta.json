@@ -1,0 +1,22 @@
+{
+  "model_key": "phi",
+  "model_id": "microsoft/Phi-3.5-vision-instruct",
+  "run_group": "phi_fp16_500img_20260114_212019",
+  "host": "thorwaggle1",
+  "device": "cuda",
+  "dtype": "torch.float16",
+  "torch_version": "2.9.1+cu130",
+  "timestamp": "2026-01-14T21:20:24.492488",
+  "manifest": "/home/thorwaggle1/Desktop/SageEdge/Benchmarking/data/testsets/coco_val2017_500.txt",
+  "num_images": 500,
+  "warmup": 5,
+  "max_new_tokens": 128,
+  "batch_size": 1,
+  "repeats": 1,
+  "suite": "week5_5tasks_bounded",
+  "num_crops": 16,
+  "n_tiles": 16,
+  "power_monitoring_available": true,
+  "power_monitoring_method": "tegrastats",
+  "power_sample_interval_ms": 100
+}

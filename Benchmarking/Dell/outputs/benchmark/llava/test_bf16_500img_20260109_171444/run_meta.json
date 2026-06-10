@@ -1,0 +1,19 @@
+{
+  "model_key": "llava",
+  "model_id": "ICTNLP/llava-mini-llama-3.1-8b",
+  "run_group": "test_bf16_20260109_171444",
+  "host": "dellgb10",
+  "device": "cuda",
+  "dtype": "torch.bfloat16",
+  "torch_version": "2.11.0.dev20251218+cu130",
+  "timestamp": "2026-01-09T17:14:46.003810",
+  "manifest": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/testsets/coco_val2017_500.txt",
+  "num_images": 500,
+  "warmup": 5,
+  "max_new_tokens": 128,
+  "batch_size": 1,
+  "repeats": 1,
+  "suite": "week5_5tasks_bounded",
+  "power_monitoring_available": true,
+  "power_sample_interval_ms": 100
+}

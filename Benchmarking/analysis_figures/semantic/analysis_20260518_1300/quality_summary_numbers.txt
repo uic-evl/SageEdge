@@ -1,0 +1,88 @@
+==============================================================================
+PAISE 2026 — Quality Metrics Summary
+==============================================================================
+
+HEADLINE — quality + latency by (model, device):
+
+  model          device  recall  cap_sim    clip  cnt_ex   lat_ms   p99_ms   tok/s
+  --------------------------------------------------------------------------------
+  gemma3n        dell     0.568    0.648   0.272   0.422     4132     6888    12.6
+  internvl2_2b   dell     0.533    0.609   0.255   0.207     1542     4788    39.1
+  moondream      dell     0.570    0.641   0.264   0.428      917     1601    41.8
+  smolvlm2       dell     0.585    0.642   0.263   0.014     2019     3220    16.4
+  internvl2_2b   orin     0.529    0.609   0.255   0.210     4087    12647    14.9
+  moondream      orin     0.569    0.642   0.264   0.428     1980     3486    19.4
+  smolvlm2       orin     0.587    0.643   0.263   0.022     4012     6483     8.2
+  gemma3n        thor     0.569    0.648   0.272   0.428     3742     6209    13.9
+  internvl2_2b   thor     0.533    0.609   0.256   0.205     1435     4451    41.5
+  moondream      thor     0.570    0.642   0.264   0.428      868     1546    44.2
+  smolvlm2       thor     0.581    0.641   0.263   0.019     1979     3077    16.8
+
+ENERGY + MEMORY — per generation:
+
+  model          device  pwr_W  energy_J  mJ/tok  mem_GB         source
+  ----------------------------------------------------------------------
+  gemma3n        dell     26.7     547.0 10458.7   15.03         pynvml
+  internvl2_2b   dell     31.2     238.2  3840.7    5.24         pynvml
+  moondream      dell     39.2     178.4  4688.3    4.43         pynvml
+  smolvlm2       dell     38.3     382.8 11054.9    6.82         pynvml
+  internvl2_2b   orin     26.1     523.6  8384.1    5.24 tegrastats_orin
+  moondream      orin     32.1     315.7  8284.8    4.43 tegrastats_orin
+  smolvlm2       orin     35.9     711.9 20517.1    6.82 tegrastats_orin
+  gemma3n        thor     59.5    1112.4 21245.0   15.03 tegrastats_thor
+  internvl2_2b   thor     65.9     471.9  7654.9    5.24 tegrastats_thor
+  moondream      thor     69.4     302.5  7934.3    4.43 tegrastats_thor
+  smolvlm2       thor     76.5     754.4 21734.1    6.82 tegrastats_thor
+
+STABILITY — within-device, 5-repeat semantic agreement:
+
+  model          device   mean    min   <0.85   <0.95
+  --------------------------------------------------------
+  gemma3n        dell    1.000  1.000    0.0%    0.0%
+  internvl2_2b   dell    1.000  1.000    0.0%    0.0%
+  moondream      dell    0.988  0.707    0.5%    8.3%
+  smolvlm2       dell    1.000  1.000    0.0%    0.0%
+  internvl2_2b   orin    1.000  1.000    0.0%    0.0%
+  moondream      orin    0.988  0.680    0.8%    8.8%
+  smolvlm2       orin    1.000  1.000    0.0%    0.0%
+  gemma3n        thor    1.000  1.000    0.0%    0.0%
+  internvl2_2b   thor    1.000  1.000    0.0%    0.0%
+  moondream      thor    0.988  0.735    0.9%    8.0%
+  smolvlm2       thor    1.000  1.000    0.0%    0.0%
+
+DETERMINISM EXAMPLES — lowest-stability inputs (top 5):
+
+  model=moondream device=orin image=8211 task=spatial_relationships stability=0.680
+    Run 0: The mop is positioned in the foreground, close to the two workers. The mop is situated bet
+    Run 1: The scooters are parked near the building, and the two workers are positioned further away
+    Run 2: The scooters are parked near the building, and the two workers are positioned further away
+    Run 3: The mop is positioned in the foreground, close to the two workers. The mop is situated bet
+    Run 4: The mop is positioned in the foreground, close to the two workers. The mop is situated bet
+
+  model=moondream device=dell image=8211 task=spatial_relationships stability=0.707
+    Run 0: The mop is positioned in the foreground, close to the two workers. The mop is situated bet
+    Run 1: The mop is positioned in the foreground, close to the two workers. The mop is situated bet
+    Run 2: The scooters are parked near the building, positioned next to each other and partially obs
+    Run 3: The scooters are parked on the sidewalk near the building. The workers are standing on the
+    Run 4: The mop is positioned in the foreground, close to the two workers. The mop is situated bet
+
+  model=moondream device=dell image=48504 task=spatial_relationships stability=0.708
+    Run 0: The main objects are positioned in a relatively open space, with a person standing near th
+    Run 1: The main objects are positioned relatively close to the camera, creating a sense of proxim
+    Run 2: The main objects are positioned in a relatively open space, with a person standing near th
+    Run 3: The main objects are positioned relatively close to the camera, creating a sense of proxim
+    Run 4: The main objects are positioned relatively close to the camera, creating a sense of proxim
+
+  model=moondream device=orin image=50638 task=attributes stability=0.724
+    Run 0: The boy is wearing a blue and white striped shirt. The flowers are predominantly blue. The
+    Run 1: The boy is wearing a blue and white striped shirt. The flowers are predominantly blue. The
+    Run 2: The scene is dominated by vibrant shades of blue and purple from the flowers, creating a s
+    Run 3: The scene is dominated by vibrant shades of blue and purple from the flowers, creating a s
+    Run 4: The scene is dominated by vibrant shades of blue and purple from the flowers, creating a s
+
+  model=moondream device=dell image=38829 task=spatial_relationships stability=0.729
+    Run 0: The main objects are positioned in the foreground, with the two boys riding a bicycle in t
+    Run 1: The main objects are positioned in the foreground, with the Coca-Cola store and storefront
+    Run 2: The main objects are positioned in the foreground, with the two boys riding a bicycle in t
+    Run 3: The main objects are positioned in the foreground, with the Coca-Cola store and storefront
+    Run 4: The main objects are positioned in the foreground, with the Coca-Cola store and storefront

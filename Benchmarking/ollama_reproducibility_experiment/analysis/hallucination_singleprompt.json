@@ -1,0 +1,452 @@
+{
+  "n_files": 12,
+  "n_records": 6000,
+  "n_groups": 12,
+  "config": {
+    "surface_dup_min_len": 20,
+    "semantic_dup_threshold": 0.95,
+    "tasks_filter": null
+  },
+  "groups": [
+    {
+      "model": "qwen3-vl:2b",
+      "device": "dell_gb10",
+      "task": null,
+      "n_records": 500,
+      "empty_count": 345,
+      "empty_pct": 69.0,
+      "refusal_count": 0,
+      "refusal_pct": 0.0,
+      "surface_dup_count": 0,
+      "surface_dup_pct": 0.0,
+      "n_unique_dup_texts": 0,
+      "semantic_dup_pairs": 0,
+      "entity_recall_applicable": true,
+      "entity_recall_mean": 0.3948,
+      "entity_recall_zero_rate": 0.3806,
+      "flagged_examples": [
+        {
+          "image_id": 261982,
+          "run": 1,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 261982,
+          "run": 2,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 261982,
+          "run": 3,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 261982,
+          "run": 4,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 273760,
+          "run": 0,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 382030,
+          "run": 0,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 382030,
+          "run": 1,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 382030,
+          "run": 2,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 382030,
+          "run": 3,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 382030,
+          "run": 4,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        }
+      ],
+      "severity_score": 0.406
+    },
+    {
+      "model": "qwen3-vl:2b",
+      "device": "thor",
+      "task": null,
+      "n_records": 500,
+      "empty_count": 348,
+      "empty_pct": 69.6,
+      "refusal_count": 0,
+      "refusal_pct": 0.0,
+      "surface_dup_count": 0,
+      "surface_dup_pct": 0.0,
+      "n_unique_dup_texts": 0,
+      "semantic_dup_pairs": 0,
+      "entity_recall_applicable": true,
+      "entity_recall_mean": 0.5613,
+      "entity_recall_zero_rate": 0.2303,
+      "flagged_examples": [
+        {
+          "image_id": 248400,
+          "run": 0,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 248400,
+          "run": 1,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 248400,
+          "run": 2,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 248400,
+          "run": 3,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 248400,
+          "run": 4,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 382030,
+          "run": 0,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 382030,
+          "run": 1,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 382030,
+          "run": 2,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 382030,
+          "run": 3,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        },
+        {
+          "image_id": 382030,
+          "run": 4,
+          "flags": [
+            "EMPTY"
+          ],
+          "text": ""
+        }
+      ],
+      "severity_score": 0.392
+    },
+    {
+      "model": "gemma3:4b-it-q4_K_M",
+      "device": "dell_gb10",
+      "task": null,
+      "n_records": 500,
+      "empty_count": 0,
+      "empty_pct": 0.0,
+      "refusal_count": 5,
+      "refusal_pct": 1.0,
+      "surface_dup_count": 0,
+      "surface_dup_pct": 0.0,
+      "n_unique_dup_texts": 0,
+      "semantic_dup_pairs": 4,
+      "entity_recall_applicable": true,
+      "entity_recall_mean": 0.5401,
+      "entity_recall_zero_rate": 0.1293,
+      "flagged_examples": [
+        {
+          "image_id": 555005,
+          "run": 0,
+          "flags": [
+            "REFUSAL"
+          ],
+          "text": "I understand you're asking me to describe the image. However, I cannot fulfill this request due to the explicit and pote"
+        },
+        {
+          "image_id": 555005,
+          "run": 1,
+          "flags": [
+            "REFUSAL"
+          ],
+          "text": "I understand you're asking me to describe the image. However, I cannot fulfill this request due to the explicit and pote"
+        },
+        {
+          "image_id": 555005,
+          "run": 2,
+          "flags": [
+            "REFUSAL"
+          ],
+          "text": "I understand you're asking me to describe the image. However, I cannot fulfill this request due to the explicit and pote"
+        },
+        {
+          "image_id": 555005,
+          "run": 3,
+          "flags": [
+            "REFUSAL"
+          ],
+          "text": "I understand you're asking me to describe the image. However, I cannot fulfill this request due to the explicit and pote"
+        },
+        {
+          "image_id": 555005,
+          "run": 4,
+          "flags": [
+            "REFUSAL"
+          ],
+          "text": "I understand you're asking me to describe the image. However, I cannot fulfill this request due to the explicit and pote"
+        }
+      ],
+      "severity_score": 0.05
+    },
+    {
+      "model": "gemma3:4b-it-q4_K_M",
+      "device": "thor",
+      "task": null,
+      "n_records": 500,
+      "empty_count": 0,
+      "empty_pct": 0.0,
+      "refusal_count": 0,
+      "refusal_pct": 0.0,
+      "surface_dup_count": 0,
+      "surface_dup_pct": 0.0,
+      "n_unique_dup_texts": 0,
+      "semantic_dup_pairs": 0,
+      "entity_recall_applicable": true,
+      "entity_recall_mean": 0.5411,
+      "entity_recall_zero_rate": 0.1293,
+      "flagged_examples": [],
+      "severity_score": 0.046
+    },
+    {
+      "model": "llava-phi3:3.8b",
+      "device": "thor",
+      "task": null,
+      "n_records": 500,
+      "empty_count": 0,
+      "empty_pct": 0.0,
+      "refusal_count": 1,
+      "refusal_pct": 0.2,
+      "surface_dup_count": 0,
+      "surface_dup_pct": 0.0,
+      "n_unique_dup_texts": 0,
+      "semantic_dup_pairs": 0,
+      "entity_recall_applicable": true,
+      "entity_recall_mean": 0.5597,
+      "entity_recall_zero_rate": 0.1071,
+      "flagged_examples": [
+        {
+          "image_id": 248400,
+          "run": 0,
+          "flags": [
+            "REFUSAL"
+          ],
+          "text": "In the center of the image, a young man is seated at a kitchen counter, his face lit up with surprise or excitement. He'"
+        }
+      ],
+      "severity_score": 0.045
+    },
+    {
+      "model": "llava-phi3:3.8b",
+      "device": "dell_gb10",
+      "task": null,
+      "n_records": 500,
+      "empty_count": 0,
+      "empty_pct": 0.0,
+      "refusal_count": 0,
+      "refusal_pct": 0.0,
+      "surface_dup_count": 0,
+      "surface_dup_pct": 0.0,
+      "n_unique_dup_texts": 0,
+      "semantic_dup_pairs": 20,
+      "entity_recall_applicable": true,
+      "entity_recall_mean": 0.5635,
+      "entity_recall_zero_rate": 0.0949,
+      "flagged_examples": [],
+      "severity_score": 0.044
+    },
+    {
+      "model": "moondream:1.8b-v2-q4_K_M",
+      "device": "dell_gb10",
+      "task": null,
+      "n_records": 500,
+      "empty_count": 0,
+      "empty_pct": 0.0,
+      "refusal_count": 0,
+      "refusal_pct": 0.0,
+      "surface_dup_count": 0,
+      "surface_dup_pct": 0.0,
+      "n_unique_dup_texts": 0,
+      "semantic_dup_pairs": 0,
+      "entity_recall_applicable": true,
+      "entity_recall_mean": 0.5897,
+      "entity_recall_zero_rate": 0.0707,
+      "flagged_examples": [],
+      "severity_score": 0.041
+    },
+    {
+      "model": "moondream:1.8b-v2-q4_K_M",
+      "device": "thor",
+      "task": null,
+      "n_records": 500,
+      "empty_count": 0,
+      "empty_pct": 0.0,
+      "refusal_count": 0,
+      "refusal_pct": 0.0,
+      "surface_dup_count": 0,
+      "surface_dup_pct": 0.0,
+      "n_unique_dup_texts": 0,
+      "semantic_dup_pairs": 0,
+      "entity_recall_applicable": true,
+      "entity_recall_mean": 0.5987,
+      "entity_recall_zero_rate": 0.0727,
+      "flagged_examples": [],
+      "severity_score": 0.04
+    },
+    {
+      "model": "qwen2.5vl:3b-q4_K_M",
+      "device": "dell_gb10",
+      "task": null,
+      "n_records": 500,
+      "empty_count": 0,
+      "empty_pct": 0.0,
+      "refusal_count": 0,
+      "refusal_pct": 0.0,
+      "surface_dup_count": 0,
+      "surface_dup_pct": 0.0,
+      "n_unique_dup_texts": 0,
+      "semantic_dup_pairs": 20,
+      "entity_recall_applicable": true,
+      "entity_recall_mean": 0.6244,
+      "entity_recall_zero_rate": 0.0545,
+      "flagged_examples": [],
+      "severity_score": 0.038
+    },
+    {
+      "model": "qwen2.5vl:3b-q4_K_M",
+      "device": "thor",
+      "task": null,
+      "n_records": 500,
+      "empty_count": 0,
+      "empty_pct": 0.0,
+      "refusal_count": 0,
+      "refusal_pct": 0.0,
+      "surface_dup_count": 0,
+      "surface_dup_pct": 0.0,
+      "n_unique_dup_texts": 0,
+      "semantic_dup_pairs": 25,
+      "entity_recall_applicable": true,
+      "entity_recall_mean": 0.6441,
+      "entity_recall_zero_rate": 0.0626,
+      "flagged_examples": [],
+      "severity_score": 0.036
+    },
+    {
+      "model": "minicpm-v:8b-2.6-q4_K_M",
+      "device": "thor",
+      "task": null,
+      "n_records": 500,
+      "empty_count": 0,
+      "empty_pct": 0.0,
+      "refusal_count": 0,
+      "refusal_pct": 0.0,
+      "surface_dup_count": 0,
+      "surface_dup_pct": 0.0,
+      "n_unique_dup_texts": 0,
+      "semantic_dup_pairs": 0,
+      "entity_recall_applicable": true,
+      "entity_recall_mean": 0.6519,
+      "entity_recall_zero_rate": 0.0566,
+      "flagged_examples": [],
+      "severity_score": 0.035
+    },
+    {
+      "model": "minicpm-v:8b-2.6-q4_K_M",
+      "device": "dell_gb10",
+      "task": null,
+      "n_records": 500,
+      "empty_count": 0,
+      "empty_pct": 0.0,
+      "refusal_count": 0,
+      "refusal_pct": 0.0,
+      "surface_dup_count": 0,
+      "surface_dup_pct": 0.0,
+      "n_unique_dup_texts": 0,
+      "semantic_dup_pairs": 0,
+      "entity_recall_applicable": true,
+      "entity_recall_mean": 0.6663,
+      "entity_recall_zero_rate": 0.0263,
+      "flagged_examples": [],
+      "severity_score": 0.033
+    }
+  ]
+}

@@ -1,0 +1,422 @@
+[
+  {
+    "image_id": 8211,
+    "task": "spatial_relationships",
+    "stability": 0.6798230409622192,
+    "texts": [
+      "The mop is positioned in the foreground, close to the two workers. The mop is situated between and slightly behind the workers, implying a proximity between them.",
+      "The scooters are parked near the building, and the two workers are positioned further away, seemingly observing or discussing something.",
+      "The scooters are parked near the building, and the two workers are positioned further away, seemingly observing or discussing something.",
+      "The mop is positioned in the foreground, close to the two workers. The mop is situated between and slightly behind the workers, positioned close to the sidewalk and building.",
+      "The mop is positioned in the foreground, close to the two workers. The mop is situated between and slightly behind the workers, implying a proximity between them."
+    ],
+    "model": "moondream",
+    "device": "orin"
+  },
+  {
+    "image_id": 8211,
+    "task": "spatial_relationships",
+    "stability": 0.7066476106643677,
+    "texts": [
+      "The mop is positioned in the foreground, close to the two workers. The mop is situated between the workers and the parked motorcycles. The background features the storefront and the signage.",
+      "The mop is positioned in the foreground, close to the two workers. The mop is situated between the workers and the parked motorcycles. The background features the storefront and signage.",
+      "The scooters are parked near the building, positioned next to each other and partially obscured by the building's wall. The workers are standing further back, closer to the street.",
+      "The scooters are parked on the sidewalk near the building. The workers are standing on the sidewalk near the scooters.",
+      "The mop is positioned in the foreground, close to the two workers. The mop is situated between the workers and the parked motorcycles. The background features the storefront and signage."
+    ],
+    "model": "moondream",
+    "device": "dell"
+  },
+  {
+    "image_id": 48504,
+    "task": "spatial_relationships",
+    "stability": 0.7083083987236023,
+    "texts": [
+      "The main objects are positioned in a relatively open space, with a person standing near the right side of the foreground. The background features bleachers, suggesting the setting is a circus or arena.",
+      "The main objects are positioned relatively close to the camera, creating a sense of proximity and closeness. The elephant in the foreground is closer to the camera than the elephant in the background. The background is further away, emphasizing the distance between the elephants and the viewer.",
+      "The main objects are positioned in a relatively open space, with a person standing near the right side of the foreground. The background features bleachers, suggesting the setting is a circus or arena.",
+      "The main objects are positioned relatively close to the camera, creating a sense of proximity and closeness. The elephant in the foreground is closer to the camera than the elephant in the background. The arena setting suggests a relatively large space, further emphasizing the proximity of the elephants.",
+      "The main objects are positioned relatively close to the camera, creating a sense of proximity and closeness. The elephant in the foreground is closer to the camera than the elephant in the background. The background is further away, emphasizing the distance between the elephants and the viewer."
+    ],
+    "model": "moondream",
+    "device": "dell"
+  },
+  {
+    "image_id": 50638,
+    "task": "attributes",
+    "stability": 0.7243284583091736,
+    "texts": [
+      "The boy is wearing a blue and white striped shirt. The flowers are predominantly blue. The lighting suggests a sunny day, and the ground appears to be dirt or gravel.",
+      "The boy is wearing a blue and white striped shirt. The flowers are predominantly blue. The lighting suggests a sunny day, and the ground appears to be dirt or gravel.",
+      "The scene is dominated by vibrant shades of blue and purple from the flowers, creating a striking contrast against the dirt path. The lighting suggests a sunny day, and the materials appear to be natural and organic, consistent with the surrounding environment.",
+      "The scene is dominated by vibrant shades of blue and purple from the flowers, creating a striking contrast against the dirt path. The lighting suggests a sunny day, with dappled shadows adding depth to the image. The materials appear to be natural, organic elements like dirt and plants, and the weather appears pleasant.",
+      "The scene is dominated by vibrant shades of blue and purple from the flowers, creating a striking contrast against the dirt path. The lighting suggests a sunny day, and the materials appear to be natural and organic, consistent with the surrounding environment."
+    ],
+    "model": "moondream",
+    "device": "orin"
+  },
+  {
+    "image_id": 38829,
+    "task": "spatial_relationships",
+    "stability": 0.7290927529335022,
+    "texts": [
+      "The main objects are positioned in the foreground, with the two boys riding a bicycle in the middle ground. The background features other motorcycles and pedestrians, indicating a busy urban environment.",
+      "The main objects are positioned in the foreground, with the Coca-Cola store and storefronts in the background. The street scene extends into the background, suggesting an urban setting.",
+      "The main objects are positioned in the foreground, with the two boys riding a bicycle in the middle ground. The background features other motorcycles and pedestrians, indicating a busy urban environment.",
+      "The main objects are positioned in the foreground, with the Coca-Cola store and storefronts in the background. The street scene extends into the background, suggesting an urban setting.",
+      "The main objects are positioned in the foreground, with the Coca-Cola store and storefronts in the background. The street scene extends into the background, suggesting an urban setting."
+    ],
+    "model": "moondream",
+    "device": "dell"
+  },
+  {
+    "image_id": 19786,
+    "task": "attributes",
+    "stability": 0.7353424489498138,
+    "texts": [
+      "The room has neutral lighting and appears to be indoors. The man is wearing gray pants and a dark gray sweater. A brown jacket is draped over a chair in the background.",
+      "The room has neutral lighting and appears to be indoors. The man is wearing gray pants and a dark gray sweater. A brown jacket is draped over a chair in the background.",
+      "The room has neutral lighting, primarily from overhead spotlights. The walls appear to be a light color, possibly off-white or beige. The floor is wooden, and there is a suitcase visible near the left side of the image.",
+      "The room has neutral lighting, primarily from overhead spotlights. The walls appear to be a light color, possibly off-white or beige. The floor is wooden, and there is a suitcase visible near the left side of the image.",
+      "The room has neutral lighting, primarily from overhead spotlights. The walls appear to be a light color, possibly off-white or beige. The floor is wooden and appears to be polished. The clothing worn by the individuals suggests a casual, everyday setting."
+    ],
+    "model": "moondream",
+    "device": "thor"
+  },
+  {
+    "image_id": 38829,
+    "task": "spatial_relationships",
+    "stability": 0.7458566427230835,
+    "texts": [
+      "The main objects are positioned in the foreground, with the two boys riding a bicycle in the middle ground. The background features other motorcycles and pedestrians, indicating a busy urban environment.",
+      "The main objects are positioned in the foreground, with the Coca-Cola store and storefronts in the background. The street scene extends into the background, suggesting an urban setting.",
+      "The main objects are positioned in the foreground, with the bicycle and motorbikes positioned behind them.  The background includes other vehicles and buildings, indicating a busy urban environment.",
+      "The main objects are positioned in the foreground, with the Coca-Cola store and storefronts in the background. The street scene extends into the background, suggesting an urban setting.",
+      "The main objects are positioned in the foreground, with the bicycle and motorbikes positioned behind them.  The background includes other vehicles and buildings, indicating a busy urban environment."
+    ],
+    "model": "moondream",
+    "device": "thor"
+  },
+  {
+    "image_id": 50638,
+    "task": "attributes",
+    "stability": 0.7496812105178833,
+    "texts": [
+      "The boy is wearing a blue and white striped shirt. The scene is bathed in soft, natural lighting, creating a serene atmosphere. The ground appears to be dirt or gravel, and the flowers are predominantly blue.",
+      "The boy is wearing a blue and white striped shirt. The scene is bathed in soft, natural lighting, creating a serene atmosphere. The ground appears to be dirt or gravel, and the flowers are predominantly blue.",
+      "The scene is dominated by vibrant blue flowers, creating a striking contrast against the dirt path. The lighting suggests a sunny day, and the materials appear to be natural, organic elements like dirt and grass.",
+      "The boy is wearing a blue and white striped shirt. The scene is bathed in soft, natural lighting, creating a serene atmosphere. The ground appears to be dirt or gravel, and the flowers are predominantly blue.",
+      "The scene is dominated by vibrant blue flowers, creating a striking contrast against the dirt path. The lighting suggests a sunny day, and the materials appear to be natural, organic elements like dirt and grass."
+    ],
+    "model": "moondream",
+    "device": "thor"
+  },
+  {
+    "image_id": 33221,
+    "task": "spatial_relationships",
+    "stability": 0.7643193125724792,
+    "texts": [
+      "The woman on the left is positioned in the foreground, while the woman on the right is further back, near the lifeguard stand. The tennis racket is held high, suggesting the woman on the right is actively participating in the tennis game.",
+      "The woman holding the tennis racket is positioned in the foreground, slightly to the right of the main subjects. The lifeguard stand and American flag are in the background, further away from the main subjects. The scene appears to be set on a sandy beach, with mountains visible in the distance.",
+      "The woman on the left is positioned in the foreground, while the woman on the right is further back, creating an interplay of foreground and background elements. The tennis racket is raised high, suggesting movement or action, further emphasizing the foreground's proximity.",
+      "The woman holding the tennis racket is positioned in the foreground, slightly to the right of the main subjects. The lifeguard stand and American flag are in the background, further away from the main subjects. The scene appears to be set on a sandy beach, with mountains visible in the distance.",
+      "The woman on the left is positioned in the foreground, while the woman on the right is further back, near the lifeguard stand. The tennis racket is held high, suggesting the woman on the right is actively participating in the tennis game."
+    ],
+    "model": "moondream",
+    "device": "dell"
+  },
+  {
+    "image_id": 1353,
+    "task": "objects_and_counts",
+    "stability": 0.7758677244186402,
+    "texts": [
+      "train: 5\nroller coaster: 4\nchildren: 5\nleather jacket: 2\nhoodie: 1\nblack vest: 1",
+      "train: 5\ntrain car: 4\ntrain tracks: 2\ntrain driver: 1\ntrain passengers: 5\ntrain conductor: 1\ntrain light: 1",
+      "train: 5\ntrain car: 4\ntrain tracks: 2\ntrain driver: 1\ntrain passengers: 5\ntrain conductor: 1\ntrain light: 1",
+      "train: 5\ntrain car: 4\ntrain tracks: 2\ntrain driver: 1\ntrain passengers: 5\ntrain conductor: 1\ntrain light: 1",
+      "train: 5\nroller coaster: 4\nchildren: 5\nleather jacket: 2\nhoodie: 1\nblack vest: 1"
+    ],
+    "model": "moondream",
+    "device": "thor"
+  },
+  {
+    "image_id": 17178,
+    "task": "attributes",
+    "stability": 0.7794594287872314,
+    "texts": [
+      "The scene is bathed in bright sunlight, creating a warm and inviting atmosphere. The road is paved and appears to be well-maintained, suitable for driving. The horses are dark brown or black, contrasting with the lighter colors of the surrounding environment.",
+      "The scene is bathed in bright sunlight, creating a warm and inviting atmosphere. The road is paved and appears to be well-maintained, suitable for driving. The horses are dark brown or black, contrasting with the lighter colors of the surrounding environment.",
+      "The scene is bathed in bright sunlight, creating a warm and inviting atmosphere. The image features a variety of colors, including browns, greens, and grays, highlighting the natural surroundings. The lighting is soft and diffused, enhancing the peaceful ambiance.",
+      "The scene is bathed in bright sunlight, creating a warm and inviting atmosphere. The image captures a peaceful moment where horses are standing on the roadside, seemingly unbothered by the presence of a car.",
+      "The scene is bathed in bright sunlight, creating a warm and inviting atmosphere. The image captures a peaceful moment where horses are standing on the roadside, seemingly unbothered by the presence of a car."
+    ],
+    "model": "moondream",
+    "device": "orin"
+  },
+  {
+    "image_id": 8211,
+    "task": "spatial_relationships",
+    "stability": 0.7877054870128631,
+    "texts": [
+      "The mop is positioned in the foreground, close to the two workers. The mop is situated between the workers and the building in the background.",
+      "The scooters are parked on the sidewalk near the building. The workers are positioned further back on the sidewalk, near the building.",
+      "The mop is positioned in the foreground, close to the two workers. The mop is situated between the workers and the building in the background.",
+      "The mop is positioned in the foreground, close to the two workers. The mop is situated between and slightly behind the workers, positioned closer to the left side of the image. The background features the storefronts and the parked motorcycles.",
+      "The mop is positioned in the foreground, close to the two workers. The mop is situated between the workers and the parked scooters. The background features the storefronts and the street."
+    ],
+    "model": "moondream",
+    "device": "thor"
+  },
+  {
+    "image_id": 50145,
+    "task": "spatial_relationships",
+    "stability": 0.7922467827796936,
+    "texts": [
+      "The man is positioned in the foreground, facing the camera. The bicycle is situated near the center, partially obscured by the man. The background features other individuals and structures, creating a sense of a public or semi-public space.",
+      "The man is positioned in the foreground, facing the camera.  In the background, several other individuals and objects are visible, suggesting a public or semi-public space. The man is walking past a bicycle parked near a building.",
+      "The man is positioned in the foreground, facing the camera.  In the background, several other individuals and objects are visible, creating a sense of depth and distance.",
+      "The man is positioned in the foreground, facing the camera.  In the background, several other individuals and objects are visible, creating a sense of depth and distance.",
+      "The man is positioned in the foreground, facing the camera.  In the background, several other individuals and objects are visible, suggesting a public or semi-public space. The man is walking past a bicycle parked near a building."
+    ],
+    "model": "moondream",
+    "device": "thor"
+  },
+  {
+    "image_id": 19402,
+    "task": "caption_brief",
+    "stability": 0.793867027759552,
+    "texts": [
+      "Two people are in a dimly lit setting, one wearing a black hooded jacket and the other with a fur-lined hood, both appearing to be in motion.",
+      "Two people are in a dimly lit setting, one wearing a black hooded jacket and the other with a fur-lined hood, both appearing to be in motion.",
+      "Two people are wearing dark clothing and hoods, one is holding a piece of paper, and the other is smiling.",
+      "Two people are in a dimly lit setting, one wearing a black hooded jacket and the other partially obscured by a furry hood, both with mouths open.",
+      "Two people are wearing dark clothing and hoods, one is holding a piece of paper, and the other is smiling."
+    ],
+    "model": "moondream",
+    "device": "dell"
+  },
+  {
+    "image_id": 39785,
+    "task": "attributes",
+    "stability": 0.7993852257728576,
+    "texts": [
+      "The water appears murky and brown, suggesting possible pollution or sedimentation. The lighting is subdued, likely due to overcast conditions or shade from the surrounding trees. The material appears to be natural rock or concrete, contrasting with the man-made structures in the background.",
+      "The water appears murky and brown, reflecting the surrounding environment. The lighting suggests an overcast day, which contributes to the overall mood of the scene. The image captures a dynamic moment where the surfer is skillfully riding a wave amidst the river's flow.",
+      "The water appears murky and brown, reflecting the surrounding environment. The lighting suggests an overcast day, which contributes to the overall mood of the scene. The image captures a dynamic moment where the surfer is skillfully riding a wave amidst the river's flow.",
+      "The water appears murky and brown, suggesting possible pollution or sedimentation. The lighting is subdued, likely due to overcast conditions or shade from the surrounding trees. The material appears to be natural rock or concrete, contrasting with the man-made structures in the background.",
+      "The water appears murky and brown, reflecting the surrounding environment. The lighting suggests an overcast day, which contributes to the overall mood of the scene. The image captures a dynamic moment where the surfer is skillfully riding a wave amidst the river's flow."
+    ],
+    "model": "moondream",
+    "device": "orin"
+  },
+  {
+    "image_id": 6954,
+    "task": "objects_and_counts",
+    "stability": 0.7999136447906494,
+    "texts": [
+      "Frisbee: 2\nUltimate: 1\nBoy: 3\nBoy: 2\nBoy: 1\nBoy: 1\nBoy: 1\nBoy: 1",
+      "Frisbee: 2\nUltimate: 1\nBoy: 3\nBoy: 2\nBoy: 1\nBoy: 1\nBoy: 1\nBoy: 1",
+      "Frisbee: 2\nT-shirt: 3\nBoy: 3\nBarefoot: 1\nGirl: 2\nToddler: 2\nGrass: 6",
+      "Frisbee: 2\nT-shirt: 3\nBoy: 3\nBarefoot: 1\nGirl: 2\nToddler: 2\nGrass: 6",
+      "Frisbee: 2\nT-shirt: 3\nBoy: 3\nBarefoot: 1\nGirl: 2\nToddler: 2\nGrass: 6"
+    ],
+    "model": "moondream",
+    "device": "thor"
+  },
+  {
+    "image_id": 17959,
+    "task": "spatial_relationships",
+    "stability": 0.8008179426193237,
+    "texts": [
+      "The main objects are positioned in the foreground, with the background extending towards the right. The foreground area appears to be a grassy field, while the background features trees and a building in the distance.",
+      "The main objects are positioned in the foreground, with the red and black kites extending towards the background. The kites are spread out across the grassy field, creating a dynamic and colorful display.",
+      "The main objects are positioned in the foreground, with the background extending behind them and the sky above. The foreground area appears relatively open and grassy, while the background features trees and a building in the distance.",
+      "The main objects are positioned in the foreground, with the background extending behind them and the sky above. The foreground area appears relatively open and grassy, while the background features trees and a building in the distance.",
+      "The main objects are positioned in the foreground, with the red and black kites extending towards the background. The kites are spread out across the grassy field, creating a dynamic and colorful display."
+    ],
+    "model": "moondream",
+    "device": "thor"
+  },
+  {
+    "image_id": 3934,
+    "task": "spatial_relationships",
+    "stability": 0.8012568831443787,
+    "texts": [
+      "The girl is positioned in the foreground, interacting with the partygoers. The living room extends in the background, creating a sense of depth and space.",
+      "The girl is positioned in the foreground, slightly to the left of the image. The background includes other individuals, furniture, and a partially visible staircase. The scene appears to be set in a living room or similar indoor space.",
+      "The girl is positioned in the foreground, interacting with the partygoers. The living room extends in the background, creating a sense of depth and space.",
+      "The girl is positioned in the foreground, slightly to the left of the image. The background includes other individuals and furniture, creating a sense of depth and space. The foreground is dominated by the rug and the girl's activity.",
+      "The girl is positioned in the foreground, interacting with the partygoers. The living room extends in the background, creating a sense of depth and space."
+    ],
+    "model": "moondream",
+    "device": "thor"
+  },
+  {
+    "image_id": 19402,
+    "task": "caption_brief",
+    "stability": 0.8013279676437378,
+    "texts": [
+      "Two people are wearing dark clothing and hoods, one is holding a piece of paper, and the other is smiling.",
+      "Two people are in a dimly lit setting, one wearing a black hooded jacket and the other with a fur-lined hood, both appearing to be in motion.",
+      "Two people are wearing dark clothing and hoods, one is holding a piece of paper, and the other is smiling.",
+      "Two people are in a dimly lit setting, one wearing a black hooded jacket and the other with a fur-lined hood, both appearing to be in motion.",
+      "Two people are wearing dark clothing and hoods, one is holding a piece of paper, and the other is smiling."
+    ],
+    "model": "moondream",
+    "device": "orin"
+  },
+  {
+    "image_id": 49259,
+    "task": "spatial_relationships",
+    "stability": 0.8017079174518585,
+    "texts": [
+      "The man is positioned in the foreground, slightly to the right of the lakebank. The lake and sign are in the background, extending across the entire width of the image. The sign is in the foreground, partially obscured by the man and the lake.",
+      "The man is positioned in the foreground, sitting on the concrete ledge near the lake. The lake and concrete ledge are in the background. The man is situated near the lake, seemingly enjoying the view.",
+      "The man is positioned in the foreground, slightly to the right of the lakefront trail sign. The trail sign is situated in the background, near the water's edge. The man is sitting on the concrete edge of a lake, further back from the foreground.",
+      "The man is positioned in the foreground, sitting on the concrete ledge near the lake. The lake and concrete ledge are in the background. The man is situated near the lake, implying a proximity to the water.",
+      "The man is positioned in the foreground, slightly to the right of the lakebank. The lake and sign are in the background, extending across the entire width of the image. The sign is in the foreground, partially obscured by the man and the lake."
+    ],
+    "model": "moondream",
+    "device": "thor"
+  },
+  {
+    "image_id": 14439,
+    "task": "caption_brief",
+    "stability": 0.8036631584167481,
+    "texts": [
+      "A group of adults and children are flying a colorful dragon kite in a vibrant park, surrounded by other kites and people enjoying outdoor activities.",
+      "A young girl holds the string of a large, colorful dragon kite while two other children run alongside it, enjoying a sunny day in a park.",
+      "A group of adults and children are flying a colorful dragon kite in a vibrant park, surrounded by other kites and people enjoying outdoor activities.",
+      "A young girl holds the string of a large, colorful dragon kite while two other children run alongside it, enjoying a sunny day in a park.",
+      "A young girl holds the string of a large, colorful dragon kite while two other children run alongside it, enjoying a sunny day in a park."
+    ],
+    "model": "moondream",
+    "device": "dell"
+  },
+  {
+    "image_id": 40083,
+    "task": "attributes",
+    "stability": 0.8046370446681976,
+    "texts": [
+      "The scene is black and white, creating a vintage feel. The lighting appears to be natural daylight, casting shadows and highlighting the textures of the objects and surroundings. The materials include metal, wood, and possibly plastic, contributing to the overall ambiance of the street vendor setup.",
+      "The scene is black and white, creating a vintage feel. The lighting appears to be natural daylight, casting shadows and highlighting the textures of the objects and surroundings. The materials include metal, wood, and possibly plastic, contributing to the overall rustic ambiance.",
+      "The scene is black and white, highlighting the contrast between the dark clothing and the lighter background. The lighting appears to be natural, casting soft shadows and highlighting the textures of the objects and clothing.",
+      "The scene is black and white, creating a vintage feel. The lighting appears to be natural daylight, casting shadows and highlighting the textures of the objects and surroundings. The materials include metal, wood, and possibly plastic, contributing to the overall ambiance of the street vendor setup.",
+      "The scene is black and white, creating a vintage feel. The lighting appears to be natural daylight, casting shadows and highlighting the textures of the objects and surroundings. The materials include metal, wood, and possibly plastic, contributing to the overall ambiance of the street vendor setup."
+    ],
+    "model": "moondream",
+    "device": "orin"
+  },
+  {
+    "image_id": 7511,
+    "task": "spatial_relationships",
+    "stability": 0.8046860814094543,
+    "texts": [
+      "The man is standing on the sandy beach, facing the water. The kite is flying in the sky above the water, suggesting the man is flying it near the shore. The beach extends from the foreground towards the background, providing a sense of depth to the scene.",
+      "The man is standing on the sandy beach, facing the water. The kite is flying in the sky above the water, suggesting the man is flying it near the shore. The beach extends from the foreground towards the background, providing a sense of depth to the scene.",
+      "The man is standing on the sandy beach, facing the water.  In the background, other people are visible on the beach and near the water's edge.",
+      "The man is standing on the sandy beach, facing the water. The kite is flying in the sky above the water, suggesting the man is flying it near the shore. The beach extends from the foreground towards the background, providing a sense of depth to the scene.",
+      "The man is standing on the sandy beach, facing the water.  In the background, other people are visible on the beach and near the water's edge."
+    ],
+    "model": "moondream",
+    "device": "dell"
+  },
+  {
+    "image_id": 49259,
+    "task": "attributes",
+    "stability": 0.8083772540092469,
+    "texts": [
+      "The scene is bathed in natural daylight, creating a bright and airy atmosphere. The grass appears slightly dry, suggesting it might be a sunny day. The blue wooden sign and the red and white \"CLOSED\" sign stand out against the green grass and light.",
+      "The scene is bathed in natural daylight, creating a bright and airy atmosphere. The grass appears slightly dry, suggesting it might be a sunny day. The lake's surface reflects the sunlight, adding to the overall brightness of the scene.",
+      "The scene is bathed in natural daylight, creating a bright and airy atmosphere. The grass appears slightly dry, suggesting it might be a sunny day. The blue wooden sign and the red and white \"CLOSED\" sign stand out against the green grass.",
+      "The scene is bathed in natural daylight, creating a bright and airy atmosphere. The grass appears slightly dry, suggesting it might be a sunny day. The lake's surface reflects the sunlight, adding to the overall brightness of the scene.",
+      "The scene is bathed in natural daylight, creating a bright and airy atmosphere. The grass appears slightly dry, suggesting it might be a sunny day. The lake's surface reflects the sunlight, adding to the overall brightness of the scene."
+    ],
+    "model": "moondream",
+    "device": "dell"
+  },
+  {
+    "image_id": 37751,
+    "task": "attributes",
+    "stability": 0.8140082597732544,
+    "texts": [
+      "The sky is a bright blue with scattered white clouds. The lighting suggests it is likely daytime. The motorcycle appears to be made of metal and has a red seat. The overall scene suggests a picturesque, outdoor setting.",
+      "The sky is a bright blue with scattered white clouds. The lighting suggests it is likely daytime. The motorcycle appears to be made of metal and has a red seat. The overall scene suggests a picturesque, outdoor setting.",
+      "The sky is a bright blue with scattered white clouds. The lighting suggests it is likely daytime. The terrain is rocky and uneven, composed of gravel and dirt. The overall atmosphere appears serene and peaceful.",
+      "The sky is a bright blue with scattered white clouds. The lighting suggests it is likely daytime. The motorcycle appears to be made of metal and has a red seat. The overall scene suggests a picturesque, outdoor setting.",
+      "The sky is a bright blue with scattered white clouds. The lighting suggests it is likely daytime. The terrain is rocky and uneven, composed of gravel and dirt. The overall atmosphere appears serene and peaceful."
+    ],
+    "model": "moondream",
+    "device": "orin"
+  },
+  {
+    "image_id": 54592,
+    "task": "attributes",
+    "stability": 0.8182165145874023,
+    "texts": [
+      "The snow is white and appears quite cold. The lighting suggests it's either early morning or late evening, casting a soft glow on the scene. The snow is likely made of snow or ice, contributing to the overall wintry atmosphere.",
+      "The snow is white and appears smooth, illuminated by the sun's rays, creating a bright and reflective scene. The skiers are wearing light-colored clothing, enhancing visibility against the snowy backdrop. The overall atmosphere conveys a sense of adventure and cold weather conditions.",
+      "The snow is white and appears quite smooth. The lighting suggests it's either early morning or late evening, creating a dramatic contrast against the dark sky. The snow is likely made of snow or ice, further contributing to the overall wintery atmosphere.",
+      "The snow is white and appears quite smooth. The lighting suggests it's either early morning or late evening, creating a dramatic contrast against the dark sky. The snow is likely made of snow or ice, further contributing to the overall wintery atmosphere.",
+      "The snow is white and appears smooth, illuminated by the sun's rays, creating a bright and reflective scene. The skiers are wearing light-colored clothing, enhancing visibility against the snowy backdrop. The overall atmosphere conveys a sense of adventure and cold weather conditions."
+    ],
+    "model": "moondream",
+    "device": "dell"
+  },
+  {
+    "image_id": 30494,
+    "task": "attributes",
+    "stability": 0.8190173149108887,
+    "texts": [
+      "The dog is black and white. The ground is covered with fallen leaves. The lighting suggests it's likely daytime.",
+      "The dog is black and white and appears to be playing with a brown frisbee. The ground is covered with fallen leaves, suggesting it's autumn. The lighting is soft and diffused, likely due to overcast conditions.",
+      "The dog is black and white and appears to be playing with a brown frisbee. The ground is covered with fallen leaves, suggesting it's autumn. The lighting is soft and diffused, likely due to overcast conditions.",
+      "The dog is black and white. The ground is covered with fallen leaves. The lighting suggests it's likely daytime. The scene appears to be outdoors in a park-like setting.",
+      "The dog is black and white. The ground is covered with fallen leaves. The lighting suggests it's likely daytime."
+    ],
+    "model": "moondream",
+    "device": "dell"
+  },
+  {
+    "image_id": 38829,
+    "task": "spatial_relationships",
+    "stability": 0.8193952083587647,
+    "texts": [
+      "The main objects are positioned in the foreground, with the Coca-Cola store and storefronts in the background. The street scene extends into the background, suggesting an urban setting.",
+      "The main objects are positioned in the foreground, with the Coca-Cola store and storefronts in the background. The street scene extends into the background, suggesting an urban setting.",
+      "The main objects are positioned in the foreground, with the Coca-Cola store and storefronts in the background. The street scene extends into the background, suggesting an urban setting.",
+      "The main objects are positioned in the foreground, with the Coca-Cola store and storefronts in the background. The street scene extends into the background, suggesting an urban setting.",
+      "The main objects are positioned in the foreground, with the two boys riding a bicycle in the middle ground. The background features other motorcycles and pedestrians, indicating a busy urban environment."
+    ],
+    "model": "moondream",
+    "device": "orin"
+  },
+  {
+    "image_id": 23126,
+    "task": "objects_and_counts",
+    "stability": 0.8230821073055268,
+    "texts": [
+      "horse: 1\nman: 1\nsaddle: 1\njockey: 1\nriding crop: 1\nground: 1\nbuilding: 1\nsky: 1",
+      "horse: 1\nman: 1\nsaddle: 1\ncowboy hat: 0\nhelmet: 0\nhelmet: 0\nshoe: 0\nbelt: 0",
+      "horse: 1\nman: 1\nsaddle: 1\njockey: 1\nriding crop: 1\nground: 1\nbuilding: 1\nsky: 1",
+      "horse: 1\nman: 1\nsaddle: 1\ncowboy hat: 0\nhelmet: 0\nshoe: 0\nbelt: 0\nhose: 0\nshirt: 0",
+      "horse: 1\nman: 1\nsaddle: 1\njockey: 1\nriding crop: 1\nground: 1\nbuilding: 1\nsky: 1"
+    ],
+    "model": "moondream",
+    "device": "orin"
+  },
+  {
+    "image_id": 56344,
+    "task": "spatial_relationships",
+    "stability": 0.8269387125968933,
+    "texts": [
+      "The main objects are positioned close together, creating a compact workspace. The foreground features the keyboard, mouse, and two monitors, while the background includes additional electronic devices and cables.",
+      "The main objects are positioned in a way that creates a sense of depth and perspective. The left monitor is closer, while the right monitor is further away, emphasizing the spatial relationship between the devices.",
+      "The main objects are positioned close together, creating a compact workspace. The foreground features the keyboard, mouse, and two monitors, while the background includes additional electronic devices and cables.",
+      "The main objects are positioned in a way that creates a sense of depth and perspective. The left and right sides of the desk are close together, while the foreground and background are further apart. The monitor is positioned at the far end of the desk, emphasizing its distance from the viewer.",
+      "The main objects are positioned close together, creating a compact workspace. The foreground features the keyboard, mouse, and two monitors, while the background includes additional electronic devices and cables."
+    ],
+    "model": "moondream",
+    "device": "orin"
+  }
+]
