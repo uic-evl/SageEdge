@@ -2,6 +2,7 @@ import sqlite3
 import os
 import asyncio
 import json
+import threading
 from datetime import datetime
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Depends, status, Request
@@ -10,6 +11,8 @@ from fastapi.responses import StreamingResponse
 from fastapi.security.api_key import APIKeyHeader
 from typing import Dict, Any
 from pydantic import BaseModel
+
+db_lock = threading.Lock()
 
 load_dotenv()
 app = FastAPI()
@@ -196,7 +199,8 @@ def update_db(target_date, target_minute):
     """
     global update_status
 
-    conn_raw = sqlite3.connect('direction_evl.db')
+    conn_raw = sqlite3.connect('direction_evl.db', timeout=20)
+    conn_raw.execute('PRAGMA journal_mode=WAL;')
     cursor_raw = conn_raw.cursor()
     
     sql_query = """
@@ -226,23 +230,26 @@ def update_db(target_date, target_minute):
         right_count = row[5] or 0
         left_count = row[6] or 0
 
-        conn_min = sqlite3.connect('direction_evl_min.db')
-        cursor_min = conn_min.cursor()
+        with db_write_lock:
+            conn_min = sqlite3.connect('direction_evl_min.db', timeout=20)
+            conn_min.execute('PRAGMA journal_mode=WAL;')
+            
+            cursor_min = conn_min.cursor()
 
-        sql_upsert = """
-        INSERT OR REPLACE INTO directional_data
-        (Date, Time, CPU_usage, GPU_usage, mem_usage, CPU_temp, GPU_temp, direction_left, direction_right)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """
-        
-        cursor_min.execute(sql_upsert, (
-            target_date, target_minute, 
-            avg_cpu, avg_gpu, avg_mem, avg_cpu_temp, avg_gpu_temp, 
-            left_count, right_count
-        ))
+            sql_upsert = """
+            INSERT OR REPLACE INTO directional_data
+            (Date, Time, CPU_usage, GPU_usage, mem_usage, CPU_temp, GPU_temp, direction_left, direction_right)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """
+            
+            cursor_min.execute(sql_upsert, (
+                target_date, target_minute, 
+                avg_cpu, avg_gpu, avg_mem, avg_cpu_temp, avg_gpu_temp, 
+                left_count, right_count
+            ))
 
-        conn_min.commit()
-        conn_min.close()
+            conn_min.commit()
+            conn_min.close()
         
         update_status = 1
 
