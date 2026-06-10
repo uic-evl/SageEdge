@@ -96,7 +96,7 @@
       <span class="stats-icon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
       <span class="stats-card-title">Data Analysis</span>
     </div>
-    <div class="stats-card-subtitle" id="data-analysis-subtitle">Averages of —</div>
+    <div class="stats-card-subtitle" id="data-analysis-subtitle">Month Averages of —</div>
     <div class="stats-grid" id="data-analysis-grid">
       <div class="stat-item">
         <div class="stat-label-row">
@@ -112,7 +112,7 @@
       </div>
       <div class="stat-item">
         <div class="stat-label-row">
-          <span class="stat-icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span> Average
+          <span class="stat-icon-sm"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span> Day Average
         </div>
         <div class="stat-value" id="stat-avg">--</div>
       </div>
@@ -242,10 +242,10 @@
             <img src="images/test_walk.png" alt="EVL Photo 2">
           </div>
           <div class="carousel-slide">
-            <img src="images/evl-logo-electronic-visualization-laboratory.png" alt="EVL Photo 3">
+            <img src="images/architecture.png" alt="EVL Photo 3">
           </div>
           <div class="carousel-slide">
-            <img src="images/evl-logo-electronic-visualization-laboratory.png" alt="EVL Photo 4">
+            <img src="images/Kiosk_dash.png" alt="EVL Photo 4">
           </div>
         </div>
       </div>
@@ -348,6 +348,7 @@
     let eventSource = null
     let reconnectTimeout = null
     let selectedYear = null
+    let pinnedPoint = null
 
     const months = ['All Data','January','February','March','April','May','June','July','August','September','October','November','December']
 
@@ -710,6 +711,7 @@
     }
 
     function filterAndRender() {
+      pinnedPoint = null
       let workingData = data.filter(d => {
         const dateObj = new Date(d.date + 'T00:00:00')
         return (!selectedYear || dateObj.getFullYear() === selectedYear) &&
@@ -842,6 +844,7 @@
         const idx = points[0].index
         const point = filteredData[idx]
         const left = point.left, right = point.right
+        pinnedPoint = point
 
         let label = point.displayDate || ''
         if (granularity === 'minute') label = `${point.hour.toString().padStart(2,'0')}:${point.minute.toString().padStart(2,'0')}`
@@ -867,7 +870,7 @@
         else if (granularity === 'hour') displayLabel = `${point.displayDate}, ${selectedYear}, ${point.displayTime}hr`
         else displayLabel = `${point.displayDate}, ${selectedYear}`
 
-        document.getElementById('data-analysis-subtitle').textContent = `Averages of ${displayLabel}`
+        document.getElementById('data-analysis-subtitle').textContent = `Month Averages of ${displayLabel}`
         document.getElementById('sys-stats-subtitle').textContent = `Averages of ${displayLabel}`
         document.getElementById('stat-time').textContent = displayLabel
         document.getElementById('stat-peak').textContent = peakLabel
@@ -900,7 +903,8 @@
 
       canvas.addEventListener('mouseleave', () => {
         tooltipEl.style.display = 'none'
-        updateDataAnalysis() // restore stat cards to current/latest point
+        if (pinnedPoint) updateDataAnalysis(pinnedPoint)
+        else updateDataAnalysis()
       })
 
       // Click to scroll to Data Analysis card
@@ -909,14 +913,25 @@
         const points = lineChart.getElementsAtEventForMode(e, 'index', { intersect: false }, true)
         if (!points.length) return
         const card = document.getElementById('data-analysis-card')
-        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        if (card) {
+          const navbarHeight = 60
+          const extraPadding = 12
+          const top = card.getBoundingClientRect().top + window.scrollY - navbarHeight - extraPadding
+          window.scrollTo({ top, behavior: 'smooth' })
+        }
       })
 
       updateDataAnalysis()
     }
 
-    function updateDataAnalysis() {
-      // Get the most recent data point
+    function updateDataAnalysis(overridePoint = null) {
+      // Use overridePoint if provided, otherwise fall back to the most recent point
+      const getLabel = (p) => {
+        if (granularity === 'minute') return `${p.displayDate} ${p.hour.toString().padStart(2,'0')}:${p.minute.toString().padStart(2,'0')}`
+        if (granularity === 'hour') return `${p.displayDate} ${p.displayTime}hr`
+        return `${p.displayDate}, ${selectedYear}`
+      }
+
       const getCurrentLabel = () => {
         if (!filteredData.length) return '--'
         const sorted = [...filteredData].sort((a, b) => {
@@ -924,14 +939,11 @@
           if (granularity === 'hour') return b.hour - a.hour
           return new Date(b.date) - new Date(a.date)
         })
-        const p = sorted[0]
-        if (granularity === 'minute') return `${p.displayDate} ${p.hour.toString().padStart(2,'0')}:${p.minute.toString().padStart(2,'0')}`
-        if (granularity === 'hour') return `${p.displayDate} ${p.displayTime}hr`
-        return `${p.displayDate}, ${selectedYear}`
+        return getLabel(sorted[0])
       }
 
-      const subtitleText = filteredData.length ? getCurrentLabel() : '—'
-      document.getElementById('data-analysis-subtitle').textContent = `Averages of ${subtitleText}`
+      const subtitleText = filteredData.length ? (overridePoint ? getLabel(overridePoint) : getCurrentLabel()) : '—'
+      document.getElementById('data-analysis-subtitle').textContent = `Month Averages of ${subtitleText}`
       document.getElementById('sys-stats-subtitle').textContent = `Averages of ${subtitleText}`
 
       if (!filteredData.length) {
@@ -951,7 +963,8 @@
         if (granularity === 'hour') return b.hour - a.hour
         return new Date(b.date) - new Date(a.date)
       })
-      const current = sorted[0]
+      const current = overridePoint || sorted[0]
+
       const totalLeft = filteredData.reduce((s, d) => s + d.left, 0)
       const totalRight = filteredData.reduce((s, d) => s + d.right, 0)
       const avg = Math.round((totalLeft + totalRight) / filteredData.length)
@@ -961,7 +974,8 @@
       if (granularity === 'minute' && peak.minute !== undefined) peakLabel = `${peak.hour.toString().padStart(2,'0')}:${peak.minute.toString().padStart(2,'0')}`
       else if (granularity === 'hour' && peak.displayTime) peakLabel = peak.displayTime
 
-      document.getElementById('stat-time').textContent = getCurrentLabel()
+      const displayedLabel = overridePoint ? getLabel(overridePoint) : getCurrentLabel()
+      document.getElementById('stat-time').textContent = displayedLabel
       document.getElementById('stat-peak').textContent = peakLabel
       document.getElementById('stat-avg').textContent = avg
       document.getElementById('stat-total').textContent = totalLeft + totalRight
@@ -970,7 +984,7 @@
       document.getElementById('stat-total-left').textContent = totalLeft
       document.getElementById('stat-total-right').textContent = totalRight
 
-      document.getElementById('sys-time').textContent = getCurrentLabel()
+      document.getElementById('sys-time').textContent = displayedLabel
       document.getElementById('sys-cpu-usage').textContent = `${parseFloat(current.cpu_usage || 0).toFixed(1)}%`
       document.getElementById('sys-gpu-usage').textContent = `${parseFloat(current.gpu_temp || 0).toFixed(1)}%`
       document.getElementById('sys-mem').textContent = `${parseFloat(current.mem_usage || 0).toFixed(1)}%`
