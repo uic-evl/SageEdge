@@ -355,10 +355,10 @@ while True:
         ret = True
         break
 
-# Infer resolution / fps safely
+# resolution / fps safely
 if ret and frame0 is not None:
-    W = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)) or 1280
-    H = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)) or 720
+    W = 1280
+    H = 720
     fps = cap.get(cv2.CAP_PROP_FPS)
     if fps is None or fps <= 0 or fps > 120:
         fps = 30
@@ -401,14 +401,18 @@ try:
     prev_frame_time = 0
     new_frame_time = 0
 
+    is_video_file = video_path.lower().endswith((".mp4", ".avi", ".mov", ".mkv"))
+    
     while True:
         t_start = time.time()
         ret, frame = cap.read()
         t_read = time.time()
-        ret, frame = cap.read()
 
         # if a frame fails to read, handle retries or reconnect
         if not ret or frame is None:
+            if is_video_file:
+                print("[info] End of video reached.")
+                break
             soft_fail += 1
 
             # small transient issue — retry a few times
