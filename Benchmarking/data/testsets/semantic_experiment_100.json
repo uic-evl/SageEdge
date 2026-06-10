@@ -1,0 +1,1001 @@
+[
+  {
+    "image_id": 301061,
+    "file_name": "000000301061.jpg",
+    "full_path": "data/coco/val2017/000000301061.jpg",
+    "expected_entities": [
+      "elephant",
+      "person",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 261982,
+    "file_name": "000000261982.jpg",
+    "full_path": "data/coco/val2017/000000261982.jpg",
+    "expected_entities": [
+      "car",
+      "person",
+      "skateboard"
+    ]
+  },
+  {
+    "image_id": 273760,
+    "file_name": "000000273760.jpg",
+    "full_path": "data/coco/val2017/000000273760.jpg",
+    "expected_entities": [
+      "person",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 248400,
+    "file_name": "000000248400.jpg",
+    "full_path": "data/coco/val2017/000000248400.jpg",
+    "expected_entities": [
+      "bowl",
+      "person",
+      "pizza",
+      "potted plant"
+    ]
+  },
+  {
+    "image_id": 382030,
+    "file_name": "000000382030.jpg",
+    "full_path": "data/coco/val2017/000000382030.jpg",
+    "expected_entities": [
+      "dining table",
+      "potted plant",
+      "sports ball",
+      "umbrella"
+    ]
+  },
+  {
+    "image_id": 405691,
+    "file_name": "000000405691.jpg",
+    "full_path": "data/coco/val2017/000000405691.jpg",
+    "expected_entities": [
+      "bottle",
+      "bowl",
+      "dining table",
+      "fork",
+      "potted plant",
+      "spoon",
+      "vase",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 29596,
+    "file_name": "000000029596.jpg",
+    "full_path": "data/coco/val2017/000000029596.jpg",
+    "expected_entities": [
+      "book",
+      "chair",
+      "couch",
+      "cup",
+      "dining table",
+      "potted plant",
+      "tv",
+      "vase"
+    ]
+  },
+  {
+    "image_id": 76547,
+    "file_name": "000000076547.jpg",
+    "full_path": "data/coco/val2017/000000076547.jpg",
+    "expected_entities": [
+      "backpack",
+      "bench",
+      "bicycle",
+      "chair",
+      "dining table",
+      "laptop",
+      "person",
+      "tie",
+      "traffic light",
+      "train"
+    ]
+  },
+  {
+    "image_id": 56344,
+    "file_name": "000000056344.jpg",
+    "full_path": "data/coco/val2017/000000056344.jpg",
+    "expected_entities": [
+      "cell phone",
+      "keyboard",
+      "mouse",
+      "remote",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 80274,
+    "file_name": "000000080274.jpg",
+    "full_path": "data/coco/val2017/000000080274.jpg",
+    "expected_entities": [
+      "elephant"
+    ]
+  },
+  {
+    "image_id": 263474,
+    "file_name": "000000263474.jpg",
+    "full_path": "data/coco/val2017/000000263474.jpg",
+    "expected_entities": [
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 384350,
+    "file_name": "000000384350.jpg",
+    "full_path": "data/coco/val2017/000000384350.jpg",
+    "expected_entities": [
+      "airplane"
+    ]
+  },
+  {
+    "image_id": 38829,
+    "file_name": "000000038829.jpg",
+    "full_path": "data/coco/val2017/000000038829.jpg",
+    "expected_entities": [
+      "backpack",
+      "bicycle",
+      "motorcycle",
+      "person"
+    ]
+  },
+  {
+    "image_id": 287545,
+    "file_name": "000000287545.jpg",
+    "full_path": "data/coco/val2017/000000287545.jpg",
+    "expected_entities": [
+      "giraffe"
+    ]
+  },
+  {
+    "image_id": 365642,
+    "file_name": "000000365642.jpg",
+    "full_path": "data/coco/val2017/000000365642.jpg",
+    "expected_entities": [
+      "car",
+      "person",
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 525286,
+    "file_name": "000000525286.jpg",
+    "full_path": "data/coco/val2017/000000525286.jpg",
+    "expected_entities": [
+      "clock"
+    ]
+  },
+  {
+    "image_id": 554595,
+    "file_name": "000000554595.jpg",
+    "full_path": "data/coco/val2017/000000554595.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 23272,
+    "file_name": "000000023272.jpg",
+    "full_path": "data/coco/val2017/000000023272.jpg",
+    "expected_entities": [
+      "car",
+      "cat"
+    ]
+  },
+  {
+    "image_id": 363207,
+    "file_name": "000000363207.jpg",
+    "full_path": "data/coco/val2017/000000363207.jpg",
+    "expected_entities": [
+      "bowl",
+      "cake",
+      "dining table",
+      "person",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 555005,
+    "file_name": "000000555005.jpg",
+    "full_path": "data/coco/val2017/000000555005.jpg",
+    "expected_entities": [
+      "bed",
+      "book",
+      "dog"
+    ]
+  },
+  {
+    "image_id": 190637,
+    "file_name": "000000190637.jpg",
+    "full_path": "data/coco/val2017/000000190637.jpg",
+    "expected_entities": [
+      "bed",
+      "person",
+      "remote"
+    ]
+  },
+  {
+    "image_id": 100274,
+    "file_name": "000000100274.jpg",
+    "full_path": "data/coco/val2017/000000100274.jpg",
+    "expected_entities": [
+      "car",
+      "train",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 375430,
+    "file_name": "000000375430.jpg",
+    "full_path": "data/coco/val2017/000000375430.jpg",
+    "expected_entities": [
+      "bowl",
+      "chair",
+      "dining table"
+    ]
+  },
+  {
+    "image_id": 357501,
+    "file_name": "000000357501.jpg",
+    "full_path": "data/coco/val2017/000000357501.jpg",
+    "expected_entities": [
+      "scissors"
+    ]
+  },
+  {
+    "image_id": 183049,
+    "file_name": "000000183049.jpg",
+    "full_path": "data/coco/val2017/000000183049.jpg",
+    "expected_entities": [
+      "book",
+      "clock"
+    ]
+  },
+  {
+    "image_id": 149622,
+    "file_name": "000000149622.jpg",
+    "full_path": "data/coco/val2017/000000149622.jpg",
+    "expected_entities": [
+      "bird"
+    ]
+  },
+  {
+    "image_id": 484978,
+    "file_name": "000000484978.jpg",
+    "full_path": "data/coco/val2017/000000484978.jpg",
+    "expected_entities": [
+      "bowl",
+      "cup",
+      "dining table",
+      "fork",
+      "knife",
+      "person",
+      "spoon"
+    ]
+  },
+  {
+    "image_id": 185250,
+    "file_name": "000000185250.jpg",
+    "full_path": "data/coco/val2017/000000185250.jpg",
+    "expected_entities": [
+      "dog",
+      "frisbee",
+      "person"
+    ]
+  },
+  {
+    "image_id": 433774,
+    "file_name": "000000433774.jpg",
+    "full_path": "data/coco/val2017/000000433774.jpg",
+    "expected_entities": [
+      "car",
+      "parking meter",
+      "traffic light"
+    ]
+  },
+  {
+    "image_id": 12667,
+    "file_name": "000000012667.jpg",
+    "full_path": "data/coco/val2017/000000012667.jpg",
+    "expected_entities": [
+      "banana"
+    ]
+  },
+  {
+    "image_id": 363188,
+    "file_name": "000000363188.jpg",
+    "full_path": "data/coco/val2017/000000363188.jpg",
+    "expected_entities": [
+      "backpack",
+      "bottle",
+      "car",
+      "cell phone",
+      "person"
+    ]
+  },
+  {
+    "image_id": 7818,
+    "file_name": "000000007818.jpg",
+    "full_path": "data/coco/val2017/000000007818.jpg",
+    "expected_entities": [
+      "chair",
+      "dining table",
+      "fork",
+      "knife",
+      "vase",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 54654,
+    "file_name": "000000054654.jpg",
+    "full_path": "data/coco/val2017/000000054654.jpg",
+    "expected_entities": [
+      "oven",
+      "person"
+    ]
+  },
+  {
+    "image_id": 425925,
+    "file_name": "000000425925.jpg",
+    "full_path": "data/coco/val2017/000000425925.jpg",
+    "expected_entities": [
+      "bottle",
+      "car",
+      "clock",
+      "person"
+    ]
+  },
+  {
+    "image_id": 429761,
+    "file_name": "000000429761.jpg",
+    "full_path": "data/coco/val2017/000000429761.jpg",
+    "expected_entities": [
+      "person",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 319935,
+    "file_name": "000000319935.jpg",
+    "full_path": "data/coco/val2017/000000319935.jpg",
+    "expected_entities": [
+      "bed",
+      "book",
+      "chair",
+      "couch",
+      "dining table",
+      "potted plant",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 17436,
+    "file_name": "000000017436.jpg",
+    "full_path": "data/coco/val2017/000000017436.jpg",
+    "expected_entities": [
+      "bench",
+      "person"
+    ]
+  },
+  {
+    "image_id": 440171,
+    "file_name": "000000440171.jpg",
+    "full_path": "data/coco/val2017/000000440171.jpg",
+    "expected_entities": [
+      "elephant",
+      "person"
+    ]
+  },
+  {
+    "image_id": 153568,
+    "file_name": "000000153568.jpg",
+    "full_path": "data/coco/val2017/000000153568.jpg",
+    "expected_entities": [
+      "stop sign"
+    ]
+  },
+  {
+    "image_id": 262440,
+    "file_name": "000000262440.jpg",
+    "full_path": "data/coco/val2017/000000262440.jpg",
+    "expected_entities": [
+      "bottle",
+      "sink",
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 478862,
+    "file_name": "000000478862.jpg",
+    "full_path": "data/coco/val2017/000000478862.jpg",
+    "expected_entities": [
+      "airplane",
+      "person"
+    ]
+  },
+  {
+    "image_id": 394275,
+    "file_name": "000000394275.jpg",
+    "full_path": "data/coco/val2017/000000394275.jpg",
+    "expected_entities": [
+      "bus",
+      "person"
+    ]
+  },
+  {
+    "image_id": 402473,
+    "file_name": "000000402473.jpg",
+    "full_path": "data/coco/val2017/000000402473.jpg",
+    "expected_entities": [
+      "cat"
+    ]
+  },
+  {
+    "image_id": 323151,
+    "file_name": "000000323151.jpg",
+    "full_path": "data/coco/val2017/000000323151.jpg",
+    "expected_entities": [
+      "bowl",
+      "chair",
+      "cup",
+      "dining table",
+      "pizza"
+    ]
+  },
+  {
+    "image_id": 462728,
+    "file_name": "000000462728.jpg",
+    "full_path": "data/coco/val2017/000000462728.jpg",
+    "expected_entities": [
+      "dog",
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 9914,
+    "file_name": "000000009914.jpg",
+    "full_path": "data/coco/val2017/000000009914.jpg",
+    "expected_entities": [
+      "bowl",
+      "dining table",
+      "hot dog",
+      "knife",
+      "sandwich"
+    ]
+  },
+  {
+    "image_id": 177893,
+    "file_name": "000000177893.jpg",
+    "full_path": "data/coco/val2017/000000177893.jpg",
+    "expected_entities": [
+      "bus",
+      "car"
+    ]
+  },
+  {
+    "image_id": 368038,
+    "file_name": "000000368038.jpg",
+    "full_path": "data/coco/val2017/000000368038.jpg",
+    "expected_entities": [
+      "train"
+    ]
+  },
+  {
+    "image_id": 489842,
+    "file_name": "000000489842.jpg",
+    "full_path": "data/coco/val2017/000000489842.jpg",
+    "expected_entities": [
+      "person",
+      "tie",
+      "vase"
+    ]
+  },
+  {
+    "image_id": 397279,
+    "file_name": "000000397279.jpg",
+    "full_path": "data/coco/val2017/000000397279.jpg",
+    "expected_entities": [
+      "person",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 35326,
+    "file_name": "000000035326.jpg",
+    "full_path": "data/coco/val2017/000000035326.jpg",
+    "expected_entities": [
+      "bottle",
+      "knife",
+      "oven"
+    ]
+  },
+  {
+    "image_id": 307074,
+    "file_name": "000000307074.jpg",
+    "full_path": "data/coco/val2017/000000307074.jpg",
+    "expected_entities": [
+      "car",
+      "stop sign",
+      "traffic light"
+    ]
+  },
+  {
+    "image_id": 13004,
+    "file_name": "000000013004.jpg",
+    "full_path": "data/coco/val2017/000000013004.jpg",
+    "expected_entities": [
+      "banana",
+      "dining table"
+    ]
+  },
+  {
+    "image_id": 289229,
+    "file_name": "000000289229.jpg",
+    "full_path": "data/coco/val2017/000000289229.jpg",
+    "expected_entities": [
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 322724,
+    "file_name": "000000322724.jpg",
+    "full_path": "data/coco/val2017/000000322724.jpg",
+    "expected_entities": [
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 221708,
+    "file_name": "000000221708.jpg",
+    "full_path": "data/coco/val2017/000000221708.jpg",
+    "expected_entities": [
+      "chair",
+      "dining table",
+      "potted plant",
+      "refrigerator",
+      "sink",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 23359,
+    "file_name": "000000023359.jpg",
+    "full_path": "data/coco/val2017/000000023359.jpg",
+    "expected_entities": [
+      "person",
+      "snowboard"
+    ]
+  },
+  {
+    "image_id": 43581,
+    "file_name": "000000043581.jpg",
+    "full_path": "data/coco/val2017/000000043581.jpg",
+    "expected_entities": [
+      "dining table",
+      "fork",
+      "knife",
+      "pizza"
+    ]
+  },
+  {
+    "image_id": 411665,
+    "file_name": "000000411665.jpg",
+    "full_path": "data/coco/val2017/000000411665.jpg",
+    "expected_entities": [
+      "cat"
+    ]
+  },
+  {
+    "image_id": 530457,
+    "file_name": "000000530457.jpg",
+    "full_path": "data/coco/val2017/000000530457.jpg",
+    "expected_entities": [
+      "vase"
+    ]
+  },
+  {
+    "image_id": 334483,
+    "file_name": "000000334483.jpg",
+    "full_path": "data/coco/val2017/000000334483.jpg",
+    "expected_entities": [
+      "cake",
+      "fork",
+      "handbag",
+      "knife",
+      "person"
+    ]
+  },
+  {
+    "image_id": 166768,
+    "file_name": "000000166768.jpg",
+    "full_path": "data/coco/val2017/000000166768.jpg",
+    "expected_entities": [
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 216419,
+    "file_name": "000000216419.jpg",
+    "full_path": "data/coco/val2017/000000216419.jpg",
+    "expected_entities": [
+      "clock",
+      "traffic light"
+    ]
+  },
+  {
+    "image_id": 541291,
+    "file_name": "000000541291.jpg",
+    "full_path": "data/coco/val2017/000000541291.jpg",
+    "expected_entities": [
+      "sink"
+    ]
+  },
+  {
+    "image_id": 161609,
+    "file_name": "000000161609.jpg",
+    "full_path": "data/coco/val2017/000000161609.jpg",
+    "expected_entities": [
+      "backpack",
+      "dog",
+      "handbag",
+      "person"
+    ]
+  },
+  {
+    "image_id": 776,
+    "file_name": "000000000776.jpg",
+    "full_path": "data/coco/val2017/000000000776.jpg",
+    "expected_entities": [
+      "bed",
+      "teddy bear"
+    ]
+  },
+  {
+    "image_id": 187585,
+    "file_name": "000000187585.jpg",
+    "full_path": "data/coco/val2017/000000187585.jpg",
+    "expected_entities": [
+      "person",
+      "skateboard"
+    ]
+  },
+  {
+    "image_id": 253433,
+    "file_name": "000000253433.jpg",
+    "full_path": "data/coco/val2017/000000253433.jpg",
+    "expected_entities": [
+      "couch",
+      "teddy bear"
+    ]
+  },
+  {
+    "image_id": 411530,
+    "file_name": "000000411530.jpg",
+    "full_path": "data/coco/val2017/000000411530.jpg",
+    "expected_entities": [
+      "backpack",
+      "person",
+      "skis",
+      "snowboard"
+    ]
+  },
+  {
+    "image_id": 494188,
+    "file_name": "000000494188.jpg",
+    "full_path": "data/coco/val2017/000000494188.jpg",
+    "expected_entities": [
+      "bird",
+      "chair",
+      "handbag",
+      "person",
+      "umbrella"
+    ]
+  },
+  {
+    "image_id": 322352,
+    "file_name": "000000322352.jpg",
+    "full_path": "data/coco/val2017/000000322352.jpg",
+    "expected_entities": [
+      "chair",
+      "clock",
+      "dining table",
+      "potted plant",
+      "vase"
+    ]
+  },
+  {
+    "image_id": 33759,
+    "file_name": "000000033759.jpg",
+    "full_path": "data/coco/val2017/000000033759.jpg",
+    "expected_entities": [
+      "baseball bat",
+      "car",
+      "person",
+      "sports ball",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 565012,
+    "file_name": "000000565012.jpg",
+    "full_path": "data/coco/val2017/000000565012.jpg",
+    "expected_entities": [
+      "car",
+      "parking meter",
+      "traffic light",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 309655,
+    "file_name": "000000309655.jpg",
+    "full_path": "data/coco/val2017/000000309655.jpg",
+    "expected_entities": [
+      "person",
+      "skis",
+      "snowboard"
+    ]
+  },
+  {
+    "image_id": 497628,
+    "file_name": "000000497628.jpg",
+    "full_path": "data/coco/val2017/000000497628.jpg",
+    "expected_entities": [
+      "bed",
+      "couch"
+    ]
+  },
+  {
+    "image_id": 22479,
+    "file_name": "000000022479.jpg",
+    "full_path": "data/coco/val2017/000000022479.jpg",
+    "expected_entities": [
+      "bench",
+      "person",
+      "skateboard"
+    ]
+  },
+  {
+    "image_id": 54164,
+    "file_name": "000000054164.jpg",
+    "full_path": "data/coco/val2017/000000054164.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 224093,
+    "file_name": "000000224093.jpg",
+    "full_path": "data/coco/val2017/000000224093.jpg",
+    "expected_entities": [
+      "cow"
+    ]
+  },
+  {
+    "image_id": 539962,
+    "file_name": "000000539962.jpg",
+    "full_path": "data/coco/val2017/000000539962.jpg",
+    "expected_entities": [
+      "chair",
+      "dining table",
+      "frisbee",
+      "person",
+      "umbrella"
+    ]
+  },
+  {
+    "image_id": 524850,
+    "file_name": "000000524850.jpg",
+    "full_path": "data/coco/val2017/000000524850.jpg",
+    "expected_entities": [
+      "airplane",
+      "backpack",
+      "bus",
+      "handbag",
+      "person",
+      "suitcase",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 466339,
+    "file_name": "000000466339.jpg",
+    "full_path": "data/coco/val2017/000000466339.jpg",
+    "expected_entities": [
+      "cat"
+    ]
+  },
+  {
+    "image_id": 328430,
+    "file_name": "000000328430.jpg",
+    "full_path": "data/coco/val2017/000000328430.jpg",
+    "expected_entities": [
+      "chair",
+      "person",
+      "sports ball",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 384670,
+    "file_name": "000000384670.jpg",
+    "full_path": "data/coco/val2017/000000384670.jpg",
+    "expected_entities": [
+      "person",
+      "sports ball",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 483050,
+    "file_name": "000000483050.jpg",
+    "full_path": "data/coco/val2017/000000483050.jpg",
+    "expected_entities": [
+      "bed",
+      "clock",
+      "cup"
+    ]
+  },
+  {
+    "image_id": 189828,
+    "file_name": "000000189828.jpg",
+    "full_path": "data/coco/val2017/000000189828.jpg",
+    "expected_entities": [
+      "airplane"
+    ]
+  },
+  {
+    "image_id": 577976,
+    "file_name": "000000577976.jpg",
+    "full_path": "data/coco/val2017/000000577976.jpg",
+    "expected_entities": [
+      "car",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 460929,
+    "file_name": "000000460929.jpg",
+    "full_path": "data/coco/val2017/000000460929.jpg",
+    "expected_entities": [
+      "bottle",
+      "hot dog"
+    ]
+  },
+  {
+    "image_id": 91619,
+    "file_name": "000000091619.jpg",
+    "full_path": "data/coco/val2017/000000091619.jpg",
+    "expected_entities": [
+      "stop sign"
+    ]
+  },
+  {
+    "image_id": 92839,
+    "file_name": "000000092839.jpg",
+    "full_path": "data/coco/val2017/000000092839.jpg",
+    "expected_entities": [
+      "bear"
+    ]
+  },
+  {
+    "image_id": 34257,
+    "file_name": "000000034257.jpg",
+    "full_path": "data/coco/val2017/000000034257.jpg",
+    "expected_entities": [
+      "broccoli",
+      "carrot"
+    ]
+  },
+  {
+    "image_id": 370900,
+    "file_name": "000000370900.jpg",
+    "full_path": "data/coco/val2017/000000370900.jpg",
+    "expected_entities": [
+      "teddy bear"
+    ]
+  },
+  {
+    "image_id": 344816,
+    "file_name": "000000344816.jpg",
+    "full_path": "data/coco/val2017/000000344816.jpg",
+    "expected_entities": [
+      "train"
+    ]
+  },
+  {
+    "image_id": 530146,
+    "file_name": "000000530146.jpg",
+    "full_path": "data/coco/val2017/000000530146.jpg",
+    "expected_entities": [
+      "bottle",
+      "bowl",
+      "cup",
+      "dining table",
+      "fork",
+      "knife"
+    ]
+  },
+  {
+    "image_id": 476491,
+    "file_name": "000000476491.jpg",
+    "full_path": "data/coco/val2017/000000476491.jpg",
+    "expected_entities": []
+  },
+  {
+    "image_id": 126107,
+    "file_name": "000000126107.jpg",
+    "full_path": "data/coco/val2017/000000126107.jpg",
+    "expected_entities": [
+      "bird",
+      "boat",
+      "person"
+    ]
+  },
+  {
+    "image_id": 80949,
+    "file_name": "000000080949.jpg",
+    "full_path": "data/coco/val2017/000000080949.jpg",
+    "expected_entities": [
+      "bottle",
+      "cat",
+      "cup",
+      "laptop"
+    ]
+  },
+  {
+    "image_id": 507797,
+    "file_name": "000000507797.jpg",
+    "full_path": "data/coco/val2017/000000507797.jpg",
+    "expected_entities": [
+      "bus",
+      "car",
+      "handbag",
+      "person"
+    ]
+  },
+  {
+    "image_id": 135670,
+    "file_name": "000000135670.jpg",
+    "full_path": "data/coco/val2017/000000135670.jpg",
+    "expected_entities": [
+      "bicycle"
+    ]
+  },
+  {
+    "image_id": 357888,
+    "file_name": "000000357888.jpg",
+    "full_path": "data/coco/val2017/000000357888.jpg",
+    "expected_entities": [
+      "apple",
+      "bottle",
+      "bowl",
+      "clock",
+      "cup",
+      "kite",
+      "person",
+      "vase",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 289702,
+    "file_name": "000000289702.jpg",
+    "full_path": "data/coco/val2017/000000289702.jpg",
+    "expected_entities": [
+      "dog"
+    ]
+  }
+]

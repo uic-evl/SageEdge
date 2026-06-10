@@ -1,0 +1,4983 @@
+[
+  {
+    "image_id": 139,
+    "file_name": "000000000139.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000000139.jpg",
+    "expected_entities": [
+      "book",
+      "chair",
+      "clock",
+      "dining table",
+      "microwave",
+      "person",
+      "potted plant",
+      "refrigerator",
+      "tv",
+      "vase"
+    ]
+  },
+  {
+    "image_id": 285,
+    "file_name": "000000000285.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000000285.jpg",
+    "expected_entities": [
+      "bear"
+    ]
+  },
+  {
+    "image_id": 632,
+    "file_name": "000000000632.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000000632.jpg",
+    "expected_entities": [
+      "bed",
+      "book",
+      "chair",
+      "potted plant"
+    ]
+  },
+  {
+    "image_id": 724,
+    "file_name": "000000000724.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000000724.jpg",
+    "expected_entities": [
+      "car",
+      "stop sign",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 776,
+    "file_name": "000000000776.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000000776.jpg",
+    "expected_entities": [
+      "bed",
+      "teddy bear"
+    ]
+  },
+  {
+    "image_id": 785,
+    "file_name": "000000000785.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000000785.jpg",
+    "expected_entities": [
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 802,
+    "file_name": "000000000802.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000000802.jpg",
+    "expected_entities": [
+      "oven",
+      "refrigerator"
+    ]
+  },
+  {
+    "image_id": 872,
+    "file_name": "000000000872.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000000872.jpg",
+    "expected_entities": [
+      "baseball glove",
+      "person",
+      "sports ball"
+    ]
+  },
+  {
+    "image_id": 885,
+    "file_name": "000000000885.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000000885.jpg",
+    "expected_entities": [
+      "person",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 1000,
+    "file_name": "000000001000.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000001000.jpg",
+    "expected_entities": [
+      "backpack",
+      "handbag",
+      "person",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 1268,
+    "file_name": "000000001268.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000001268.jpg",
+    "expected_entities": [
+      "backpack",
+      "bird",
+      "boat",
+      "cell phone",
+      "handbag",
+      "person"
+    ]
+  },
+  {
+    "image_id": 1296,
+    "file_name": "000000001296.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000001296.jpg",
+    "expected_entities": [
+      "cell phone",
+      "clock",
+      "person"
+    ]
+  },
+  {
+    "image_id": 1353,
+    "file_name": "000000001353.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000001353.jpg",
+    "expected_entities": [
+      "person",
+      "train"
+    ]
+  },
+  {
+    "image_id": 1425,
+    "file_name": "000000001425.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000001425.jpg",
+    "expected_entities": [
+      "bowl",
+      "sandwich"
+    ]
+  },
+  {
+    "image_id": 1490,
+    "file_name": "000000001490.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000001490.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 1503,
+    "file_name": "000000001503.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000001503.jpg",
+    "expected_entities": [
+      "keyboard",
+      "laptop",
+      "mouse",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 1532,
+    "file_name": "000000001532.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000001532.jpg",
+    "expected_entities": [
+      "car",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 1584,
+    "file_name": "000000001584.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000001584.jpg",
+    "expected_entities": [
+      "bus",
+      "person"
+    ]
+  },
+  {
+    "image_id": 1675,
+    "file_name": "000000001675.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000001675.jpg",
+    "expected_entities": [
+      "cat",
+      "keyboard"
+    ]
+  },
+  {
+    "image_id": 1761,
+    "file_name": "000000001761.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000001761.jpg",
+    "expected_entities": [
+      "airplane",
+      "person"
+    ]
+  },
+  {
+    "image_id": 1818,
+    "file_name": "000000001818.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000001818.jpg",
+    "expected_entities": [
+      "zebra"
+    ]
+  },
+  {
+    "image_id": 1993,
+    "file_name": "000000001993.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000001993.jpg",
+    "expected_entities": [
+      "bed",
+      "chair",
+      "dining table"
+    ]
+  },
+  {
+    "image_id": 2006,
+    "file_name": "000000002006.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000002006.jpg",
+    "expected_entities": [
+      "bus",
+      "person",
+      "tie",
+      "traffic light"
+    ]
+  },
+  {
+    "image_id": 2149,
+    "file_name": "000000002149.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000002149.jpg",
+    "expected_entities": [
+      "apple",
+      "bowl"
+    ]
+  },
+  {
+    "image_id": 2153,
+    "file_name": "000000002153.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000002153.jpg",
+    "expected_entities": [
+      "baseball bat",
+      "person"
+    ]
+  },
+  {
+    "image_id": 2157,
+    "file_name": "000000002157.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000002157.jpg",
+    "expected_entities": [
+      "cake",
+      "cup",
+      "dining table",
+      "knife",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 2261,
+    "file_name": "000000002261.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000002261.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 2299,
+    "file_name": "000000002299.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000002299.jpg",
+    "expected_entities": [
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 2431,
+    "file_name": "000000002431.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000002431.jpg",
+    "expected_entities": [
+      "cup",
+      "dining table",
+      "knife",
+      "person",
+      "spoon",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 2473,
+    "file_name": "000000002473.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000002473.jpg",
+    "expected_entities": [
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 2532,
+    "file_name": "000000002532.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000002532.jpg",
+    "expected_entities": [
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 2587,
+    "file_name": "000000002587.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000002587.jpg",
+    "expected_entities": [
+      "banana",
+      "donut"
+    ]
+  },
+  {
+    "image_id": 2592,
+    "file_name": "000000002592.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000002592.jpg",
+    "expected_entities": [
+      "cup",
+      "dining table",
+      "knife"
+    ]
+  },
+  {
+    "image_id": 2685,
+    "file_name": "000000002685.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000002685.jpg",
+    "expected_entities": [
+      "bottle",
+      "cup",
+      "handbag",
+      "person",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 2923,
+    "file_name": "000000002923.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000002923.jpg",
+    "expected_entities": [
+      "bird",
+      "boat"
+    ]
+  },
+  {
+    "image_id": 3156,
+    "file_name": "000000003156.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000003156.jpg",
+    "expected_entities": [
+      "person",
+      "sink",
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 3255,
+    "file_name": "000000003255.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000003255.jpg",
+    "expected_entities": [
+      "backpack",
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 3501,
+    "file_name": "000000003501.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000003501.jpg",
+    "expected_entities": [
+      "bowl",
+      "broccoli"
+    ]
+  },
+  {
+    "image_id": 3553,
+    "file_name": "000000003553.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000003553.jpg",
+    "expected_entities": [
+      "person",
+      "skateboard"
+    ]
+  },
+  {
+    "image_id": 3661,
+    "file_name": "000000003661.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000003661.jpg",
+    "expected_entities": [
+      "banana",
+      "cup",
+      "keyboard"
+    ]
+  },
+  {
+    "image_id": 3845,
+    "file_name": "000000003845.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000003845.jpg",
+    "expected_entities": [
+      "broccoli",
+      "carrot",
+      "cup",
+      "dining table",
+      "fork",
+      "spoon"
+    ]
+  },
+  {
+    "image_id": 3934,
+    "file_name": "000000003934.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000003934.jpg",
+    "expected_entities": [
+      "couch",
+      "cup",
+      "person",
+      "remote",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 4134,
+    "file_name": "000000004134.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000004134.jpg",
+    "expected_entities": [
+      "chair",
+      "dining table",
+      "person",
+      "tie",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 4395,
+    "file_name": "000000004395.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000004395.jpg",
+    "expected_entities": [
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 4495,
+    "file_name": "000000004495.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000004495.jpg",
+    "expected_entities": [
+      "chair",
+      "couch",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 4765,
+    "file_name": "000000004765.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000004765.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 4795,
+    "file_name": "000000004795.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000004795.jpg",
+    "expected_entities": [
+      "cat",
+      "laptop",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 5001,
+    "file_name": "000000005001.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000005001.jpg",
+    "expected_entities": [
+      "bicycle",
+      "handbag",
+      "person",
+      "scissors"
+    ]
+  },
+  {
+    "image_id": 5037,
+    "file_name": "000000005037.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000005037.jpg",
+    "expected_entities": [
+      "bus",
+      "car",
+      "person"
+    ]
+  },
+  {
+    "image_id": 5060,
+    "file_name": "000000005060.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000005060.jpg",
+    "expected_entities": [
+      "cell phone",
+      "person"
+    ]
+  },
+  {
+    "image_id": 5193,
+    "file_name": "000000005193.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000005193.jpg",
+    "expected_entities": [
+      "bottle",
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 5477,
+    "file_name": "000000005477.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000005477.jpg",
+    "expected_entities": [
+      "airplane"
+    ]
+  },
+  {
+    "image_id": 5503,
+    "file_name": "000000005503.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000005503.jpg",
+    "expected_entities": [
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 5529,
+    "file_name": "000000005529.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000005529.jpg",
+    "expected_entities": [
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 5586,
+    "file_name": "000000005586.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000005586.jpg",
+    "expected_entities": [
+      "person",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 5600,
+    "file_name": "000000005600.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000005600.jpg",
+    "expected_entities": [
+      "bowl",
+      "spoon"
+    ]
+  },
+  {
+    "image_id": 5992,
+    "file_name": "000000005992.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000005992.jpg",
+    "expected_entities": [
+      "sheep"
+    ]
+  },
+  {
+    "image_id": 6012,
+    "file_name": "000000006012.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000006012.jpg",
+    "expected_entities": [
+      "banana"
+    ]
+  },
+  {
+    "image_id": 6040,
+    "file_name": "000000006040.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000006040.jpg",
+    "expected_entities": [
+      "car",
+      "person",
+      "train",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 6213,
+    "file_name": "000000006213.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000006213.jpg",
+    "expected_entities": [
+      "sink"
+    ]
+  },
+  {
+    "image_id": 6460,
+    "file_name": "000000006460.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000006460.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 6471,
+    "file_name": "000000006471.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000006471.jpg",
+    "expected_entities": [
+      "baseball bat",
+      "baseball glove",
+      "bench",
+      "bottle",
+      "person"
+    ]
+  },
+  {
+    "image_id": 6614,
+    "file_name": "000000006614.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000006614.jpg",
+    "expected_entities": [
+      "apple",
+      "orange"
+    ]
+  },
+  {
+    "image_id": 6723,
+    "file_name": "000000006723.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000006723.jpg",
+    "expected_entities": [
+      "bus",
+      "car",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 6763,
+    "file_name": "000000006763.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000006763.jpg",
+    "expected_entities": [
+      "cell phone",
+      "dining table",
+      "person",
+      "tie",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 6771,
+    "file_name": "000000006771.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000006771.jpg",
+    "expected_entities": [
+      "cell phone",
+      "person"
+    ]
+  },
+  {
+    "image_id": 6818,
+    "file_name": "000000006818.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000006818.jpg",
+    "expected_entities": [
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 6894,
+    "file_name": "000000006894.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000006894.jpg",
+    "expected_entities": [
+      "elephant",
+      "person"
+    ]
+  },
+  {
+    "image_id": 6954,
+    "file_name": "000000006954.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000006954.jpg",
+    "expected_entities": [
+      "frisbee",
+      "person"
+    ]
+  },
+  {
+    "image_id": 7088,
+    "file_name": "000000007088.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000007088.jpg",
+    "expected_entities": [
+      "car",
+      "person",
+      "truck",
+      "umbrella"
+    ]
+  },
+  {
+    "image_id": 7108,
+    "file_name": "000000007108.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000007108.jpg",
+    "expected_entities": [
+      "elephant"
+    ]
+  },
+  {
+    "image_id": 7278,
+    "file_name": "000000007278.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000007278.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 7281,
+    "file_name": "000000007281.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000007281.jpg",
+    "expected_entities": [
+      "horse",
+      "person"
+    ]
+  },
+  {
+    "image_id": 7386,
+    "file_name": "000000007386.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000007386.jpg",
+    "expected_entities": [
+      "bicycle",
+      "dog",
+      "motorcycle",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 7511,
+    "file_name": "000000007511.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000007511.jpg",
+    "expected_entities": [
+      "backpack",
+      "kite",
+      "person"
+    ]
+  },
+  {
+    "image_id": 7574,
+    "file_name": "000000007574.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000007574.jpg",
+    "expected_entities": [
+      "bottle",
+      "bowl",
+      "microwave",
+      "oven",
+      "refrigerator",
+      "sink",
+      "vase",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 7784,
+    "file_name": "000000007784.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000007784.jpg",
+    "expected_entities": [
+      "kite"
+    ]
+  },
+  {
+    "image_id": 7795,
+    "file_name": "000000007795.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000007795.jpg",
+    "expected_entities": [
+      "bed",
+      "clock",
+      "remote"
+    ]
+  },
+  {
+    "image_id": 7816,
+    "file_name": "000000007816.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000007816.jpg",
+    "expected_entities": [
+      "motorcycle",
+      "person"
+    ]
+  },
+  {
+    "image_id": 7818,
+    "file_name": "000000007818.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000007818.jpg",
+    "expected_entities": [
+      "chair",
+      "dining table",
+      "fork",
+      "knife",
+      "vase",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 7888,
+    "file_name": "000000007888.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000007888.jpg",
+    "expected_entities": [
+      "clock"
+    ]
+  },
+  {
+    "image_id": 7977,
+    "file_name": "000000007977.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000007977.jpg",
+    "expected_entities": [
+      "person",
+      "skateboard"
+    ]
+  },
+  {
+    "image_id": 7991,
+    "file_name": "000000007991.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000007991.jpg",
+    "expected_entities": [
+      "carrot",
+      "knife"
+    ]
+  },
+  {
+    "image_id": 8021,
+    "file_name": "000000008021.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000008021.jpg",
+    "expected_entities": [
+      "bottle",
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 8211,
+    "file_name": "000000008211.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000008211.jpg",
+    "expected_entities": [
+      "bicycle",
+      "chair",
+      "motorcycle",
+      "person"
+    ]
+  },
+  {
+    "image_id": 8277,
+    "file_name": "000000008277.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000008277.jpg",
+    "expected_entities": [
+      "bowl",
+      "broccoli",
+      "fork"
+    ]
+  },
+  {
+    "image_id": 8532,
+    "file_name": "000000008532.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000008532.jpg",
+    "expected_entities": [
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 8629,
+    "file_name": "000000008629.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000008629.jpg",
+    "expected_entities": [
+      "fork",
+      "pizza"
+    ]
+  },
+  {
+    "image_id": 8690,
+    "file_name": "000000008690.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000008690.jpg",
+    "expected_entities": [
+      "person",
+      "sheep"
+    ]
+  },
+  {
+    "image_id": 8762,
+    "file_name": "000000008762.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000008762.jpg",
+    "expected_entities": [
+      "car",
+      "traffic light"
+    ]
+  },
+  {
+    "image_id": 8844,
+    "file_name": "000000008844.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000008844.jpg",
+    "expected_entities": [
+      "banana",
+      "person"
+    ]
+  },
+  {
+    "image_id": 8899,
+    "file_name": "000000008899.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000008899.jpg",
+    "expected_entities": [
+      "bicycle",
+      "fire hydrant"
+    ]
+  },
+  {
+    "image_id": 9378,
+    "file_name": "000000009378.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000009378.jpg",
+    "expected_entities": [
+      "frisbee",
+      "person"
+    ]
+  },
+  {
+    "image_id": 9400,
+    "file_name": "000000009400.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000009400.jpg",
+    "expected_entities": [
+      "cup",
+      "keyboard",
+      "laptop",
+      "mouse",
+      "person"
+    ]
+  },
+  {
+    "image_id": 9448,
+    "file_name": "000000009448.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000009448.jpg",
+    "expected_entities": [
+      "person",
+      "umbrella"
+    ]
+  },
+  {
+    "image_id": 9483,
+    "file_name": "000000009483.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000009483.jpg",
+    "expected_entities": [
+      "keyboard",
+      "mouse",
+      "person",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 9590,
+    "file_name": "000000009590.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000009590.jpg",
+    "expected_entities": [
+      "bottle",
+      "bowl",
+      "chair",
+      "clock",
+      "cup",
+      "dining table",
+      "person",
+      "spoon"
+    ]
+  },
+  {
+    "image_id": 9769,
+    "file_name": "000000009769.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000009769.jpg",
+    "expected_entities": [
+      "fire hydrant",
+      "person",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 9772,
+    "file_name": "000000009772.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000009772.jpg",
+    "expected_entities": [
+      "person",
+      "sink",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 9891,
+    "file_name": "000000009891.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000009891.jpg",
+    "expected_entities": [
+      "backpack",
+      "car",
+      "person",
+      "suitcase",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 9914,
+    "file_name": "000000009914.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000009914.jpg",
+    "expected_entities": [
+      "bowl",
+      "dining table",
+      "hot dog",
+      "knife",
+      "sandwich"
+    ]
+  },
+  {
+    "image_id": 10092,
+    "file_name": "000000010092.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000010092.jpg",
+    "expected_entities": [
+      "bed",
+      "bird",
+      "chair",
+      "dining table"
+    ]
+  },
+  {
+    "image_id": 10363,
+    "file_name": "000000010363.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000010363.jpg",
+    "expected_entities": [
+      "bicycle",
+      "bottle",
+      "car",
+      "cat"
+    ]
+  },
+  {
+    "image_id": 10583,
+    "file_name": "000000010583.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000010583.jpg",
+    "expected_entities": [
+      "dining table",
+      "knife",
+      "sandwich"
+    ]
+  },
+  {
+    "image_id": 10707,
+    "file_name": "000000010707.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000010707.jpg",
+    "expected_entities": [
+      "backpack",
+      "bottle",
+      "couch",
+      "cup",
+      "dining table",
+      "laptop",
+      "person",
+      "remote"
+    ]
+  },
+  {
+    "image_id": 10764,
+    "file_name": "000000010764.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000010764.jpg",
+    "expected_entities": [
+      "baseball glove",
+      "person"
+    ]
+  },
+  {
+    "image_id": 10977,
+    "file_name": "000000010977.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000010977.jpg",
+    "expected_entities": [
+      "sink",
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 10995,
+    "file_name": "000000010995.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000010995.jpg",
+    "expected_entities": [
+      "bed"
+    ]
+  },
+  {
+    "image_id": 11051,
+    "file_name": "000000011051.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000011051.jpg",
+    "expected_entities": [
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 11122,
+    "file_name": "000000011122.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000011122.jpg",
+    "expected_entities": [
+      "stop sign"
+    ]
+  },
+  {
+    "image_id": 11149,
+    "file_name": "000000011149.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000011149.jpg",
+    "expected_entities": [
+      "bicycle",
+      "motorcycle",
+      "person"
+    ]
+  },
+  {
+    "image_id": 11197,
+    "file_name": "000000011197.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000011197.jpg",
+    "expected_entities": [
+      "backpack",
+      "bicycle",
+      "car",
+      "person",
+      "traffic light"
+    ]
+  },
+  {
+    "image_id": 11511,
+    "file_name": "000000011511.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000011511.jpg",
+    "expected_entities": [
+      "bench",
+      "handbag",
+      "motorcycle",
+      "person"
+    ]
+  },
+  {
+    "image_id": 11615,
+    "file_name": "000000011615.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000011615.jpg",
+    "expected_entities": [
+      "truck"
+    ]
+  },
+  {
+    "image_id": 11699,
+    "file_name": "000000011699.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000011699.jpg",
+    "expected_entities": [
+      "handbag",
+      "person",
+      "suitcase"
+    ]
+  },
+  {
+    "image_id": 11760,
+    "file_name": "000000011760.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000011760.jpg",
+    "expected_entities": [
+      "zebra"
+    ]
+  },
+  {
+    "image_id": 11813,
+    "file_name": "000000011813.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000011813.jpg",
+    "expected_entities": [
+      "chair",
+      "laptop"
+    ]
+  },
+  {
+    "image_id": 12062,
+    "file_name": "000000012062.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000012062.jpg",
+    "expected_entities": [
+      "sheep",
+      "sports ball"
+    ]
+  },
+  {
+    "image_id": 12120,
+    "file_name": "000000012120.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000012120.jpg",
+    "expected_entities": [
+      "chair",
+      "person",
+      "sports ball",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 12280,
+    "file_name": "000000012280.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000012280.jpg",
+    "expected_entities": [
+      "person",
+      "suitcase",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 12576,
+    "file_name": "000000012576.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000012576.jpg",
+    "expected_entities": [
+      "cup",
+      "dining table",
+      "fork",
+      "knife",
+      "person",
+      "pizza",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 12639,
+    "file_name": "000000012639.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000012639.jpg",
+    "expected_entities": [
+      "baseball bat",
+      "baseball glove",
+      "person"
+    ]
+  },
+  {
+    "image_id": 12667,
+    "file_name": "000000012667.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000012667.jpg",
+    "expected_entities": [
+      "banana"
+    ]
+  },
+  {
+    "image_id": 12670,
+    "file_name": "000000012670.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000012670.jpg",
+    "expected_entities": [
+      "backpack",
+      "cell phone",
+      "handbag",
+      "person",
+      "teddy bear"
+    ]
+  },
+  {
+    "image_id": 12748,
+    "file_name": "000000012748.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000012748.jpg",
+    "expected_entities": [
+      "horse",
+      "person"
+    ]
+  },
+  {
+    "image_id": 13004,
+    "file_name": "000000013004.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000013004.jpg",
+    "expected_entities": [
+      "banana",
+      "dining table"
+    ]
+  },
+  {
+    "image_id": 13177,
+    "file_name": "000000013177.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000013177.jpg",
+    "expected_entities": [
+      "bicycle",
+      "motorcycle",
+      "person"
+    ]
+  },
+  {
+    "image_id": 13201,
+    "file_name": "000000013201.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000013201.jpg",
+    "expected_entities": [
+      "person",
+      "skateboard"
+    ]
+  },
+  {
+    "image_id": 13291,
+    "file_name": "000000013291.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000013291.jpg",
+    "expected_entities": [
+      "frisbee",
+      "person"
+    ]
+  },
+  {
+    "image_id": 13348,
+    "file_name": "000000013348.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000013348.jpg",
+    "expected_entities": [
+      "airplane",
+      "person",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 13546,
+    "file_name": "000000013546.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000013546.jpg",
+    "expected_entities": [
+      "bench",
+      "person",
+      "skateboard"
+    ]
+  },
+  {
+    "image_id": 13597,
+    "file_name": "000000013597.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000013597.jpg",
+    "expected_entities": [
+      "cake",
+      "dining table"
+    ]
+  },
+  {
+    "image_id": 13659,
+    "file_name": "000000013659.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000013659.jpg",
+    "expected_entities": [
+      "chair",
+      "cup",
+      "dining table",
+      "laptop",
+      "person",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 13729,
+    "file_name": "000000013729.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000013729.jpg",
+    "expected_entities": [
+      "bottle",
+      "couch",
+      "cup",
+      "dining table",
+      "person",
+      "remote"
+    ]
+  },
+  {
+    "image_id": 13774,
+    "file_name": "000000013774.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000013774.jpg",
+    "expected_entities": [
+      "frisbee",
+      "person"
+    ]
+  },
+  {
+    "image_id": 13923,
+    "file_name": "000000013923.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000013923.jpg",
+    "expected_entities": [
+      "bottle",
+      "bowl",
+      "chair",
+      "couch",
+      "dining table",
+      "potted plant",
+      "tv",
+      "vase"
+    ]
+  },
+  {
+    "image_id": 14007,
+    "file_name": "000000014007.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000014007.jpg",
+    "expected_entities": [
+      "cat",
+      "refrigerator"
+    ]
+  },
+  {
+    "image_id": 14038,
+    "file_name": "000000014038.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000014038.jpg",
+    "expected_entities": [
+      "bed",
+      "book",
+      "bottle",
+      "cell phone",
+      "chair",
+      "couch",
+      "dining table",
+      "microwave",
+      "potted plant",
+      "refrigerator",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 14226,
+    "file_name": "000000014226.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000014226.jpg",
+    "expected_entities": [
+      "apple",
+      "chair",
+      "dining table",
+      "laptop",
+      "person"
+    ]
+  },
+  {
+    "image_id": 14380,
+    "file_name": "000000014380.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000014380.jpg",
+    "expected_entities": [
+      "car",
+      "train"
+    ]
+  },
+  {
+    "image_id": 14439,
+    "file_name": "000000014439.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000014439.jpg",
+    "expected_entities": [
+      "backpack",
+      "chair",
+      "kite",
+      "person"
+    ]
+  },
+  {
+    "image_id": 14473,
+    "file_name": "000000014473.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000014473.jpg",
+    "expected_entities": [
+      "person",
+      "train"
+    ]
+  },
+  {
+    "image_id": 14831,
+    "file_name": "000000014831.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000014831.jpg",
+    "expected_entities": [
+      "bed",
+      "cat"
+    ]
+  },
+  {
+    "image_id": 14888,
+    "file_name": "000000014888.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000014888.jpg",
+    "expected_entities": [
+      "cow"
+    ]
+  },
+  {
+    "image_id": 15079,
+    "file_name": "000000015079.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000015079.jpg",
+    "expected_entities": [
+      "knife",
+      "sandwich"
+    ]
+  },
+  {
+    "image_id": 15254,
+    "file_name": "000000015254.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000015254.jpg",
+    "expected_entities": [
+      "bowl",
+      "carrot",
+      "spoon"
+    ]
+  },
+  {
+    "image_id": 15272,
+    "file_name": "000000015272.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000015272.jpg",
+    "expected_entities": [
+      "traffic light"
+    ]
+  },
+  {
+    "image_id": 15278,
+    "file_name": "000000015278.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000015278.jpg",
+    "expected_entities": [
+      "broccoli"
+    ]
+  },
+  {
+    "image_id": 15335,
+    "file_name": "000000015335.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000015335.jpg",
+    "expected_entities": [
+      "bowl",
+      "cell phone",
+      "couch",
+      "cup",
+      "person"
+    ]
+  },
+  {
+    "image_id": 15338,
+    "file_name": "000000015338.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000015338.jpg",
+    "expected_entities": [
+      "bus",
+      "car",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 15440,
+    "file_name": "000000015440.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000015440.jpg",
+    "expected_entities": [
+      "bus",
+      "stop sign"
+    ]
+  },
+  {
+    "image_id": 15497,
+    "file_name": "000000015497.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000015497.jpg",
+    "expected_entities": [
+      "cat",
+      "couch",
+      "mouse"
+    ]
+  },
+  {
+    "image_id": 15517,
+    "file_name": "000000015517.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000015517.jpg",
+    "expected_entities": [
+      "bus"
+    ]
+  },
+  {
+    "image_id": 15597,
+    "file_name": "000000015597.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000015597.jpg",
+    "expected_entities": [
+      "bicycle",
+      "person",
+      "skateboard"
+    ]
+  },
+  {
+    "image_id": 15660,
+    "file_name": "000000015660.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000015660.jpg",
+    "expected_entities": [
+      "kite",
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 15746,
+    "file_name": "000000015746.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000015746.jpg",
+    "expected_entities": [
+      "fire hydrant"
+    ]
+  },
+  {
+    "image_id": 15751,
+    "file_name": "000000015751.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000015751.jpg",
+    "expected_entities": [
+      "bird"
+    ]
+  },
+  {
+    "image_id": 15956,
+    "file_name": "000000015956.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000015956.jpg",
+    "expected_entities": [
+      "clock",
+      "horse",
+      "person"
+    ]
+  },
+  {
+    "image_id": 16010,
+    "file_name": "000000016010.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000016010.jpg",
+    "expected_entities": [
+      "cow",
+      "zebra"
+    ]
+  },
+  {
+    "image_id": 16228,
+    "file_name": "000000016228.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000016228.jpg",
+    "expected_entities": [
+      "bench",
+      "horse",
+      "person",
+      "tie",
+      "train",
+      "umbrella"
+    ]
+  },
+  {
+    "image_id": 16249,
+    "file_name": "000000016249.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000016249.jpg",
+    "expected_entities": [
+      "backpack",
+      "bench",
+      "chair",
+      "person"
+    ]
+  },
+  {
+    "image_id": 16439,
+    "file_name": "000000016439.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000016439.jpg",
+    "expected_entities": [
+      "laptop",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 16451,
+    "file_name": "000000016451.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000016451.jpg",
+    "expected_entities": [
+      "backpack",
+      "chair",
+      "handbag",
+      "person",
+      "surfboard",
+      "umbrella"
+    ]
+  },
+  {
+    "image_id": 16502,
+    "file_name": "000000016502.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000016502.jpg",
+    "expected_entities": [
+      "sheep"
+    ]
+  },
+  {
+    "image_id": 16598,
+    "file_name": "000000016598.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000016598.jpg",
+    "expected_entities": [
+      "cell phone",
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 16958,
+    "file_name": "000000016958.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000016958.jpg",
+    "expected_entities": [
+      "book",
+      "chair",
+      "vase"
+    ]
+  },
+  {
+    "image_id": 17029,
+    "file_name": "000000017029.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000017029.jpg",
+    "expected_entities": [
+      "car",
+      "dog",
+      "frisbee"
+    ]
+  },
+  {
+    "image_id": 17031,
+    "file_name": "000000017031.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000017031.jpg",
+    "expected_entities": [
+      "giraffe"
+    ]
+  },
+  {
+    "image_id": 17115,
+    "file_name": "000000017115.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000017115.jpg",
+    "expected_entities": [
+      "zebra"
+    ]
+  },
+  {
+    "image_id": 17178,
+    "file_name": "000000017178.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000017178.jpg",
+    "expected_entities": [
+      "car",
+      "horse"
+    ]
+  },
+  {
+    "image_id": 17182,
+    "file_name": "000000017182.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000017182.jpg",
+    "expected_entities": [
+      "apple",
+      "book",
+      "chair"
+    ]
+  },
+  {
+    "image_id": 17207,
+    "file_name": "000000017207.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000017207.jpg",
+    "expected_entities": [
+      "bus",
+      "car",
+      "motorcycle",
+      "person"
+    ]
+  },
+  {
+    "image_id": 17379,
+    "file_name": "000000017379.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000017379.jpg",
+    "expected_entities": [
+      "person",
+      "sink",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 17436,
+    "file_name": "000000017436.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000017436.jpg",
+    "expected_entities": [
+      "bench",
+      "person"
+    ]
+  },
+  {
+    "image_id": 17627,
+    "file_name": "000000017627.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000017627.jpg",
+    "expected_entities": [
+      "bus",
+      "car",
+      "person"
+    ]
+  },
+  {
+    "image_id": 17714,
+    "file_name": "000000017714.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000017714.jpg",
+    "expected_entities": [
+      "banana",
+      "cup",
+      "dining table",
+      "fork",
+      "knife",
+      "pizza",
+      "spoon"
+    ]
+  },
+  {
+    "image_id": 17899,
+    "file_name": "000000017899.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000017899.jpg",
+    "expected_entities": [
+      "bird",
+      "cake",
+      "chair",
+      "couch",
+      "cup",
+      "dining table",
+      "hot dog",
+      "person",
+      "spoon"
+    ]
+  },
+  {
+    "image_id": 17905,
+    "file_name": "000000017905.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000017905.jpg",
+    "expected_entities": [
+      "fire hydrant",
+      "person",
+      "traffic light"
+    ]
+  },
+  {
+    "image_id": 17959,
+    "file_name": "000000017959.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000017959.jpg",
+    "expected_entities": [
+      "backpack",
+      "kite",
+      "person"
+    ]
+  },
+  {
+    "image_id": 18150,
+    "file_name": "000000018150.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000018150.jpg",
+    "expected_entities": [
+      "backpack",
+      "bottle",
+      "couch",
+      "person",
+      "pizza"
+    ]
+  },
+  {
+    "image_id": 18193,
+    "file_name": "000000018193.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000018193.jpg",
+    "expected_entities": [
+      "chair",
+      "hot dog",
+      "person"
+    ]
+  },
+  {
+    "image_id": 18380,
+    "file_name": "000000018380.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000018380.jpg",
+    "expected_entities": [
+      "bowl",
+      "carrot",
+      "chair",
+      "cup",
+      "dining table",
+      "fork",
+      "knife",
+      "person",
+      "spoon",
+      "vase",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 18491,
+    "file_name": "000000018491.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000018491.jpg",
+    "expected_entities": [
+      "baseball bat",
+      "baseball glove",
+      "bench",
+      "person"
+    ]
+  },
+  {
+    "image_id": 18519,
+    "file_name": "000000018519.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000018519.jpg",
+    "expected_entities": [
+      "person"
+    ]
+  },
+  {
+    "image_id": 18575,
+    "file_name": "000000018575.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000018575.jpg",
+    "expected_entities": [
+      "bottle",
+      "bowl",
+      "dining table",
+      "knife",
+      "sandwich",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 18737,
+    "file_name": "000000018737.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000018737.jpg",
+    "expected_entities": [
+      "motorcycle"
+    ]
+  },
+  {
+    "image_id": 18770,
+    "file_name": "000000018770.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000018770.jpg",
+    "expected_entities": [
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 18833,
+    "file_name": "000000018833.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000018833.jpg",
+    "expected_entities": [
+      "cat"
+    ]
+  },
+  {
+    "image_id": 18837,
+    "file_name": "000000018837.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000018837.jpg",
+    "expected_entities": [
+      "car",
+      "person",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 19042,
+    "file_name": "000000019042.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000019042.jpg",
+    "expected_entities": [
+      "bird",
+      "car"
+    ]
+  },
+  {
+    "image_id": 19109,
+    "file_name": "000000019109.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000019109.jpg",
+    "expected_entities": [
+      "handbag",
+      "motorcycle",
+      "person"
+    ]
+  },
+  {
+    "image_id": 19221,
+    "file_name": "000000019221.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000019221.jpg",
+    "expected_entities": [
+      "broccoli",
+      "person"
+    ]
+  },
+  {
+    "image_id": 19402,
+    "file_name": "000000019402.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000019402.jpg",
+    "expected_entities": [
+      "person",
+      "pizza"
+    ]
+  },
+  {
+    "image_id": 19432,
+    "file_name": "000000019432.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000019432.jpg",
+    "expected_entities": [
+      "chair",
+      "person",
+      "sports ball",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 19742,
+    "file_name": "000000019742.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000019742.jpg",
+    "expected_entities": [
+      "vase"
+    ]
+  },
+  {
+    "image_id": 19786,
+    "file_name": "000000019786.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000019786.jpg",
+    "expected_entities": [
+      "couch",
+      "laptop",
+      "person",
+      "remote"
+    ]
+  },
+  {
+    "image_id": 19924,
+    "file_name": "000000019924.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000019924.jpg",
+    "expected_entities": [
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 20059,
+    "file_name": "000000020059.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000020059.jpg",
+    "expected_entities": [
+      "zebra"
+    ]
+  },
+  {
+    "image_id": 20107,
+    "file_name": "000000020107.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000020107.jpg",
+    "expected_entities": [
+      "fire hydrant"
+    ]
+  },
+  {
+    "image_id": 20247,
+    "file_name": "000000020247.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000020247.jpg",
+    "expected_entities": [
+      "bear"
+    ]
+  },
+  {
+    "image_id": 20333,
+    "file_name": "000000020333.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000020333.jpg",
+    "expected_entities": [
+      "bowl",
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 20553,
+    "file_name": "000000020553.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000020553.jpg",
+    "expected_entities": [
+      "bottle",
+      "chair",
+      "cup",
+      "dining table",
+      "teddy bear",
+      "umbrella",
+      "vase"
+    ]
+  },
+  {
+    "image_id": 20571,
+    "file_name": "000000020571.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000020571.jpg",
+    "expected_entities": [
+      "boat",
+      "handbag",
+      "person"
+    ]
+  },
+  {
+    "image_id": 20992,
+    "file_name": "000000020992.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000020992.jpg",
+    "expected_entities": [
+      "hot dog",
+      "person"
+    ]
+  },
+  {
+    "image_id": 21167,
+    "file_name": "000000021167.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000021167.jpg",
+    "expected_entities": [
+      "person",
+      "tie",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 21465,
+    "file_name": "000000021465.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000021465.jpg",
+    "expected_entities": [
+      "chair",
+      "vase"
+    ]
+  },
+  {
+    "image_id": 21503,
+    "file_name": "000000021503.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000021503.jpg",
+    "expected_entities": [
+      "keyboard",
+      "mouse",
+      "remote",
+      "sandwich"
+    ]
+  },
+  {
+    "image_id": 21604,
+    "file_name": "000000021604.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000021604.jpg",
+    "expected_entities": [
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 21839,
+    "file_name": "000000021839.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000021839.jpg",
+    "expected_entities": [
+      "car",
+      "handbag",
+      "person",
+      "traffic light"
+    ]
+  },
+  {
+    "image_id": 21879,
+    "file_name": "000000021879.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000021879.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 21903,
+    "file_name": "000000021903.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000021903.jpg",
+    "expected_entities": [
+      "elephant",
+      "person"
+    ]
+  },
+  {
+    "image_id": 22192,
+    "file_name": "000000022192.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000022192.jpg",
+    "expected_entities": [
+      "bed",
+      "dog",
+      "handbag"
+    ]
+  },
+  {
+    "image_id": 22371,
+    "file_name": "000000022371.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000022371.jpg",
+    "expected_entities": [
+      "book",
+      "laptop",
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 22396,
+    "file_name": "000000022396.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000022396.jpg",
+    "expected_entities": [
+      "airplane"
+    ]
+  },
+  {
+    "image_id": 22479,
+    "file_name": "000000022479.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000022479.jpg",
+    "expected_entities": [
+      "bench",
+      "person",
+      "skateboard"
+    ]
+  },
+  {
+    "image_id": 22589,
+    "file_name": "000000022589.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000022589.jpg",
+    "expected_entities": [
+      "sheep"
+    ]
+  },
+  {
+    "image_id": 22623,
+    "file_name": "000000022623.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000022623.jpg",
+    "expected_entities": [
+      "cell phone"
+    ]
+  },
+  {
+    "image_id": 22705,
+    "file_name": "000000022705.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000022705.jpg",
+    "expected_entities": [
+      "bottle",
+      "bowl",
+      "person",
+      "refrigerator",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 22755,
+    "file_name": "000000022755.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000022755.jpg",
+    "expected_entities": [
+      "bus",
+      "car"
+    ]
+  },
+  {
+    "image_id": 22892,
+    "file_name": "000000022892.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000022892.jpg",
+    "expected_entities": [
+      "cat",
+      "chair",
+      "dining table",
+      "dog",
+      "potted plant"
+    ]
+  },
+  {
+    "image_id": 22935,
+    "file_name": "000000022935.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000022935.jpg",
+    "expected_entities": [
+      "person",
+      "sports ball"
+    ]
+  },
+  {
+    "image_id": 22969,
+    "file_name": "000000022969.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000022969.jpg",
+    "expected_entities": [
+      "giraffe"
+    ]
+  },
+  {
+    "image_id": 23023,
+    "file_name": "000000023023.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000023023.jpg",
+    "expected_entities": [
+      "handbag",
+      "suitcase"
+    ]
+  },
+  {
+    "image_id": 23034,
+    "file_name": "000000023034.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000023034.jpg",
+    "expected_entities": [
+      "backpack",
+      "horse",
+      "person"
+    ]
+  },
+  {
+    "image_id": 23126,
+    "file_name": "000000023126.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000023126.jpg",
+    "expected_entities": [
+      "horse",
+      "person"
+    ]
+  },
+  {
+    "image_id": 23230,
+    "file_name": "000000023230.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000023230.jpg",
+    "expected_entities": [
+      "bird"
+    ]
+  },
+  {
+    "image_id": 23272,
+    "file_name": "000000023272.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000023272.jpg",
+    "expected_entities": [
+      "car",
+      "cat"
+    ]
+  },
+  {
+    "image_id": 23359,
+    "file_name": "000000023359.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000023359.jpg",
+    "expected_entities": [
+      "person",
+      "snowboard"
+    ]
+  },
+  {
+    "image_id": 23666,
+    "file_name": "000000023666.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000023666.jpg",
+    "expected_entities": [
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 23751,
+    "file_name": "000000023751.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000023751.jpg",
+    "expected_entities": [
+      "kite"
+    ]
+  },
+  {
+    "image_id": 23781,
+    "file_name": "000000023781.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000023781.jpg",
+    "expected_entities": [
+      "broccoli",
+      "carrot"
+    ]
+  },
+  {
+    "image_id": 23899,
+    "file_name": "000000023899.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000023899.jpg",
+    "expected_entities": [
+      "couch",
+      "person",
+      "remote"
+    ]
+  },
+  {
+    "image_id": 23937,
+    "file_name": "000000023937.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000023937.jpg",
+    "expected_entities": [
+      "cow",
+      "sheep"
+    ]
+  },
+  {
+    "image_id": 24021,
+    "file_name": "000000024021.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000024021.jpg",
+    "expected_entities": [
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 24027,
+    "file_name": "000000024027.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000024027.jpg",
+    "expected_entities": [
+      "kite",
+      "person"
+    ]
+  },
+  {
+    "image_id": 24144,
+    "file_name": "000000024144.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000024144.jpg",
+    "expected_entities": [
+      "pizza"
+    ]
+  },
+  {
+    "image_id": 24243,
+    "file_name": "000000024243.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000024243.jpg",
+    "expected_entities": [
+      "cup",
+      "person",
+      "refrigerator"
+    ]
+  },
+  {
+    "image_id": 24567,
+    "file_name": "000000024567.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000024567.jpg",
+    "expected_entities": [
+      "chair",
+      "hot dog",
+      "person"
+    ]
+  },
+  {
+    "image_id": 24610,
+    "file_name": "000000024610.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000024610.jpg",
+    "expected_entities": [
+      "backpack",
+      "book",
+      "bottle",
+      "chair",
+      "couch",
+      "laptop"
+    ]
+  },
+  {
+    "image_id": 24919,
+    "file_name": "000000024919.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000024919.jpg",
+    "expected_entities": [
+      "elephant"
+    ]
+  },
+  {
+    "image_id": 25057,
+    "file_name": "000000025057.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000025057.jpg",
+    "expected_entities": [
+      "bottle",
+      "frisbee",
+      "person"
+    ]
+  },
+  {
+    "image_id": 25096,
+    "file_name": "000000025096.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000025096.jpg",
+    "expected_entities": [
+      "chair",
+      "dining table",
+      "knife",
+      "person",
+      "skateboard",
+      "zebra"
+    ]
+  },
+  {
+    "image_id": 25139,
+    "file_name": "000000025139.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000025139.jpg",
+    "expected_entities": [
+      "zebra"
+    ]
+  },
+  {
+    "image_id": 25181,
+    "file_name": "000000025181.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000025181.jpg",
+    "expected_entities": [
+      "backpack",
+      "bench",
+      "person",
+      "train"
+    ]
+  },
+  {
+    "image_id": 25228,
+    "file_name": "000000025228.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000025228.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 25386,
+    "file_name": "000000025386.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000025386.jpg",
+    "expected_entities": [
+      "chair",
+      "hot dog",
+      "person",
+      "sandwich"
+    ]
+  },
+  {
+    "image_id": 25393,
+    "file_name": "000000025393.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000025393.jpg",
+    "expected_entities": [
+      "car",
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 25394,
+    "file_name": "000000025394.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000025394.jpg",
+    "expected_entities": [
+      "bottle",
+      "cup",
+      "person",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 25424,
+    "file_name": "000000025424.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000025424.jpg",
+    "expected_entities": [
+      "person",
+      "sports ball",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 25560,
+    "file_name": "000000025560.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000025560.jpg",
+    "expected_entities": [
+      "cat",
+      "cup",
+      "person",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 25593,
+    "file_name": "000000025593.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000025593.jpg",
+    "expected_entities": []
+  },
+  {
+    "image_id": 25603,
+    "file_name": "000000025603.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000025603.jpg",
+    "expected_entities": [
+      "book",
+      "chair",
+      "cup",
+      "dining table",
+      "person",
+      "pizza"
+    ]
+  },
+  {
+    "image_id": 25986,
+    "file_name": "000000025986.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000025986.jpg",
+    "expected_entities": [
+      "bowl",
+      "broccoli",
+      "cup",
+      "donut",
+      "spoon"
+    ]
+  },
+  {
+    "image_id": 26204,
+    "file_name": "000000026204.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000026204.jpg",
+    "expected_entities": [
+      "bus",
+      "car",
+      "person",
+      "traffic light",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 26465,
+    "file_name": "000000026465.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000026465.jpg",
+    "expected_entities": [
+      "cell phone",
+      "chair",
+      "keyboard",
+      "laptop",
+      "person",
+      "remote"
+    ]
+  },
+  {
+    "image_id": 26564,
+    "file_name": "000000026564.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000026564.jpg",
+    "expected_entities": [
+      "book",
+      "bottle",
+      "keyboard",
+      "laptop",
+      "mouse",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 26690,
+    "file_name": "000000026690.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000026690.jpg",
+    "expected_entities": [
+      "person",
+      "refrigerator",
+      "skateboard"
+    ]
+  },
+  {
+    "image_id": 26926,
+    "file_name": "000000026926.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000026926.jpg",
+    "expected_entities": [
+      "car",
+      "fire hydrant"
+    ]
+  },
+  {
+    "image_id": 26941,
+    "file_name": "000000026941.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000026941.jpg",
+    "expected_entities": [
+      "person",
+      "suitcase"
+    ]
+  },
+  {
+    "image_id": 27186,
+    "file_name": "000000027186.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000027186.jpg",
+    "expected_entities": [
+      "couch",
+      "person",
+      "remote"
+    ]
+  },
+  {
+    "image_id": 27620,
+    "file_name": "000000027620.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000027620.jpg",
+    "expected_entities": [
+      "bottle",
+      "chair",
+      "keyboard",
+      "laptop",
+      "mouse"
+    ]
+  },
+  {
+    "image_id": 27696,
+    "file_name": "000000027696.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000027696.jpg",
+    "expected_entities": [
+      "fork",
+      "knife",
+      "person",
+      "pizza"
+    ]
+  },
+  {
+    "image_id": 27768,
+    "file_name": "000000027768.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000027768.jpg",
+    "expected_entities": [
+      "bus",
+      "car",
+      "person"
+    ]
+  },
+  {
+    "image_id": 27932,
+    "file_name": "000000027932.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000027932.jpg",
+    "expected_entities": [
+      "baseball glove"
+    ]
+  },
+  {
+    "image_id": 27972,
+    "file_name": "000000027972.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000027972.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 27982,
+    "file_name": "000000027982.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000027982.jpg",
+    "expected_entities": [
+      "sink",
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 28285,
+    "file_name": "000000028285.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000028285.jpg",
+    "expected_entities": [
+      "clock"
+    ]
+  },
+  {
+    "image_id": 28449,
+    "file_name": "000000028449.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000028449.jpg",
+    "expected_entities": [
+      "elephant"
+    ]
+  },
+  {
+    "image_id": 28452,
+    "file_name": "000000028452.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000028452.jpg",
+    "expected_entities": [
+      "bottle",
+      "refrigerator"
+    ]
+  },
+  {
+    "image_id": 28809,
+    "file_name": "000000028809.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000028809.jpg",
+    "expected_entities": [
+      "banana"
+    ]
+  },
+  {
+    "image_id": 28993,
+    "file_name": "000000028993.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000028993.jpg",
+    "expected_entities": [
+      "fire hydrant",
+      "person",
+      "traffic light"
+    ]
+  },
+  {
+    "image_id": 29187,
+    "file_name": "000000029187.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000029187.jpg",
+    "expected_entities": [
+      "horse",
+      "person"
+    ]
+  },
+  {
+    "image_id": 29393,
+    "file_name": "000000029393.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000029393.jpg",
+    "expected_entities": [
+      "dog",
+      "orange"
+    ]
+  },
+  {
+    "image_id": 29397,
+    "file_name": "000000029397.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000029397.jpg",
+    "expected_entities": [
+      "bench",
+      "person"
+    ]
+  },
+  {
+    "image_id": 29596,
+    "file_name": "000000029596.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000029596.jpg",
+    "expected_entities": [
+      "book",
+      "chair",
+      "couch",
+      "cup",
+      "dining table",
+      "potted plant",
+      "tv",
+      "vase"
+    ]
+  },
+  {
+    "image_id": 29640,
+    "file_name": "000000029640.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000029640.jpg",
+    "expected_entities": [
+      "broccoli",
+      "carrot",
+      "oven",
+      "spoon"
+    ]
+  },
+  {
+    "image_id": 29675,
+    "file_name": "000000029675.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000029675.jpg",
+    "expected_entities": [
+      "dining table",
+      "hot dog"
+    ]
+  },
+  {
+    "image_id": 29984,
+    "file_name": "000000029984.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000029984.jpg",
+    "expected_entities": [
+      "chair",
+      "person",
+      "umbrella"
+    ]
+  },
+  {
+    "image_id": 30213,
+    "file_name": "000000030213.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000030213.jpg",
+    "expected_entities": [
+      "apple",
+      "bottle",
+      "bowl",
+      "chair",
+      "dining table",
+      "oven",
+      "refrigerator",
+      "sink"
+    ]
+  },
+  {
+    "image_id": 30494,
+    "file_name": "000000030494.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000030494.jpg",
+    "expected_entities": [
+      "dog",
+      "frisbee"
+    ]
+  },
+  {
+    "image_id": 30504,
+    "file_name": "000000030504.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000030504.jpg",
+    "expected_entities": [
+      "backpack",
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 30675,
+    "file_name": "000000030675.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000030675.jpg",
+    "expected_entities": [
+      "train"
+    ]
+  },
+  {
+    "image_id": 30785,
+    "file_name": "000000030785.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000030785.jpg",
+    "expected_entities": [
+      "bowl",
+      "broccoli",
+      "dining table",
+      "sandwich"
+    ]
+  },
+  {
+    "image_id": 30828,
+    "file_name": "000000030828.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000030828.jpg",
+    "expected_entities": [
+      "backpack",
+      "bench",
+      "car",
+      "parking meter",
+      "person"
+    ]
+  },
+  {
+    "image_id": 31050,
+    "file_name": "000000031050.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000031050.jpg",
+    "expected_entities": [
+      "vase"
+    ]
+  },
+  {
+    "image_id": 31093,
+    "file_name": "000000031093.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000031093.jpg",
+    "expected_entities": [
+      "backpack",
+      "person",
+      "skateboard"
+    ]
+  },
+  {
+    "image_id": 31118,
+    "file_name": "000000031118.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000031118.jpg",
+    "expected_entities": [
+      "car",
+      "clock",
+      "person"
+    ]
+  },
+  {
+    "image_id": 31217,
+    "file_name": "000000031217.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000031217.jpg",
+    "expected_entities": [
+      "person",
+      "sports ball",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 31248,
+    "file_name": "000000031248.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000031248.jpg",
+    "expected_entities": [
+      "book",
+      "bowl",
+      "chair",
+      "couch",
+      "potted plant"
+    ]
+  },
+  {
+    "image_id": 31269,
+    "file_name": "000000031269.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000031269.jpg",
+    "expected_entities": [
+      "zebra"
+    ]
+  },
+  {
+    "image_id": 31296,
+    "file_name": "000000031296.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000031296.jpg",
+    "expected_entities": [
+      "bottle",
+      "cell phone",
+      "chair",
+      "clock",
+      "cup",
+      "dining table",
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 31322,
+    "file_name": "000000031322.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000031322.jpg",
+    "expected_entities": [
+      "bird",
+      "boat",
+      "person"
+    ]
+  },
+  {
+    "image_id": 31620,
+    "file_name": "000000031620.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000031620.jpg",
+    "expected_entities": [
+      "cake",
+      "chair",
+      "cup",
+      "knife",
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 31735,
+    "file_name": "000000031735.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000031735.jpg",
+    "expected_entities": [
+      "book",
+      "couch",
+      "potted plant"
+    ]
+  },
+  {
+    "image_id": 31749,
+    "file_name": "000000031749.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000031749.jpg",
+    "expected_entities": [
+      "clock"
+    ]
+  },
+  {
+    "image_id": 31817,
+    "file_name": "000000031817.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000031817.jpg",
+    "expected_entities": [
+      "motorcycle",
+      "person"
+    ]
+  },
+  {
+    "image_id": 32038,
+    "file_name": "000000032038.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000032038.jpg",
+    "expected_entities": [
+      "bottle",
+      "dining table",
+      "person",
+      "pizza"
+    ]
+  },
+  {
+    "image_id": 32081,
+    "file_name": "000000032081.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000032081.jpg",
+    "expected_entities": [
+      "person",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 32285,
+    "file_name": "000000032285.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000032285.jpg",
+    "expected_entities": [
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 32334,
+    "file_name": "000000032334.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000032334.jpg",
+    "expected_entities": [
+      "car",
+      "chair",
+      "person",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 32570,
+    "file_name": "000000032570.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000032570.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 32610,
+    "file_name": "000000032610.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000032610.jpg",
+    "expected_entities": [
+      "backpack",
+      "laptop"
+    ]
+  },
+  {
+    "image_id": 32735,
+    "file_name": "000000032735.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000032735.jpg",
+    "expected_entities": [
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 32811,
+    "file_name": "000000032811.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000032811.jpg",
+    "expected_entities": [
+      "bird"
+    ]
+  },
+  {
+    "image_id": 32817,
+    "file_name": "000000032817.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000032817.jpg",
+    "expected_entities": [
+      "person",
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 32861,
+    "file_name": "000000032861.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000032861.jpg",
+    "expected_entities": [
+      "person",
+      "umbrella"
+    ]
+  },
+  {
+    "image_id": 32887,
+    "file_name": "000000032887.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000032887.jpg",
+    "expected_entities": [
+      "backpack",
+      "cell phone",
+      "person"
+    ]
+  },
+  {
+    "image_id": 32901,
+    "file_name": "000000032901.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000032901.jpg",
+    "expected_entities": [
+      "bottle",
+      "chair",
+      "cup",
+      "dining table",
+      "person",
+      "tie",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 32941,
+    "file_name": "000000032941.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000032941.jpg",
+    "expected_entities": [
+      "bus",
+      "car",
+      "person",
+      "traffic light",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 33005,
+    "file_name": "000000033005.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000033005.jpg",
+    "expected_entities": [
+      "person",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 33104,
+    "file_name": "000000033104.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000033104.jpg",
+    "expected_entities": [
+      "bench",
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 33109,
+    "file_name": "000000033109.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000033109.jpg",
+    "expected_entities": [
+      "bus",
+      "car",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 33114,
+    "file_name": "000000033114.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000033114.jpg",
+    "expected_entities": [
+      "airplane",
+      "parking meter"
+    ]
+  },
+  {
+    "image_id": 33221,
+    "file_name": "000000033221.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000033221.jpg",
+    "expected_entities": [
+      "car",
+      "handbag",
+      "person",
+      "tennis racket",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 33368,
+    "file_name": "000000033368.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000033368.jpg",
+    "expected_entities": [
+      "person",
+      "sports ball",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 33638,
+    "file_name": "000000033638.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000033638.jpg",
+    "expected_entities": [
+      "bowl",
+      "oven",
+      "person",
+      "spoon"
+    ]
+  },
+  {
+    "image_id": 33707,
+    "file_name": "000000033707.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000033707.jpg",
+    "expected_entities": [
+      "giraffe"
+    ]
+  },
+  {
+    "image_id": 33759,
+    "file_name": "000000033759.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000033759.jpg",
+    "expected_entities": [
+      "baseball bat",
+      "car",
+      "person",
+      "sports ball",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 33854,
+    "file_name": "000000033854.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000033854.jpg",
+    "expected_entities": [
+      "bus",
+      "car",
+      "motorcycle",
+      "person"
+    ]
+  },
+  {
+    "image_id": 34071,
+    "file_name": "000000034071.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000034071.jpg",
+    "expected_entities": [
+      "parking meter"
+    ]
+  },
+  {
+    "image_id": 34139,
+    "file_name": "000000034139.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000034139.jpg",
+    "expected_entities": [
+      "handbag",
+      "person",
+      "suitcase"
+    ]
+  },
+  {
+    "image_id": 34205,
+    "file_name": "000000034205.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000034205.jpg",
+    "expected_entities": [
+      "broccoli"
+    ]
+  },
+  {
+    "image_id": 34257,
+    "file_name": "000000034257.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000034257.jpg",
+    "expected_entities": [
+      "broccoli",
+      "carrot"
+    ]
+  },
+  {
+    "image_id": 34417,
+    "file_name": "000000034417.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000034417.jpg",
+    "expected_entities": [
+      "donut",
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 34452,
+    "file_name": "000000034452.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000034452.jpg",
+    "expected_entities": [
+      "frisbee",
+      "person"
+    ]
+  },
+  {
+    "image_id": 34760,
+    "file_name": "000000034760.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000034760.jpg",
+    "expected_entities": [
+      "bottle",
+      "sink",
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 34873,
+    "file_name": "000000034873.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000034873.jpg",
+    "expected_entities": [
+      "apple",
+      "bowl",
+      "chair",
+      "cup",
+      "dining table",
+      "sink",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 35062,
+    "file_name": "000000035062.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000035062.jpg",
+    "expected_entities": [
+      "bed",
+      "person"
+    ]
+  },
+  {
+    "image_id": 35197,
+    "file_name": "000000035197.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000035197.jpg",
+    "expected_entities": [
+      "person",
+      "skateboard"
+    ]
+  },
+  {
+    "image_id": 35279,
+    "file_name": "000000035279.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000035279.jpg",
+    "expected_entities": [
+      "book",
+      "bottle",
+      "cell phone",
+      "handbag",
+      "laptop",
+      "person",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 35326,
+    "file_name": "000000035326.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000035326.jpg",
+    "expected_entities": [
+      "bottle",
+      "knife",
+      "oven"
+    ]
+  },
+  {
+    "image_id": 35682,
+    "file_name": "000000035682.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000035682.jpg",
+    "expected_entities": [
+      "cake",
+      "chair",
+      "cup",
+      "dining table",
+      "donut",
+      "handbag",
+      "person"
+    ]
+  },
+  {
+    "image_id": 35770,
+    "file_name": "000000035770.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000035770.jpg",
+    "expected_entities": [
+      "sink",
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 35963,
+    "file_name": "000000035963.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000035963.jpg",
+    "expected_entities": [
+      "teddy bear"
+    ]
+  },
+  {
+    "image_id": 36494,
+    "file_name": "000000036494.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000036494.jpg",
+    "expected_entities": [
+      "bottle",
+      "bowl",
+      "chair",
+      "clock",
+      "cup",
+      "dining table",
+      "person",
+      "refrigerator",
+      "vase"
+    ]
+  },
+  {
+    "image_id": 36539,
+    "file_name": "000000036539.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000036539.jpg",
+    "expected_entities": [
+      "person",
+      "snowboard"
+    ]
+  },
+  {
+    "image_id": 36660,
+    "file_name": "000000036660.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000036660.jpg",
+    "expected_entities": [
+      "cell phone",
+      "person"
+    ]
+  },
+  {
+    "image_id": 36678,
+    "file_name": "000000036678.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000036678.jpg",
+    "expected_entities": [
+      "boat",
+      "clock"
+    ]
+  },
+  {
+    "image_id": 36844,
+    "file_name": "000000036844.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000036844.jpg",
+    "expected_entities": [
+      "bicycle",
+      "chair",
+      "couch",
+      "cup",
+      "potted plant",
+      "refrigerator",
+      "remote",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 36861,
+    "file_name": "000000036861.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000036861.jpg",
+    "expected_entities": [
+      "parking meter"
+    ]
+  },
+  {
+    "image_id": 36936,
+    "file_name": "000000036936.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000036936.jpg",
+    "expected_entities": [
+      "book",
+      "bowl",
+      "cell phone",
+      "couch",
+      "cup",
+      "person",
+      "potted plant",
+      "remote",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 37670,
+    "file_name": "000000037670.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000037670.jpg",
+    "expected_entities": [
+      "person",
+      "remote",
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 37689,
+    "file_name": "000000037689.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000037689.jpg",
+    "expected_entities": [
+      "person",
+      "snowboard"
+    ]
+  },
+  {
+    "image_id": 37740,
+    "file_name": "000000037740.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000037740.jpg",
+    "expected_entities": [
+      "book",
+      "chair",
+      "couch",
+      "keyboard",
+      "laptop",
+      "mouse",
+      "potted plant",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 37751,
+    "file_name": "000000037751.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000037751.jpg",
+    "expected_entities": [
+      "backpack",
+      "motorcycle",
+      "person"
+    ]
+  },
+  {
+    "image_id": 37777,
+    "file_name": "000000037777.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000037777.jpg",
+    "expected_entities": [
+      "banana",
+      "chair",
+      "dining table",
+      "orange",
+      "oven",
+      "potted plant",
+      "refrigerator",
+      "sink"
+    ]
+  },
+  {
+    "image_id": 37988,
+    "file_name": "000000037988.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000037988.jpg",
+    "expected_entities": [
+      "person",
+      "sports ball",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 38048,
+    "file_name": "000000038048.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000038048.jpg",
+    "expected_entities": [
+      "car",
+      "fire hydrant",
+      "handbag",
+      "person"
+    ]
+  },
+  {
+    "image_id": 38070,
+    "file_name": "000000038070.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000038070.jpg",
+    "expected_entities": [
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 38118,
+    "file_name": "000000038118.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000038118.jpg",
+    "expected_entities": [
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 38210,
+    "file_name": "000000038210.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000038210.jpg",
+    "expected_entities": [
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 38576,
+    "file_name": "000000038576.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000038576.jpg",
+    "expected_entities": [
+      "keyboard",
+      "mouse",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 38678,
+    "file_name": "000000038678.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000038678.jpg",
+    "expected_entities": [
+      "cup",
+      "donut",
+      "person",
+      "sandwich"
+    ]
+  },
+  {
+    "image_id": 38825,
+    "file_name": "000000038825.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000038825.jpg",
+    "expected_entities": [
+      "zebra"
+    ]
+  },
+  {
+    "image_id": 38829,
+    "file_name": "000000038829.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000038829.jpg",
+    "expected_entities": [
+      "backpack",
+      "bicycle",
+      "motorcycle",
+      "person"
+    ]
+  },
+  {
+    "image_id": 39405,
+    "file_name": "000000039405.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000039405.jpg",
+    "expected_entities": [
+      "backpack",
+      "bench",
+      "chair",
+      "person",
+      "sports ball",
+      "suitcase",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 39477,
+    "file_name": "000000039477.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000039477.jpg",
+    "expected_entities": [
+      "book",
+      "couch",
+      "potted plant",
+      "tv",
+      "vase"
+    ]
+  },
+  {
+    "image_id": 39480,
+    "file_name": "000000039480.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000039480.jpg",
+    "expected_entities": [
+      "person",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 39484,
+    "file_name": "000000039484.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000039484.jpg",
+    "expected_entities": [
+      "airplane",
+      "car",
+      "chair",
+      "dining table",
+      "person",
+      "traffic light"
+    ]
+  },
+  {
+    "image_id": 39551,
+    "file_name": "000000039551.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000039551.jpg",
+    "expected_entities": [
+      "person",
+      "sports ball",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 39670,
+    "file_name": "000000039670.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000039670.jpg",
+    "expected_entities": [
+      "train"
+    ]
+  },
+  {
+    "image_id": 39769,
+    "file_name": "000000039769.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000039769.jpg",
+    "expected_entities": [
+      "bed",
+      "cat",
+      "couch",
+      "remote"
+    ]
+  },
+  {
+    "image_id": 39785,
+    "file_name": "000000039785.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000039785.jpg",
+    "expected_entities": [
+      "bench",
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 39914,
+    "file_name": "000000039914.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000039914.jpg",
+    "expected_entities": [
+      "kite",
+      "person"
+    ]
+  },
+  {
+    "image_id": 39951,
+    "file_name": "000000039951.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000039951.jpg",
+    "expected_entities": [
+      "person",
+      "sports ball",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 39956,
+    "file_name": "000000039956.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000039956.jpg",
+    "expected_entities": [
+      "bed",
+      "chair"
+    ]
+  },
+  {
+    "image_id": 40036,
+    "file_name": "000000040036.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000040036.jpg",
+    "expected_entities": [
+      "horse",
+      "person",
+      "potted plant"
+    ]
+  },
+  {
+    "image_id": 40083,
+    "file_name": "000000040083.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000040083.jpg",
+    "expected_entities": [
+      "bicycle",
+      "bottle",
+      "car",
+      "chair",
+      "person",
+      "umbrella"
+    ]
+  },
+  {
+    "image_id": 40471,
+    "file_name": "000000040471.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000040471.jpg",
+    "expected_entities": [
+      "apple",
+      "banana",
+      "bottle",
+      "bowl",
+      "cup",
+      "knife",
+      "microwave",
+      "oven",
+      "refrigerator",
+      "sink",
+      "spoon"
+    ]
+  },
+  {
+    "image_id": 40757,
+    "file_name": "000000040757.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000040757.jpg",
+    "expected_entities": [
+      "bed",
+      "person",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 41488,
+    "file_name": "000000041488.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000041488.jpg",
+    "expected_entities": []
+  },
+  {
+    "image_id": 41633,
+    "file_name": "000000041633.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000041633.jpg",
+    "expected_entities": [
+      "car",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 41635,
+    "file_name": "000000041635.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000041635.jpg",
+    "expected_entities": [
+      "cow"
+    ]
+  },
+  {
+    "image_id": 41872,
+    "file_name": "000000041872.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000041872.jpg",
+    "expected_entities": [
+      "bed",
+      "chair",
+      "clock",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 41888,
+    "file_name": "000000041888.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000041888.jpg",
+    "expected_entities": [
+      "bird"
+    ]
+  },
+  {
+    "image_id": 41990,
+    "file_name": "000000041990.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000041990.jpg",
+    "expected_entities": [
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 42070,
+    "file_name": "000000042070.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000042070.jpg",
+    "expected_entities": [
+      "bus",
+      "car",
+      "person"
+    ]
+  },
+  {
+    "image_id": 42102,
+    "file_name": "000000042102.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000042102.jpg",
+    "expected_entities": [
+      "handbag",
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 42178,
+    "file_name": "000000042178.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000042178.jpg",
+    "expected_entities": [
+      "train"
+    ]
+  },
+  {
+    "image_id": 42276,
+    "file_name": "000000042276.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000042276.jpg",
+    "expected_entities": [
+      "potted plant",
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 42296,
+    "file_name": "000000042296.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000042296.jpg",
+    "expected_entities": [
+      "bear",
+      "sports ball"
+    ]
+  },
+  {
+    "image_id": 42528,
+    "file_name": "000000042528.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000042528.jpg",
+    "expected_entities": [
+      "cell phone",
+      "chair",
+      "person"
+    ]
+  },
+  {
+    "image_id": 42563,
+    "file_name": "000000042563.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000042563.jpg",
+    "expected_entities": [
+      "train"
+    ]
+  },
+  {
+    "image_id": 42628,
+    "file_name": "000000042628.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000042628.jpg",
+    "expected_entities": [
+      "fire hydrant",
+      "handbag",
+      "person",
+      "snowboard"
+    ]
+  },
+  {
+    "image_id": 42888,
+    "file_name": "000000042888.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000042888.jpg",
+    "expected_entities": []
+  },
+  {
+    "image_id": 42889,
+    "file_name": "000000042889.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000042889.jpg",
+    "expected_entities": [
+      "keyboard",
+      "teddy bear"
+    ]
+  },
+  {
+    "image_id": 43314,
+    "file_name": "000000043314.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000043314.jpg",
+    "expected_entities": [
+      "backpack",
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 43435,
+    "file_name": "000000043435.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000043435.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 43581,
+    "file_name": "000000043581.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000043581.jpg",
+    "expected_entities": [
+      "dining table",
+      "fork",
+      "knife",
+      "pizza"
+    ]
+  },
+  {
+    "image_id": 43737,
+    "file_name": "000000043737.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000043737.jpg",
+    "expected_entities": [
+      "car",
+      "clock"
+    ]
+  },
+  {
+    "image_id": 43816,
+    "file_name": "000000043816.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000043816.jpg",
+    "expected_entities": [
+      "baseball bat",
+      "baseball glove",
+      "person",
+      "sports ball"
+    ]
+  },
+  {
+    "image_id": 44068,
+    "file_name": "000000044068.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000044068.jpg",
+    "expected_entities": [
+      "chair",
+      "teddy bear"
+    ]
+  },
+  {
+    "image_id": 44195,
+    "file_name": "000000044195.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000044195.jpg",
+    "expected_entities": [
+      "person",
+      "snowboard"
+    ]
+  },
+  {
+    "image_id": 44260,
+    "file_name": "000000044260.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000044260.jpg",
+    "expected_entities": [
+      "apple"
+    ]
+  },
+  {
+    "image_id": 44279,
+    "file_name": "000000044279.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000044279.jpg",
+    "expected_entities": [
+      "bowl",
+      "knife",
+      "oven",
+      "person"
+    ]
+  },
+  {
+    "image_id": 44590,
+    "file_name": "000000044590.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000044590.jpg",
+    "expected_entities": [
+      "car",
+      "motorcycle",
+      "person"
+    ]
+  },
+  {
+    "image_id": 44652,
+    "file_name": "000000044652.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000044652.jpg",
+    "expected_entities": [
+      "airplane"
+    ]
+  },
+  {
+    "image_id": 44699,
+    "file_name": "000000044699.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000044699.jpg",
+    "expected_entities": [
+      "sheep"
+    ]
+  },
+  {
+    "image_id": 44877,
+    "file_name": "000000044877.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000044877.jpg",
+    "expected_entities": [
+      "person",
+      "sports ball",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 45070,
+    "file_name": "000000045070.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000045070.jpg",
+    "expected_entities": [
+      "horse",
+      "person"
+    ]
+  },
+  {
+    "image_id": 45090,
+    "file_name": "000000045090.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000045090.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 45229,
+    "file_name": "000000045229.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000045229.jpg",
+    "expected_entities": [
+      "book",
+      "bottle",
+      "bowl",
+      "oven",
+      "potted plant"
+    ]
+  },
+  {
+    "image_id": 45472,
+    "file_name": "000000045472.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000045472.jpg",
+    "expected_entities": [
+      "cup",
+      "orange"
+    ]
+  },
+  {
+    "image_id": 45550,
+    "file_name": "000000045550.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000045550.jpg",
+    "expected_entities": [
+      "bowl",
+      "clock",
+      "person",
+      "sandwich"
+    ]
+  },
+  {
+    "image_id": 45596,
+    "file_name": "000000045596.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000045596.jpg",
+    "expected_entities": [
+      "bicycle",
+      "car",
+      "person",
+      "umbrella"
+    ]
+  },
+  {
+    "image_id": 45728,
+    "file_name": "000000045728.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000045728.jpg",
+    "expected_entities": [
+      "fork",
+      "knife"
+    ]
+  },
+  {
+    "image_id": 46031,
+    "file_name": "000000046031.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000046031.jpg",
+    "expected_entities": [
+      "cell phone",
+      "keyboard",
+      "laptop",
+      "mouse",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 46048,
+    "file_name": "000000046048.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000046048.jpg",
+    "expected_entities": [
+      "bed",
+      "book",
+      "person"
+    ]
+  },
+  {
+    "image_id": 46252,
+    "file_name": "000000046252.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000046252.jpg",
+    "expected_entities": [
+      "baseball bat",
+      "baseball glove",
+      "person"
+    ]
+  },
+  {
+    "image_id": 46378,
+    "file_name": "000000046378.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000046378.jpg",
+    "expected_entities": [
+      "bird",
+      "cat"
+    ]
+  },
+  {
+    "image_id": 46463,
+    "file_name": "000000046463.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000046463.jpg",
+    "expected_entities": [
+      "oven",
+      "person",
+      "sandwich"
+    ]
+  },
+  {
+    "image_id": 46497,
+    "file_name": "000000046497.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000046497.jpg",
+    "expected_entities": [
+      "boat",
+      "person"
+    ]
+  },
+  {
+    "image_id": 46804,
+    "file_name": "000000046804.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000046804.jpg",
+    "expected_entities": [
+      "sheep"
+    ]
+  },
+  {
+    "image_id": 46872,
+    "file_name": "000000046872.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000046872.jpg",
+    "expected_entities": [
+      "car",
+      "person",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 47010,
+    "file_name": "000000047010.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000047010.jpg",
+    "expected_entities": [
+      "cow",
+      "giraffe"
+    ]
+  },
+  {
+    "image_id": 47112,
+    "file_name": "000000047112.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000047112.jpg",
+    "expected_entities": [
+      "bottle",
+      "bowl",
+      "chair",
+      "dining table",
+      "knife",
+      "person",
+      "pizza",
+      "wine glass"
+    ]
+  },
+  {
+    "image_id": 47121,
+    "file_name": "000000047121.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000047121.jpg",
+    "expected_entities": [
+      "bottle",
+      "bowl",
+      "cat",
+      "sink"
+    ]
+  },
+  {
+    "image_id": 47571,
+    "file_name": "000000047571.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000047571.jpg",
+    "expected_entities": [
+      "horse",
+      "person"
+    ]
+  },
+  {
+    "image_id": 47585,
+    "file_name": "000000047585.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000047585.jpg",
+    "expected_entities": [
+      "person",
+      "tie",
+      "umbrella"
+    ]
+  },
+  {
+    "image_id": 47740,
+    "file_name": "000000047740.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000047740.jpg",
+    "expected_entities": [
+      "kite",
+      "person"
+    ]
+  },
+  {
+    "image_id": 47769,
+    "file_name": "000000047769.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000047769.jpg",
+    "expected_entities": [
+      "chair",
+      "couch",
+      "dining table",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 47801,
+    "file_name": "000000047801.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000047801.jpg",
+    "expected_entities": [
+      "cake",
+      "person",
+      "spoon"
+    ]
+  },
+  {
+    "image_id": 47819,
+    "file_name": "000000047819.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000047819.jpg",
+    "expected_entities": [
+      "horse",
+      "person",
+      "suitcase"
+    ]
+  },
+  {
+    "image_id": 47828,
+    "file_name": "000000047828.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000047828.jpg",
+    "expected_entities": [
+      "boat",
+      "car",
+      "person"
+    ]
+  },
+  {
+    "image_id": 48153,
+    "file_name": "000000048153.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000048153.jpg",
+    "expected_entities": [
+      "bench",
+      "person"
+    ]
+  },
+  {
+    "image_id": 48396,
+    "file_name": "000000048396.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000048396.jpg",
+    "expected_entities": [
+      "cake",
+      "chair",
+      "cup",
+      "dining table",
+      "knife",
+      "person"
+    ]
+  },
+  {
+    "image_id": 48504,
+    "file_name": "000000048504.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000048504.jpg",
+    "expected_entities": [
+      "bench",
+      "elephant",
+      "person"
+    ]
+  },
+  {
+    "image_id": 48555,
+    "file_name": "000000048555.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000048555.jpg",
+    "expected_entities": [
+      "horse",
+      "person"
+    ]
+  },
+  {
+    "image_id": 48564,
+    "file_name": "000000048564.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000048564.jpg",
+    "expected_entities": [
+      "cell phone",
+      "person"
+    ]
+  },
+  {
+    "image_id": 48924,
+    "file_name": "000000048924.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000048924.jpg",
+    "expected_entities": [
+      "backpack",
+      "handbag",
+      "motorcycle"
+    ]
+  },
+  {
+    "image_id": 49060,
+    "file_name": "000000049060.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000049060.jpg",
+    "expected_entities": [
+      "person",
+      "train"
+    ]
+  },
+  {
+    "image_id": 49091,
+    "file_name": "000000049091.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000049091.jpg",
+    "expected_entities": []
+  },
+  {
+    "image_id": 49259,
+    "file_name": "000000049259.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000049259.jpg",
+    "expected_entities": [
+      "person"
+    ]
+  },
+  {
+    "image_id": 49269,
+    "file_name": "000000049269.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000049269.jpg",
+    "expected_entities": [
+      "dog",
+      "horse"
+    ]
+  },
+  {
+    "image_id": 49759,
+    "file_name": "000000049759.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000049759.jpg",
+    "expected_entities": [
+      "person",
+      "sports ball"
+    ]
+  },
+  {
+    "image_id": 49761,
+    "file_name": "000000049761.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000049761.jpg",
+    "expected_entities": [
+      "bird",
+      "zebra"
+    ]
+  },
+  {
+    "image_id": 49810,
+    "file_name": "000000049810.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000049810.jpg",
+    "expected_entities": [
+      "bench",
+      "cat"
+    ]
+  },
+  {
+    "image_id": 50006,
+    "file_name": "000000050006.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000050006.jpg",
+    "expected_entities": [
+      "boat",
+      "person",
+      "umbrella"
+    ]
+  },
+  {
+    "image_id": 50145,
+    "file_name": "000000050145.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000050145.jpg",
+    "expected_entities": [
+      "backpack",
+      "bicycle",
+      "person",
+      "umbrella"
+    ]
+  },
+  {
+    "image_id": 50149,
+    "file_name": "000000050149.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000050149.jpg",
+    "expected_entities": [
+      "banana",
+      "bowl"
+    ]
+  },
+  {
+    "image_id": 50165,
+    "file_name": "000000050165.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000050165.jpg",
+    "expected_entities": [
+      "train"
+    ]
+  },
+  {
+    "image_id": 50326,
+    "file_name": "000000050326.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000050326.jpg",
+    "expected_entities": [
+      "chair",
+      "kite",
+      "person"
+    ]
+  },
+  {
+    "image_id": 50331,
+    "file_name": "000000050331.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000050331.jpg",
+    "expected_entities": [
+      "broccoli",
+      "potted plant"
+    ]
+  },
+  {
+    "image_id": 50380,
+    "file_name": "000000050380.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000050380.jpg",
+    "expected_entities": [
+      "chair",
+      "horse",
+      "person"
+    ]
+  },
+  {
+    "image_id": 50638,
+    "file_name": "000000050638.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000050638.jpg",
+    "expected_entities": [
+      "person",
+      "teddy bear"
+    ]
+  },
+  {
+    "image_id": 50679,
+    "file_name": "000000050679.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000050679.jpg",
+    "expected_entities": [
+      "car",
+      "orange"
+    ]
+  },
+  {
+    "image_id": 50811,
+    "file_name": "000000050811.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000050811.jpg",
+    "expected_entities": [
+      "bottle",
+      "bowl",
+      "cell phone",
+      "dining table",
+      "person",
+      "remote",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 50828,
+    "file_name": "000000050828.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000050828.jpg",
+    "expected_entities": [
+      "bed",
+      "chair",
+      "remote",
+      "suitcase"
+    ]
+  },
+  {
+    "image_id": 50844,
+    "file_name": "000000050844.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000050844.jpg",
+    "expected_entities": [
+      "teddy bear"
+    ]
+  },
+  {
+    "image_id": 50896,
+    "file_name": "000000050896.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000050896.jpg",
+    "expected_entities": [
+      "bowl",
+      "dining table",
+      "orange"
+    ]
+  },
+  {
+    "image_id": 50943,
+    "file_name": "000000050943.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000050943.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 51008,
+    "file_name": "000000051008.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000051008.jpg",
+    "expected_entities": [
+      "cat",
+      "laptop"
+    ]
+  },
+  {
+    "image_id": 51309,
+    "file_name": "000000051309.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000051309.jpg",
+    "expected_entities": [
+      "horse"
+    ]
+  },
+  {
+    "image_id": 51314,
+    "file_name": "000000051314.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000051314.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 51326,
+    "file_name": "000000051326.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000051326.jpg",
+    "expected_entities": [
+      "vase"
+    ]
+  },
+  {
+    "image_id": 51598,
+    "file_name": "000000051598.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000051598.jpg",
+    "expected_entities": [
+      "bottle",
+      "sink"
+    ]
+  },
+  {
+    "image_id": 51610,
+    "file_name": "000000051610.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000051610.jpg",
+    "expected_entities": [
+      "bed",
+      "laptop",
+      "person"
+    ]
+  },
+  {
+    "image_id": 51712,
+    "file_name": "000000051712.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000051712.jpg",
+    "expected_entities": [
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 51738,
+    "file_name": "000000051738.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000051738.jpg",
+    "expected_entities": [
+      "bed",
+      "chair",
+      "suitcase"
+    ]
+  },
+  {
+    "image_id": 51938,
+    "file_name": "000000051938.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000051938.jpg",
+    "expected_entities": [
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 51961,
+    "file_name": "000000051961.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000051961.jpg",
+    "expected_entities": [
+      "parking meter"
+    ]
+  },
+  {
+    "image_id": 51976,
+    "file_name": "000000051976.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000051976.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 52007,
+    "file_name": "000000052007.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000052007.jpg",
+    "expected_entities": [
+      "bus",
+      "person",
+      "tie"
+    ]
+  },
+  {
+    "image_id": 52017,
+    "file_name": "000000052017.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000052017.jpg",
+    "expected_entities": [
+      "airplane",
+      "person"
+    ]
+  },
+  {
+    "image_id": 52412,
+    "file_name": "000000052412.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000052412.jpg",
+    "expected_entities": [
+      "airplane",
+      "car",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 52413,
+    "file_name": "000000052413.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000052413.jpg",
+    "expected_entities": [
+      "cell phone",
+      "chair",
+      "cup",
+      "person"
+    ]
+  },
+  {
+    "image_id": 52462,
+    "file_name": "000000052462.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000052462.jpg",
+    "expected_entities": [
+      "zebra"
+    ]
+  },
+  {
+    "image_id": 52507,
+    "file_name": "000000052507.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000052507.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 52565,
+    "file_name": "000000052565.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000052565.jpg",
+    "expected_entities": [
+      "cow"
+    ]
+  },
+  {
+    "image_id": 52591,
+    "file_name": "000000052591.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000052591.jpg",
+    "expected_entities": [
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 52891,
+    "file_name": "000000052891.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000052891.jpg",
+    "expected_entities": [
+      "dog",
+      "frisbee",
+      "person"
+    ]
+  },
+  {
+    "image_id": 52996,
+    "file_name": "000000052996.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000052996.jpg",
+    "expected_entities": [
+      "backpack",
+      "book",
+      "bowl",
+      "cup",
+      "dining table",
+      "handbag",
+      "knife",
+      "oven",
+      "person",
+      "refrigerator"
+    ]
+  },
+  {
+    "image_id": 53505,
+    "file_name": "000000053505.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000053505.jpg",
+    "expected_entities": [
+      "bottle",
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 53529,
+    "file_name": "000000053529.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000053529.jpg",
+    "expected_entities": [
+      "dog",
+      "person",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 53624,
+    "file_name": "000000053624.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000053624.jpg",
+    "expected_entities": [
+      "elephant",
+      "person"
+    ]
+  },
+  {
+    "image_id": 53626,
+    "file_name": "000000053626.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000053626.jpg",
+    "expected_entities": [
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 53909,
+    "file_name": "000000053909.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000053909.jpg",
+    "expected_entities": [
+      "cell phone",
+      "person"
+    ]
+  },
+  {
+    "image_id": 53994,
+    "file_name": "000000053994.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000053994.jpg",
+    "expected_entities": [
+      "car",
+      "parking meter"
+    ]
+  },
+  {
+    "image_id": 54123,
+    "file_name": "000000054123.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000054123.jpg",
+    "expected_entities": [
+      "zebra"
+    ]
+  },
+  {
+    "image_id": 54164,
+    "file_name": "000000054164.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000054164.jpg",
+    "expected_entities": [
+      "person",
+      "surfboard"
+    ]
+  },
+  {
+    "image_id": 54592,
+    "file_name": "000000054592.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000054592.jpg",
+    "expected_entities": [
+      "backpack",
+      "person",
+      "skis"
+    ]
+  },
+  {
+    "image_id": 54593,
+    "file_name": "000000054593.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000054593.jpg",
+    "expected_entities": [
+      "backpack",
+      "baseball bat",
+      "baseball glove",
+      "bottle",
+      "car",
+      "chair",
+      "motorcycle",
+      "person",
+      "sports ball"
+    ]
+  },
+  {
+    "image_id": 54605,
+    "file_name": "000000054605.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000054605.jpg",
+    "expected_entities": [
+      "cake",
+      "chair",
+      "cup",
+      "dining table",
+      "fork",
+      "person"
+    ]
+  },
+  {
+    "image_id": 54628,
+    "file_name": "000000054628.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000054628.jpg",
+    "expected_entities": [
+      "cake",
+      "chair",
+      "dining table",
+      "person",
+      "potted plant"
+    ]
+  },
+  {
+    "image_id": 54654,
+    "file_name": "000000054654.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000054654.jpg",
+    "expected_entities": [
+      "oven",
+      "person"
+    ]
+  },
+  {
+    "image_id": 54931,
+    "file_name": "000000054931.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000054931.jpg",
+    "expected_entities": [
+      "horse",
+      "person"
+    ]
+  },
+  {
+    "image_id": 54967,
+    "file_name": "000000054967.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000054967.jpg",
+    "expected_entities": [
+      "car",
+      "person",
+      "traffic light"
+    ]
+  },
+  {
+    "image_id": 55002,
+    "file_name": "000000055002.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000055002.jpg",
+    "expected_entities": [
+      "person",
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 55022,
+    "file_name": "000000055022.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000055022.jpg",
+    "expected_entities": [
+      "bicycle",
+      "person"
+    ]
+  },
+  {
+    "image_id": 55072,
+    "file_name": "000000055072.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000055072.jpg",
+    "expected_entities": [
+      "giraffe"
+    ]
+  },
+  {
+    "image_id": 55150,
+    "file_name": "000000055150.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000055150.jpg",
+    "expected_entities": [
+      "backpack",
+      "book",
+      "car",
+      "person",
+      "suitcase"
+    ]
+  },
+  {
+    "image_id": 55167,
+    "file_name": "000000055167.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000055167.jpg",
+    "expected_entities": [
+      "backpack",
+      "bus",
+      "car",
+      "person",
+      "truck"
+    ]
+  },
+  {
+    "image_id": 55299,
+    "file_name": "000000055299.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000055299.jpg",
+    "expected_entities": [
+      "bird",
+      "umbrella"
+    ]
+  },
+  {
+    "image_id": 55528,
+    "file_name": "000000055528.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000055528.jpg",
+    "expected_entities": [
+      "book",
+      "clock",
+      "couch",
+      "person",
+      "remote",
+      "toothbrush"
+    ]
+  },
+  {
+    "image_id": 55950,
+    "file_name": "000000055950.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000055950.jpg",
+    "expected_entities": [
+      "person",
+      "sports ball",
+      "tennis racket"
+    ]
+  },
+  {
+    "image_id": 56127,
+    "file_name": "000000056127.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000056127.jpg",
+    "expected_entities": [
+      "bench",
+      "cup",
+      "oven",
+      "refrigerator",
+      "sink"
+    ]
+  },
+  {
+    "image_id": 56288,
+    "file_name": "000000056288.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000056288.jpg",
+    "expected_entities": [
+      "keyboard",
+      "sandwich",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 56344,
+    "file_name": "000000056344.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000056344.jpg",
+    "expected_entities": [
+      "cell phone",
+      "keyboard",
+      "mouse",
+      "remote",
+      "tv"
+    ]
+  },
+  {
+    "image_id": 56350,
+    "file_name": "000000056350.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000056350.jpg",
+    "expected_entities": [
+      "person",
+      "toilet"
+    ]
+  },
+  {
+    "image_id": 56545,
+    "file_name": "000000056545.jpg",
+    "full_path": "/home/dgxwaggle/Desktop/SageEdge/Benchmarking/data/coco/val2017/000000056545.jpg",
+    "expected_entities": [
+      "bird"
+    ]
+  }
+]

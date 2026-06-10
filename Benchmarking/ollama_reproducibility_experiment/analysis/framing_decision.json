@@ -1,0 +1,133 @@
+{
+  "n_records": 1000,
+  "devices": [
+    "dell_gb10",
+    "thor"
+  ],
+  "models": [
+    "gemma3:4b-it-q4_K_M",
+    "llava-phi3:3.8b",
+    "minicpm-v:8b-2.6-q4_K_M",
+    "moondream:1.8b-v2-q4_K_M",
+    "qwen3-vl:2b"
+  ],
+  "n_images": 100,
+  "reproducibility": {
+    "gemma3:4b-it-q4_K_M": {
+      "cross_device_agreement_mean": 0.9824,
+      "cross_device_agreement_min": 0.6473,
+      "cross_device_agreement_std": 0.0357,
+      "n_image_pairs": 100,
+      "within_device_stability_mean": 0.996
+    },
+    "llava-phi3:3.8b": {
+      "cross_device_agreement_mean": 0.9765,
+      "cross_device_agreement_min": 0.8378,
+      "cross_device_agreement_std": 0.0283,
+      "n_image_pairs": 100,
+      "within_device_stability_mean": 0.9896
+    },
+    "minicpm-v:8b-2.6-q4_K_M": {
+      "cross_device_agreement_mean": 0.9683,
+      "cross_device_agreement_min": 0.9141,
+      "cross_device_agreement_std": 0.0214,
+      "n_image_pairs": 100,
+      "within_device_stability_mean": 0.9895
+    },
+    "moondream:1.8b-v2-q4_K_M": {
+      "cross_device_agreement_mean": 0.9835,
+      "cross_device_agreement_min": 0.8607,
+      "cross_device_agreement_std": 0.0272,
+      "n_image_pairs": 100,
+      "within_device_stability_mean": 0.9938
+    },
+    "qwen3-vl:2b": {
+      "cross_device_agreement_mean": 0.9125,
+      "cross_device_agreement_min": 0.7117,
+      "cross_device_agreement_std": 0.0801,
+      "n_image_pairs": 23,
+      "within_device_stability_mean": 0.9889
+    }
+  },
+  "tradeoff": {
+    "gemma3:4b-it-q4_K_M|dell_gb10": {
+      "n_images": 100,
+      "entity_recall": 0.5401,
+      "tokens_per_sec": 71.75,
+      "latency_s": 3.898,
+      "gpu_power_w": 46.57
+    },
+    "llava-phi3:3.8b|dell_gb10": {
+      "n_images": 100,
+      "entity_recall": 0.5635,
+      "tokens_per_sec": 74.32,
+      "latency_s": 2.845,
+      "gpu_power_w": 48.07
+    },
+    "minicpm-v:8b-2.6-q4_K_M|dell_gb10": {
+      "n_images": 100,
+      "entity_recall": 0.6663,
+      "tokens_per_sec": 44.96,
+      "latency_s": 3.395,
+      "gpu_power_w": 48.22
+    },
+    "moondream:1.8b-v2-q4_K_M|dell_gb10": {
+      "n_images": 100,
+      "entity_recall": 0.5897,
+      "tokens_per_sec": 180.07,
+      "latency_s": 0.439,
+      "gpu_power_w": 40.65
+    },
+    "qwen3-vl:2b|dell_gb10": {
+      "n_images": 100,
+      "entity_recall": 0.3762,
+      "tokens_per_sec": 152.63,
+      "latency_s": 1.906,
+      "gpu_power_w": 45.0
+    },
+    "gemma3:4b-it-q4_K_M|thor": {
+      "n_images": 100,
+      "entity_recall": 0.5411,
+      "tokens_per_sec": 58.18,
+      "latency_s": 5.405,
+      "gpu_power_w": 32.52
+    },
+    "llava-phi3:3.8b|thor": {
+      "n_images": 100,
+      "entity_recall": 0.5597,
+      "tokens_per_sec": 65.77,
+      "latency_s": 3.389,
+      "gpu_power_w": 38.14
+    },
+    "minicpm-v:8b-2.6-q4_K_M|thor": {
+      "n_images": 100,
+      "entity_recall": 0.6519,
+      "tokens_per_sec": 43.38,
+      "latency_s": 4.116,
+      "gpu_power_w": 37.98
+    },
+    "moondream:1.8b-v2-q4_K_M|thor": {
+      "n_images": 100,
+      "entity_recall": 0.5987,
+      "tokens_per_sec": 138.22,
+      "latency_s": 0.665,
+      "gpu_power_w": 28.79
+    },
+    "qwen3-vl:2b|thor": {
+      "n_images": 100,
+      "entity_recall": 0.5245,
+      "tokens_per_sec": 119.1,
+      "latency_s": 2.733,
+      "gpu_power_w": 31.09
+    }
+  },
+  "recommendation": {
+    "decision": "REPRODUCIBILITY",
+    "rationale": "Cross-device drift detected. Lead with reproducibility; trade-off as supporting analysis.",
+    "notes": [
+      "At least one model shows cross-device drift (min agreement = 0.9125 < 0.98). Reproducibility framing has teeth.",
+      "Throughput spans 4.2x and accuracy spans 0.29 F1 \u2014 clear trade-off across (model, device) pairs.",
+      "Same model on different devices differs by up to 1.3x throughput \u2014 device choice matters."
+    ]
+  }
+}
