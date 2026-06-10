@@ -24,7 +24,7 @@ import subprocess
 import numpy as np
 from collections import defaultdict, deque
 from ultralytics import YOLO
-import time 
+import time
 
 print("This program uses YOLOv8 and Ultralytics ByteTrack to count the number of people moving left/right from a video file or live camera feed.")
 print()
@@ -124,7 +124,7 @@ os.chdir(output_dir)
 # Open CSV file for logging stats
 data_file = open("data.csv", "w", newline="")
 csv_writer = csv.writer(data_file)
-csv_writer.writerow([ 
+csv_writer.writerow([
     "Date", "Time", "Direction", "X_start", "X_end",
     "CPU%", "GPU%", "RAM_used_MB", "RAM_total_MB",
     "CPU_temp_C", "GPU_temp_C"
@@ -146,10 +146,10 @@ cached_gpu_util = -1
 
 last_tegra_time = 0.0
 cached_tegra_data = {
-    "cpu": -1.0, 
-    "ram_used": -1, 
-    "ram_total": -1, 
-    "cpu_temp": -1.0, 
+    "cpu": -1.0,
+    "ram_used": -1,
+    "ram_total": -1,
+    "cpu_temp": -1.0,
     "gpu_temp": -1.0
 }
 
@@ -158,14 +158,14 @@ def stats_worker():
         item = data_queue.get()
         if item is None:
             break
-        
+
         direction, x_start, x_end, det_date, det_time = item
-        
+
         try:
             log_stats(direction, x_start, x_end, det_date, det_time)
         except Exception as e:
             print(f"[Worker Error] Failed to log stats: {e}")
-            
+
         data_queue.task_done()
 
 threading.Thread(target=stats_worker, daemon=True).start()
@@ -204,13 +204,13 @@ def log_stats(direction=None, x_start=None, x_end=None, date=None, time_str=None
                     core_usages = list(map(int, core_usages))
                     cached_tegra_data["cpu"] = sum(core_usages) / len(core_usages)
 
-            # Temperature 
+            # Temperature
             cpu_temp = re.search(r"cpu@([\d\.]+)C", out, re.IGNORECASE)
             gpu_temp = re.search(r"gpu@([\d\.]+)C", out, re.IGNORECASE)
-            
+
             if cpu_temp: cached_tegra_data["cpu_temp"] = float(cpu_temp.group(1))
             if gpu_temp: cached_tegra_data["gpu_temp"] = float(gpu_temp.group(1))
-        
+
         except Exception as e:
             print(f"Error collecting tegrastats: {e}")
             cached_tegra_data["cpu"] = psutil.cpu_percent()
@@ -235,19 +235,19 @@ def log_stats(direction=None, x_start=None, x_end=None, date=None, time_str=None
             cached_gpu_util = -1
         finally:
             last_jtop_time = current_time
-    
+
     row_data = [
-        date, 
-        time_str, 
-        direction,  
-        x_start , 
-        x_end, 
-        round(cached_tegra_data["cpu"], 1), 
-        cached_gpu_util, 
-        cached_tegra_data["ram_used"], 
-        cached_tegra_data["ram_total"], 
-        cached_tegra_data["cpu_temp"], 
-        cached_tegra_data["gpu_temp"]    
+        date,
+        time_str,
+        direction,
+        x_start ,
+        x_end,
+        round(cached_tegra_data["cpu"], 1),
+        cached_gpu_util,
+        cached_tegra_data["ram_used"],
+        cached_tegra_data["ram_total"],
+        cached_tegra_data["cpu_temp"],
+        cached_tegra_data["gpu_temp"]
     ]
 
     try:
@@ -301,8 +301,8 @@ while True:
 
 # Infer resolution / fps safely
 if ret and frame0 is not None:
-    W = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)) or 1280
-    H = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)) or 720
+    W =  1280
+    H =  720
     fps = cap.get(cv2.CAP_PROP_FPS)
     if fps is None or fps <= 0 or fps > 120:
         fps = 30
@@ -341,18 +341,26 @@ try:
     # --------------------------------------------
     max_soft_fail = 20    # how many bad reads before reconnect
     soft_fail = 0         # counter for consecutive failed frames
-    
+
     prev_frame_time = 0
     new_frame_time = 0
+
+    is_video_file = video_path.lower().endswith((".mp4", ".avi", ".mov", ".mkv"))
 
     while True:
         t_start = time.time()
         ret, frame = cap.read()
         t_read = time.time()
-        ret, frame = cap.read()
+
 
         # if a frame fails to read, handle retries or reconnect
         if not ret or frame is None:
+
+            if is_video_file:
+                print("[info] End of video reached.")
+                break
+
+
             soft_fail += 1
 
             # small transient issue — retry a few times
@@ -385,7 +393,7 @@ try:
         soft_fail = 0
         frame_idx += 1
         # -------------------------------
-        
+
         results = person_model.track(
             frame,
             classes=[0],
@@ -408,7 +416,7 @@ try:
 
         # Draw detections and update histories
         ids_tensor = results[0].boxes.id
-        
+
         if ids_tensor is not None and len(ids_tensor):
             current_ids = set(ids_tensor.int().cpu().numpy().tolist())
             for box, track_id in zip(results[0].boxes.xyxy.cpu().numpy(),
@@ -419,20 +427,20 @@ try:
                 # Append center and smooth box
                 track_history[track_id].append(center)
                 bbox_history[track_id].append((x1, y1, x2, y2))
-                
+
                 # Only tracks the 60 frames per ID to not clog up memory
                 if len(track_history[track_id]) > 60:
                     track_history[track_id] = [track_history[track_id][0], track_history[track_id][-1]]
-                
+
                 if len(bbox_history[track_id]) > 10:
-                    bbox_history[track_id].pop(0) 
+                    bbox_history[track_id].pop(0)
                 sx1, sy1, sx2, sy2 = np.mean(bbox_history[track_id], axis=0).astype(int)
                 x1, y1, x2, y2 = sx1, sy1, sx2, sy2
 
                 # -- V2: save smoothed person box for the face pass
                 person_boxes.append((x1, y1, x2, y2))
-                # -- end --  
-                
+                # -- end --
+
                 # Draw
                 if not headless or save_video:
                     cv2.rectangle(frame, (x1, y1), (x2, y2), (0,255,0), 2)
@@ -465,7 +473,7 @@ try:
                 elif x_diff < -direction_threshold:
                     numLeft += 1
                     data_queue.put(("Left", x_start, x_end, det_date, det_time))
-            
+
             # cleanup after counting
             del track_history[tid]
             if tid in bbox_history:
@@ -506,18 +514,18 @@ try:
         # -- end face blurring --
         # --- CALCULATE FPS ---
         new_frame_time = time.time()
-        
+
         # Avoid division by zero
         diff = new_frame_time - prev_frame_time
         fps = 1 / diff if diff > 0 else 0
-        
+
         prev_frame_time = new_frame_time
 
         if not headless or save_video:
-            cv2.putText(frame, f"FPS: {int(fps)}", (10, 70), 
+            cv2.putText(frame, f"FPS: {int(fps)}", (10, 70),
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
-    
-        # Optional: Print to terminal every 100 frames so you don't spam logs
+
+        # Optional: Print to terminal every 1000 frames so you don't spam logs
         if frame_idx % 1000 == 0:
             print(f"Current Speed: {fps:.2f} FPS")
 
@@ -532,7 +540,7 @@ try:
 
         if frame_idx % 1000 == 0:
             print(f"Processed frame {frame_idx}")
-        
+
         if frame_idx % 1000 == 0:
             print(f"Current Speed: {fps:.2f} FPS")
 
