@@ -12,7 +12,7 @@ from fastapi.security.api_key import APIKeyHeader
 from typing import Dict, Any
 from pydantic import BaseModel
 
-db_lock = threading.Lock()
+db_write_lock = threading.Lock()
 
 load_dotenv()
 app = FastAPI()
