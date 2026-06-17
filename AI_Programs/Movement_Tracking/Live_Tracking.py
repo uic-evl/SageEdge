@@ -24,7 +24,6 @@ import subprocess
 import numpy as np
 from collections import defaultdict, deque
 from ultralytics import YOLO
-import time 
 
 print("This program uses YOLOv8 and Ultralytics ByteTrack to count the number of people moving left/right from a video file or live camera feed.")
 print()
@@ -91,7 +90,7 @@ if AI_model not in ['n', 's', 'm', 'l', 'x']:
 print()
 
 cwd = os.path.dirname(os.path.abspath(__file__))
-person_model = 'yolov8' + AI_model + '.engine'
+person_model = 'yolov8' + AI_model + '_640.engine'
 model_path = os.path.join(cwd, person_model)
 
 print("Loading YOLO model... (first run may download weights)")
@@ -99,9 +98,9 @@ print("Loading YOLO model... (first run may download weights)")
 if os.path.isfile(model_path):
     person_model = YOLO(model_path, task='detect')
 else:
-    print(f"Engine not found. exporting {AI_model} to engine...")
+    print(f"Engine not found. Exporting {AI_model} engine at imgsz=640 (first run may take a few minutes)...")
     temp_model = YOLO('yolov8' + AI_model + '.pt')
-    temp_model.export(format='engine', device=0)
+    temp_model.export(format='engine', device=0, imgsz=640, verbose=False)
     person_model = YOLO(model_path, task='detect')
 
 #counting sensitivity (pixels across the image width)
@@ -132,7 +131,7 @@ send_status(1)
 
 #-------------------------------
 # --- V2: Face blurring settings ---
-FACE_BLUR = bool(int(os.getenv("FACE_BLUR", "1")))   # set 0 to disable
+FACE_BLUR = bool(int(os.getenv("FACE_BLUR", "0")))   # set 0 to disable
 FACE_CONF = float(os.getenv("FACE_CONF", "0.35"))    # face detector confidence
 FACE_EVERY = int(os.getenv("FACE_EVERY", "1"))       # run face detection every N frames (1 = every frame)
 
@@ -172,7 +171,7 @@ csv_writer.writerow([
 # Initialize movement counters and histories
 numLeft = 0
 numRight = 0
-track_history = defaultdict(lambda: deque(maxlen=20))  # track_id -> centers [(x,y), ...]
+track_history = defaultdict(lambda: deque(maxlen=60))  # track_id -> centers [(x,y), ...]
 bbox_history  = defaultdict(lambda: deque(maxlen=5))   # track_id -> last N boxes (for smoothing)
 
 # Initialize psutil
@@ -355,7 +354,7 @@ while True:
         ret = True
         break
 
-# resolution / fps safely
+# Infer resolution / fps safely
 if ret and frame0 is not None:
     W = 1280
     H = 720
@@ -381,11 +380,11 @@ if os.name == 'posix' and "DISPLAY" not in os.environ:
 
 if save_video:
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    out = cv2.VideoWriter("output.mp4", fourcc, fps, (W, H))
+    out = cv2.VideoWriter("output.mp4", fourcc, fps, (1280, 720))
 
 if not headless:
     cv2.namedWindow("Live People Tracking", cv2.WINDOW_NORMAL)
-    cv2.resizeWindow("Live People Tracking", W, H)
+    cv2.resizeWindow("Live People Tracking", 1280, 720)
 
 frame_idx = 0
 
@@ -400,14 +399,13 @@ try:
     
     prev_frame_time = 0
     new_frame_time = 0
-
     is_video_file = video_path.lower().endswith((".mp4", ".avi", ".mov", ".mkv"))
-    
+
     while True:
         t_start = time.time()
         ret, frame = cap.read()
         t_read = time.time()
-
+        #ret, frame = cap.read()
         # if a frame fails to read, handle retries or reconnect
         if not ret or frame is None:
             if is_video_file:
@@ -453,6 +451,7 @@ try:
             tracker="botsort.yaml",
             persist=True,
             verbose=False,
+            iou=0.5,
             device=0,
             imgsz=640
         )
@@ -480,9 +479,6 @@ try:
                 track_history[track_id].append(center)
                 bbox_history[track_id].append((x1, y1, x2, y2))
                 
-                # Only tracks the 60 frames per ID to not clog up memory
-                if len(track_history[track_id]) > 60:
-                    track_history[track_id] = [track_history[track_id][0], track_history[track_id][-1]]
                 
                 if len(bbox_history[track_id]) > 10:
                     bbox_history[track_id].pop(0) 
@@ -593,8 +589,6 @@ try:
         if frame_idx % 1000 == 0:
             print(f"Processed frame {frame_idx}")
         
-        if frame_idx % 1000 == 0:
-            print(f"Current Speed: {fps:.2f} FPS")
 
 
 except Exception as e:
