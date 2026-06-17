@@ -24,7 +24,6 @@ import subprocess
 import numpy as np
 from collections import defaultdict, deque
 from ultralytics import YOLO
-import time
 
 print("This program uses YOLOv8 and Ultralytics ByteTrack to count the number of people moving left/right from a video file or live camera feed.")
 print()
@@ -74,7 +73,7 @@ if AI_model not in ['n', 's', 'm', 'l', 'x']:
 print()
 
 cwd = os.path.dirname(os.path.abspath(__file__))
-person_model = 'yolov8' + AI_model + '.engine'
+person_model = 'yolov8' + AI_model + '_640.engine'
 model_path = os.path.join(cwd, person_model)
 
 print("Loading YOLO model... (first run may download weights)")
@@ -84,7 +83,7 @@ if os.path.isfile(model_path):
 else:
     print(f"Engine not found. exporting {AI_model} to engine...")
     temp_model = YOLO('yolov8' + AI_model + '.pt')
-    temp_model.export(format='engine', device=0)
+    temp_model.export(format='engine', device=0, imgsz=640, verbose=False)
     person_model = YOLO(model_path, task='detect')
 
 #counting sensitivity (pixels across the image width)
@@ -93,7 +92,7 @@ print(f"Direction threshold set to {direction_threshold} px (override with DIR_T
 
 #-------------------------------
 # --- V2: Face blurring settings ---
-FACE_BLUR = bool(int(os.getenv("FACE_BLUR", "1")))   # set 0 to disable
+FACE_BLUR = bool(int(os.getenv("FACE_BLUR", "0")))   # set 0 to disable
 FACE_CONF = float(os.getenv("FACE_CONF", "0.35"))    # face detector confidence
 FACE_EVERY = int(os.getenv("FACE_EVERY", "1"))       # run face detection every N frames (1 = every frame)
 
@@ -133,7 +132,7 @@ csv_writer.writerow([
 # Initialize movement counters and histories
 numLeft = 0
 numRight = 0
-track_history = defaultdict(lambda: deque(maxlen=20))  # track_id -> centers [(x,y), ...]
+track_history = defaultdict(lambda: deque(maxlen=60))  # track_id -> centers [(x,y), ...]
 bbox_history  = defaultdict(lambda: deque(maxlen=5))   # track_id -> last N boxes (for smoothing)
 
 # Initialize psutil
@@ -401,6 +400,7 @@ try:
             tracker="botsort.yaml",
             persist=True,
             verbose=False,
+            iou=0.5,
             device=0,
             imgsz=640
         )
@@ -427,10 +427,6 @@ try:
                 # Append center and smooth box
                 track_history[track_id].append(center)
                 bbox_history[track_id].append((x1, y1, x2, y2))
-
-                # Only tracks the 60 frames per ID to not clog up memory
-                if len(track_history[track_id]) > 60:
-                    track_history[track_id] = [track_history[track_id][0], track_history[track_id][-1]]
 
                 if len(bbox_history[track_id]) > 10:
                     bbox_history[track_id].pop(0)
@@ -540,9 +536,6 @@ try:
 
         if frame_idx % 1000 == 0:
             print(f"Processed frame {frame_idx}")
-
-        if frame_idx % 1000 == 0:
-            print(f"Current Speed: {fps:.2f} FPS")
 
 
 except Exception as e:
