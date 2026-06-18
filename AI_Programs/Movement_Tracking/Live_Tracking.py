@@ -90,7 +90,7 @@ if AI_model not in ['n', 's', 'm', 'l', 'x']:
 print()
 
 cwd = os.path.dirname(os.path.abspath(__file__))
-person_model = 'yolov8' + AI_model + '_640.engine'
+person_model = 'yolov8' + AI_model + '.engine'
 model_path = os.path.join(cwd, person_model)
 
 print("Loading YOLO model... (first run may download weights)")
