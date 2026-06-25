@@ -3,10 +3,10 @@
 # Uses YOLOv8 + Ultralytics built-in ByteTrack tracker. Restores:
 # - Bounded history & disappearance-based counting
 # - Short-term bbox smoothing
-# - Configurable direction threshold (DIR_THRESH, default 100)
+# - Configurable direction threshold (DIR_THRESH, default 200)
 #
 # Usage:
-#   DIR_THRESH=100 python Live_Tracking.py
+#   DIR_THRESH=200 python Live_Tracking.py
 
 import os
 import requests
@@ -103,8 +103,58 @@ else:
     temp_model.export(format='engine', device=0, imgsz=640, verbose=False)
     person_model = YOLO(model_path, task='detect')
 
+# -------------------------------
+# ReID model: download ONNX to cwd, export to TensorRT engine, inject into temp yaml
+# -------------------------------
+reid_onnx   = os.path.join(cwd, "yolo26m-reid.onnx")
+reid_engine = os.path.join(cwd, "yolo26m-reid.engine")
+
+if not os.path.isfile(reid_onnx) and not os.path.isfile(reid_engine):
+    print("ReID ONNX not found — downloading yolo26m-reid.onnx to script directory...")
+    import urllib.request
+    urllib.request.urlretrieve(
+        "https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo26m-reid.onnx",
+        reid_onnx,
+    )
+    print(f"ReID ONNX downloaded to {reid_onnx}")
+
+if not os.path.isfile(reid_engine) and os.path.isfile(reid_onnx):
+    print("Exporting ReID ONNX to TensorRT engine (one-time, may take a minute)...")
+    trtexec = next((p for p in [
+        "/usr/src/tensorrt/bin/trtexec"
+    ] if os.path.isfile(p)), "trtexec")  # fallback to PATH as last resort
+    result = subprocess.run(
+        [
+            trtexec,
+            f"--onnx={reid_onnx}",
+            f"--saveEngine={reid_engine}",
+            "--fp16",
+            "--minShapes=images:1x3x224x224",
+            "--optShapes=images:4x3x224x224",
+            "--maxShapes=images:16x3x224x224",
+        ],
+        capture_output=True, text=True
+    )
+    if result.returncode == 0:
+        print(f"ReID TensorRT engine saved to {reid_engine}")
+    else:
+        print(f"[warn] trtexec failed — falling back to ONNX ReID.\n{result.stderr[-500:]}")
+        reid_engine = reid_onnx  # fallback: use onnx if trtexec unavailable
+
+# write a runtime-only botsort yaml with the absolute ReID model path
+reid_model_path = reid_engine if os.path.isfile(reid_engine) else (
+                   reid_onnx   if os.path.isfile(reid_onnx)   else "auto")
+base_yaml = os.path.join(cwd, "botsort.yaml")
+runtime_yaml = os.path.join(cwd, "_botsort_runtime.yaml")
+with open(base_yaml) as f:
+    yaml_content = f.read()
+yaml_content = re.sub(r"^model:.*$", f"model: {reid_model_path}", yaml_content, flags=re.MULTILINE)
+with open(runtime_yaml, "w") as f:
+    f.write(yaml_content)
+print(f"Tracker config: using ReID model at {reid_model_path}")
+
 #counting sensitivity (pixels across the image width)
-direction_threshold = int(os.getenv("DIR_THRESH", "100"))
+direction_threshold = int(os.getenv("DIR_THRESH", "200"))
 print(f"Direction threshold set to {direction_threshold} px (override with DIR_THRESH env var).")
 
 #-----Sending program status to server-----
@@ -171,8 +221,11 @@ csv_writer.writerow([
 # Initialize movement counters and histories
 numLeft = 0
 numRight = 0
-track_history = defaultdict(lambda: deque(maxlen=60))  # track_id -> centers [(x,y), ...]
-bbox_history  = defaultdict(lambda: deque(maxlen=5))   # track_id -> last N boxes (for smoothing)
+track_history = defaultdict(lambda: deque(maxlen=120))  # track_id -> centers [(x,y), ...]
+bbox_history  = defaultdict(lambda: deque(maxlen=5))    # track_id -> last N boxes (for smoothing)
+missing_frames = defaultdict(int)  # tracks how long an ID has been missing
+MAX_MISSING = 120
+MIN_TRACK_FRAMES = 15              # ignore tracks seen for fewer than this many frames
 
 # Initialize psutil
 psutil.cpu_percent(interval=None)
@@ -448,7 +501,7 @@ try:
             frame,
             classes=[0],
             conf=0.55,
-            tracker="botsort.yaml",
+            tracker=runtime_yaml,
             persist=True,
             verbose=False,
             iou=0.5,
@@ -487,8 +540,10 @@ try:
 
                 # -- V2: save smoothed person box for the face pass
                 person_boxes.append((x1, y1, x2, y2))
-                # -- end --  
-                
+                # -- end --
+
+                missing_frames[track_id] = 0
+
                 # Draw
                 if not headless or save_video:
                     cv2.rectangle(frame, (x1, y1), (x2, y2), (0,255,0), 2)
@@ -503,29 +558,33 @@ try:
         else:
             current_ids = set() # Camera empty (no people)
 
-        disappeared = set(track_history.keys()) - current_ids
-        for tid in disappeared:
-            if len(track_history[tid]) >= 2:
-                x_start = track_history[tid][0][0]
-                x_end   = track_history[tid][-1][0]
-                x_diff  = x_end - x_start
+        # Check every ID we have a history for
+        for tid in list(track_history.keys()):
+            if tid not in current_ids:
+                missing_frames[tid] += 1
 
-                #used to grab correct time for queue
-                cdt = datetime.datetime.now()
-                det_date = cdt.strftime("%Y-%m-%d")
-                det_time = cdt.strftime("%H:%M:%S")
+                if missing_frames[tid] > MAX_MISSING:
+                    if len(track_history[tid]) >= MIN_TRACK_FRAMES:
+                        x_start = track_history[tid][0][0]
+                        x_end   = track_history[tid][-1][0]
+                        x_diff  = x_end - x_start
 
-                if x_diff > direction_threshold:
-                    numRight += 1
-                    data_queue.put(("Right", x_start, x_end, det_date, det_time))
-                elif x_diff < -direction_threshold:
-                    numLeft += 1
-                    data_queue.put(("Left", x_start, x_end, det_date, det_time))
-            
-            # cleanup after counting
-            del track_history[tid]
-            if tid in bbox_history:
-                del bbox_history[tid]
+                        cdt = datetime.datetime.now()
+                        det_date = cdt.strftime("%Y-%m-%d")
+                        det_time = cdt.strftime("%H:%M:%S")
+
+                        if x_diff > direction_threshold:
+                            numRight += 1
+                            data_queue.put(("Right", x_start, x_end, det_date, det_time))
+                        elif x_diff < -direction_threshold:
+                            numLeft += 1
+                            data_queue.put(("Left", x_start, x_end, det_date, det_time))
+
+                    # cleanup after counting
+                    del track_history[tid]
+                    del missing_frames[tid]
+                    if tid in bbox_history:
+                        del bbox_history[tid]
 
         if not headless or save_video:
             # Overlay totals
@@ -613,5 +672,11 @@ finally:
     except Exception:
         pass
     data_file.close()
+    # clean up runtime yaml
+    try:
+        if os.path.isfile(runtime_yaml):
+            os.remove(runtime_yaml)
+    except Exception:
+        pass
     print(f"Total Left: {numLeft}, Right: {numRight}")
     print("Processing complete")
