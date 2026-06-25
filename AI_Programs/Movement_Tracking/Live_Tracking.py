@@ -121,8 +121,10 @@ if not os.path.isfile(reid_onnx) and not os.path.isfile(reid_engine):
 if not os.path.isfile(reid_engine) and os.path.isfile(reid_onnx):
     print("Exporting ReID ONNX to TensorRT engine (one-time, may take a minute)...")
     trtexec = next((p for p in [
-        "/usr/src/tensorrt/bin/trtexec"
-    ] if os.path.isfile(p)), "trtexec")  # fallback to PATH as last resort
+        "/usr/src/tensorrt/bin/trtexec",
+        "/usr/local/bin/trtexec",
+        "/opt/tensorrt/bin/trtexec",
+    ]  if os.path.isfile(p)), "trtexec")  # fallback to PATH as last resort
     result = subprocess.run(
         [
             trtexec,
