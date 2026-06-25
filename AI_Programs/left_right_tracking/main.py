@@ -398,7 +398,7 @@ def collect_system_stats():
     last_tegra_time = current_time
 
 
-def log_stats(direction=None, x_start=None, x_end=None, date=None, time_str=None):
+def log_stats(direction=None, x_start=None, x_end=None, date=None, time_str=None, plugin=None):
     if date is None or time_str is None:
         cdt2 = datetime.datetime.now()
         date = cdt2.strftime("%Y-%m-%d")
@@ -427,6 +427,12 @@ def log_stats(direction=None, x_start=None, x_end=None, date=None, time_str=None
     except Exception as e:
         print(f"error writing to csv: {e}")
 
+    if plugin is not None and direction is not None:
+        plugin.publish("movement.direction", direction.lower())
+        plugin.publish("movement.left.count", numLeft)
+        plugin.publish("movement.right.count", numRight)
+        plugin.publish("movement.total.count", numLeft + numRight)
+
 
 def stats_worker():
     while True:
@@ -434,9 +440,9 @@ def stats_worker():
         if item is None:
             data_queue.task_done()
             break
-        direction, x_start, x_end, det_date, det_time = item
+        direction, x_start, x_end, det_date, det_time, plugin = item
         try:
-            log_stats(direction, x_start, x_end, det_date, det_time)
+            log_stats(direction, x_start, x_end, det_date, det_time, plugin)
         except Exception as e:
             print(f"[worker error] failed to log stats: {e}")
         data_queue.task_done()
@@ -678,10 +684,10 @@ try:
 
                             if x_diff > direction_threshold:
                                 numRight += 1
-                                data_queue.put(("Right", x_start, x_end, det_date, det_time))
+                                data_queue.put(("Right", x_start, x_end, det_date, det_time, plugin))
                             elif x_diff < -direction_threshold:
                                 numLeft += 1
-                                data_queue.put(("Left", x_start, x_end, det_date, det_time))
+                                data_queue.put(("Left", x_start, x_end, det_date, det_time, plugin))
 
                         del track_history[tid]
                         del missing_frames[tid]
@@ -730,11 +736,6 @@ try:
             if not headless or save_video:
                 cv2.putText(frame, f"FPS: {int(fps_now)}", (10, 70),
                             cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
-
-            # publish counts via waggle
-            plugin.publish("movement.left.count", numLeft)
-            plugin.publish("movement.right.count", numRight)
-            plugin.publish("movement.total.count", numLeft + numRight)
 
             if save_video and out_writer is not None:
                 out_writer.write(frame)
