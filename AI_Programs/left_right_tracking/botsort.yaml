@@ -1,0 +1,12 @@
+tracker_type: botsort
+track_high_thresh: 0.5      # high-conf detections (1st association)
+track_low_thresh: 0.1       # low-conf detections (2nd association)
+new_track_thresh: 0.6       # min conf to start a new track
+track_buffer: 120           # keep "lost" tracks for 120 frames (match MAX_MISSING)
+match_thresh: 0.85          # IoU threshold for assignment
+fuse_score: True            # multiply IoU by detection score
+gmc_method: sparseOptFlow   # camera motion compensation
+proximity_thresh: 0.5       # motion gating in 2nd round
+appearance_thresh: 0.3      # max cosine distance to accept ReID match (HIGHER = more permissive)
+with_reid: True             # <-- KEY CHANGE
+model: yolo26s-reid.onnx    # let ultralytics pick a small default ReID model
