@@ -193,22 +193,13 @@ model_names = {
 }
 engine_path = f"/app/models/yolov8{AI_model}.engine"
 pt_path = f"/app/models/yolov8{AI_model}.pt"
-
-if os.path.isfile(engine_path):
-    print(f"found existing tensorrt engine ({model_names[AI_model]}) — loading.")
-    person_model = YOLO(engine_path, task='detect')
-else:
-    print(f"engine not found. exporting {model_names[AI_model]} to engine at imgsz=640 (first run may take a few minutes)...")
-    temp_model = YOLO(pt_path)
-    temp_model.export(format='engine', device=0, imgsz=640, verbose=False)
-    person_model = YOLO(engine_path, task='detect')
+person_model = YOLO(pt_path, task='detect')
 
 # -------------------------------
 # ReID model: download ONNX to models dir, export to TensorRT engine, inject into temp yaml
 # -------------------------------
 reid_onnx   = "/app/models/yolo26s-reid.onnx"
 reid_engine = "/app/models/yolo26s-reid.engine"
-
 if not os.path.isfile(reid_onnx) and not os.path.isfile(reid_engine):
     print("ReID ONNX not found — downloading yolo26s-reid.onnx to models directory...")
     _prev_dir = os.getcwd()
@@ -218,30 +209,6 @@ if not os.path.isfile(reid_onnx) and not os.path.isfile(reid_engine):
         attempt_download_asset("yolo26s-reid.onnx")
     finally:
         os.chdir(_prev_dir)
-
-if not os.path.isfile(reid_engine) and os.path.isfile(reid_onnx):
-    print("Exporting ReID ONNX to TensorRT engine (one-time, may take a minute)...")
-    _trtexec = next((p for p in [
-        "/usr/src/tensorrt/bin/trtexec",
-        "/usr/local/bin/trtexec",
-        "/opt/tensorrt/bin/trtexec",
-    ] if os.path.isfile(p)), "trtexec")  # fallback to PATH as last resort
-    result = subprocess.run(
-        [
-            _trtexec,
-            f"--onnx={reid_onnx}",
-            f"--saveEngine={reid_engine}",
-            "--minShapes=images:1x3x224x224",
-            "--optShapes=images:4x3x224x224",
-            "--maxShapes=images:16x3x224x224",
-        ],
-        capture_output=True, text=True
-    )
-    if result.returncode == 0:
-        print(f"ReID TensorRT engine saved to {reid_engine}")
-    else:
-        print(f"[warn] trtexec failed — falling back to ONNX ReID.\n{result.stderr[-500:]}")
-        reid_engine = reid_onnx  # fallback: use onnx if trtexec unavailable
 
 # write a runtime-only tracker yaml with the absolute ReID model path
 _reid_model_path = reid_engine if os.path.isfile(reid_engine) else (
@@ -398,7 +365,7 @@ def collect_system_stats():
     last_tegra_time = current_time
 
 
-def log_stats(direction=None, x_start=None, x_end=None, date=None, time_str=None, plugin=None):
+def log_stats(direction=None, x_start=None, x_end=None, date=None, time_str=None):
     if date is None or time_str is None:
         cdt2 = datetime.datetime.now()
         date = cdt2.strftime("%Y-%m-%d")
@@ -427,12 +394,6 @@ def log_stats(direction=None, x_start=None, x_end=None, date=None, time_str=None
     except Exception as e:
         print(f"error writing to csv: {e}")
 
-    if plugin is not None and direction is not None:
-        plugin.publish("movement.direction", direction.lower())
-        plugin.publish("movement.left.count", numLeft)
-        plugin.publish("movement.right.count", numRight)
-        plugin.publish("movement.total.count", numLeft + numRight)
-
 
 def stats_worker():
     while True:
@@ -440,9 +401,9 @@ def stats_worker():
         if item is None:
             data_queue.task_done()
             break
-        direction, x_start, x_end, det_date, det_time, plugin = item
+        direction, x_start, x_end, det_date, det_time = item
         try:
-            log_stats(direction, x_start, x_end, det_date, det_time, plugin)
+            log_stats(direction, x_start, x_end, det_date, det_time)
         except Exception as e:
             print(f"[worker error] failed to log stats: {e}")
         data_queue.task_done()
@@ -560,7 +521,7 @@ try:
         is_video_file = bool(video_path) and video_path.lower().endswith(
             (".mp4", ".avi", ".mov", ".mkv")
         )
-
+        print("here4")
         while True:
             t_start = time.time()
             if use_camera:
@@ -613,7 +574,6 @@ try:
 
             soft_fail = 0
             frame_idx += 1
-
             # yolov8 + tracker
             results = person_model.track(
                 frame,
@@ -623,10 +583,8 @@ try:
                 persist=True,
                 verbose=False,
                 iou=0.5,
-                device=0,
                 imgsz=args.imgsz,
             )
-
             t_ai = time.time()
             read_ms = (t_read - t_start) * 1000
             ai_ms = (t_ai - t_read) * 1000
@@ -684,10 +642,10 @@ try:
 
                             if x_diff > direction_threshold:
                                 numRight += 1
-                                data_queue.put(("Right", x_start, x_end, det_date, det_time, plugin))
+                                data_queue.put(("Right", x_start, x_end, det_date, det_time))
                             elif x_diff < -direction_threshold:
                                 numLeft += 1
-                                data_queue.put(("Left", x_start, x_end, det_date, det_time, plugin))
+                                data_queue.put(("Left", x_start, x_end, det_date, det_time))
 
                         del track_history[tid]
                         del missing_frames[tid]
@@ -736,6 +694,11 @@ try:
             if not headless or save_video:
                 cv2.putText(frame, f"FPS: {int(fps_now)}", (10, 70),
                             cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
+
+            # publish counts via waggle
+            plugin.publish("movement.left.count", numLeft)
+            plugin.publish("movement.right.count", numRight)
+            plugin.publish("movement.total.count", numLeft + numRight)
 
             if save_video and out_writer is not None:
                 out_writer.write(frame)
