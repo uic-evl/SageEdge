@@ -106,7 +106,7 @@ parser.add_argument("--face_every",
                     help="run face detection every N frames")
 
 parser.add_argument("--face_weights",
-                    default=os.getenv("FACE_WEIGHTS", "/app/yolov8n-face.pt"),
+                    default=os.getenv("FACE_WEIGHTS", "/app/models/yolov8n-face.pt"),
                     help="path to yolov8 face weights")
 
 parser.add_argument("--face_upscale",
@@ -521,7 +521,6 @@ try:
         is_video_file = bool(video_path) and video_path.lower().endswith(
             (".mp4", ".avi", ".mov", ".mkv")
         )
-        print("here4")
         while True:
             t_start = time.time()
             if use_camera:
@@ -642,9 +641,11 @@ try:
 
                             if x_diff > direction_threshold:
                                 numRight += 1
+                                plugin.publish("movement.right.count", numRight)
                                 data_queue.put(("Right", x_start, x_end, det_date, det_time))
                             elif x_diff < -direction_threshold:
                                 numLeft += 1
+                                plugin.publish("movement.left.count", numLeft)
                                 data_queue.put(("Left", x_start, x_end, det_date, det_time))
 
                         del track_history[tid]
@@ -696,8 +697,6 @@ try:
                             cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
 
             # publish counts via waggle
-            plugin.publish("movement.left.count", numLeft)
-            plugin.publish("movement.right.count", numRight)
             plugin.publish("movement.total.count", numLeft + numRight)
 
             if save_video and out_writer is not None:
