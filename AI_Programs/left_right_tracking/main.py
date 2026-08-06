@@ -696,9 +696,6 @@ try:
                 cv2.putText(frame, f"FPS: {int(fps_now)}", (10, 70),
                             cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
 
-            # publish counts via waggle
-            plugin.publish("movement.total.count", numLeft + numRight)
-
             if save_video and out_writer is not None:
                 out_writer.write(frame)
 
