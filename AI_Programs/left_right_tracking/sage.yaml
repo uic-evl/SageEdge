@@ -1,6 +1,6 @@
 name: "pedestrian-direction-tracker"
 namespace: "sage"
-version: "1.0.0"
+version: "1.0.6"
 
 description: "Pedestrian-Direction-Tracker uses YOLOv8 + built-in tracking to estimate simple pedestrian flow (left vs right) from either a Waggle camera or a video/RTSP stream."
 authors: "Michael Cortez; Om Patel; Elizabeth Cardoso; Fatima Mora Garcia;"
@@ -11,12 +11,12 @@ keywords: "pedestrian, people-tracking, YOLOv8, ByteTrack, edge AI, education"
 homepage: ""
 
 source:
-  url: "https://github.com/fmora22/pedestrian-direction-tracker"
+  url: "https://github.com/Cortez-Michael/ECR_left_right_privacy_tracker.git"
   branch: "main"
   dockerfile: "Dockerfile"
   directory: ""
   architectures:
-    - "linux/amd64"
+    - "linux/arm64"
 
 inputs:
   - id: "stream"
@@ -46,3 +46,23 @@ inputs:
   - id: "save_output"
     type: "boolean"
     description: "If true, save processed video output to OUT_PATH."
+
+  - id: "out_path"
+    type: "string"
+    description: "Output video path when save_output is true (e.g. output.mp4)."
+
+  - id: "conf"
+    type: "float"
+    description: "Person detection confidence threshold (0-1). Default 0.55."
+
+  - id: "imgsz"
+    type: "int"
+    description: "YOLO inference image size in pixels. Default 640."
+
+  - id: "face_blur"
+    type: "boolean"
+    description: "Enable face blurring for privacy. Default true."
+
+  - id: "face_every"
+    type: "int"
+    description: "Run face detection every N frames (higher = faster). Default 1."
