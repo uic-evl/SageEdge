@@ -8,5 +8,5 @@ fuse_score: True            # multiply IoU by detection score
 gmc_method: sparseOptFlow   # camera motion compensation
 proximity_thresh: 0.5       # motion gating in 2nd round
 appearance_thresh: 0.3      # max cosine distance to accept ReID match (HIGHER = more permissive)
-with_reid: True             # <-- KEY CHANGE
-model: yolo26s-reid.onnx    # let ultralytics pick a small default ReID model
+with_reid: True
+model: /app/models/yolo26s-reid.onnx 
