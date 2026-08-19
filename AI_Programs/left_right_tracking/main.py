@@ -9,6 +9,10 @@
 # - publishes counts via waggle Plugin
 
 import os
+# force headless backends BEFORE any GUI-capable lib (matplotlib via ultralytics,
+# Qt, etc.) is imported, so nothing tries to load a Qt/X11 backend at runtime.
+os.environ.setdefault("MPLBACKEND", "Agg")
+os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 import cv2
 import csv
 import re
