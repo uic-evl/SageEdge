@@ -1,0 +1,76 @@
+{
+  "host": "sgt-thor-1423225064854-H00B",
+  "torch": "2.14.0+cu130",
+  "cuda": true,
+  "gpu": "NVIDIA Thor",
+  "started": "2026-09-29 05:35:57",
+  "power_mode": "NV Power Mode: 120W\n1",
+  "yolo": {
+    "yolov8n@cuda:0": {
+      "n": 100,
+      "median_ms": 7.89,
+      "p90_ms": 11.53,
+      "mean_ms": 8.64,
+      "peak_gpu_mem_mb": 35.6
+    },
+    "yolov8s@cuda:0": {
+      "n": 100,
+      "median_ms": 8.97,
+      "p90_ms": 12.95,
+      "mean_ms": 9.65,
+      "peak_gpu_mem_mb": 90.4
+    },
+    "yolov8m@cuda:0": {
+      "n": 100,
+      "median_ms": 15.89,
+      "p90_ms": 20.84,
+      "mean_ms": 17.07,
+      "peak_gpu_mem_mb": 201.6
+    },
+    "yolov8x@cuda:0": {
+      "n": 100,
+      "median_ms": 27.36,
+      "p90_ms": 30.73,
+      "mean_ms": 28.28,
+      "peak_gpu_mem_mb": 502.7
+    },
+    "yolov8n@cpu": {
+      "n": 100,
+      "median_ms": 63.57,
+      "p90_ms": 79.64,
+      "mean_ms": 65.73
+    },
+    "yolov8s@cpu": {
+      "n": 100,
+      "median_ms": 145.36,
+      "p90_ms": 178.14,
+      "mean_ms": 142.75
+    },
+    "yolov8m@cpu": {
+      "n": 100,
+      "median_ms": 351.41,
+      "p90_ms": 422.19,
+      "mean_ms": 353.52
+    },
+    "yolov8x@cpu": {
+      "n": 100,
+      "median_ms": 893.56,
+      "p90_ms": 1059.17,
+      "mean_ms": 908.67
+    }
+  },
+  "rule_judge_parse_match": {
+    "n": 100,
+    "median_ms": 0.41,
+    "p90_ms": 0.45,
+    "mean_ms": 0.39
+  },
+  "vlm_judge": {
+    "model": "qwen3-vl:32b",
+    "n": 19,
+    "median_ms": 72869,
+    "p90_ms": 78309,
+    "mean_ms": 73351.37,
+    "note": "first call (model load) excluded"
+  }
+}

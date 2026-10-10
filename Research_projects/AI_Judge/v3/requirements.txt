@@ -1,0 +1,11 @@
+# Versions used on the NVIDIA Jetson AGX Thor (JetPack 7 / L4T R38.2), Python 3.12.3
+# Ollama server 0.30.11 (installed separately: https://ollama.com)
+ollama==0.6.1
+ultralytics==8.4.14
+torch==2.10.0            # CPU build was used; install the CUDA build for GPU timing
+torchvision==0.25.0
+transformers==5.2.0
+accelerate==1.13.0
+pillow==12.1.1
+numpy==2.4.2
+pytest                   # only for tests/

@@ -1,0 +1,13 @@
+venv/
+venv_gpu/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+val2017/
+coco_subset/
+annotations/
+*.pt
+*.log
+runs/
+results/
