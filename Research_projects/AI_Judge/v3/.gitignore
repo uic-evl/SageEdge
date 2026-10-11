@@ -10,4 +10,6 @@ annotations/
 *.pt
 *.log
 runs/
-results/
+
+# the parent AI_Judge/.gitignore ignores data/; v3 ships its small data files
+!data/

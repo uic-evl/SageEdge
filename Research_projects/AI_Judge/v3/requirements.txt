@@ -2,7 +2,8 @@
 # Ollama server 0.30.11 (installed separately: https://ollama.com)
 ollama==0.6.1
 ultralytics==8.4.14
-torch==2.10.0            # CPU build was used; install the CUDA build for GPU timing
+torch==2.10.0            # CPU build used for captioning/detection runs
+# GPU latency benchmark: torch 2.14.0+cu130 (Jetson CUDA build), see results/benchmark.json
 torchvision==0.25.0
 transformers==5.2.0
 accelerate==1.13.0
