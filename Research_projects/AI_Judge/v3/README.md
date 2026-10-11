@@ -5,6 +5,27 @@ object claims are extracted from a VLM caption and verified against a YOLO detec
 A large VLM (Qwen3-VL 32B) is used as a reference judge, and everything is scored
 against COCO ground truth and blinded human labels.
 
+## How the judge works
+```
+caption --> parse_caption_v3 --> object claims (bus, man->person, dog, sky; "no cars" = negated)
+image   --> YOLOv8x (conf >= 0.25) --> detected classes (bus, person)
+claims vs detections --> bus OK, person OK, dog UNSUPPORTED (likely hallucination), sky ? (not a COCO class)
+hallucination score = unsupported / checked = 1/3
+```
+On the Jetson AGX Thor GPU this takes about 28 ms per caption with YOLOv8x
+(27.4 ms detection + 0.4 ms parsing and matching), vs. 72.9 s for a Qwen3-VL-32B judge.
+
+## Use the judge
+```bash
+pip install -r requirements.txt
+# one image + caption
+python judge.py --image val2017/000000387387.jpg --caption "A yellow bus parked next to a man with a dog."
+# a whole caption file -> JSONL with a verdict per claim (same format evaluate.py reads)
+python judge.py --captions results/llava.jsonl --out runs/llava_judged.jsonl
+```
+Options: `--detector yolov8n.pt|yolov8s.pt|yolov8m.pt|yolov8x.pt` (default x), `--conf 0.25`, `--device cuda:0`.
+In Python: `from judge import Judge; Judge()("img.jpg", "caption")`.
+
 ## Folder layout
 | Path | Content |
 |---|---|
@@ -59,6 +80,7 @@ Ollama models ignore `seed` on some backends, so new captions can differ slightl
 ## Code
 - `judge_v3/parse_caption_v3.py`: claim extraction with negation handling ("no people"), blocked compounds ("table lamp", "bus stop", "train car"), COCO synonym map, and out-of-vocabulary words kept separately.
 - `judge_v3/rule_judge_v3.py`: a COCO-class claim is *supported* if YOLO detected that class (confidence >= `min_conf`, 0.25 in the paper). Captions with no checkable claim are *unverifiable* (`None`), not scored as 0.
+- `judge.py`: the judge itself (YOLO + parser + rule), for new images and captions.
 - `evaluate.py`: CHAIR-i/-s for captioners; precision, recall, F1 and Cohen's kappa for judges (flag = hallucination) vs COCO GT, with bootstrap CIs.
 - `compare_judges.py`, `analyze_human.py`: the judge comparison and the human study.
 
