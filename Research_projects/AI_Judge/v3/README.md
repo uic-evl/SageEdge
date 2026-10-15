@@ -15,6 +15,15 @@ hallucination score = unsupported / checked = 1/3
 On the Jetson AGX Thor GPU this takes about 28 ms per caption with YOLOv8x
 (27.4 ms detection + 0.4 ms parsing and matching), vs. 72.9 s for a Qwen3-VL-32B judge.
 
+| Judge (Jetson AGX Thor, 120 W) | Time / caption (GPU) | Memory | Energy / caption | F1 vs COCO GT |
+|---|---|---|---|---|
+| YOLOv8n + parser | 8.3 ms | 36 MB | 0.36 J | 0.56 |
+| **YOLOv8x + parser** | **27.8 ms** | **0.5 GB** | **1.8 J** | **0.77** |
+| Qwen3-VL-32B (Q4_K_M, Ollama) | 72.9 s | 20 GB | 4,143 J | 0.76 |
+
+F1 on the same 889 claims (100 images x 4 captioners). Energy is the whole module (tegrastats, VIN rail),
+see `results/energy.json`.
+
 ## Use the judge
 ```bash
 pip install -r requirements.txt
@@ -36,7 +45,9 @@ In Python: `from judge import Judge; Judge()("img.jpg", "caption")`.
 | `results/<captioner>.jsonl` | captions of the 4 VLMs (gemma3n, gemma4, llava, moondream) |
 | `results/detections/yolov8{n,s,m,x}.jsonl` | all YOLO boxes with confidence >= 0.05 |
 | `results/judge_qwen_<captioner>.jsonl` | Qwen3-VL-32B yes/no verdicts (100 images) |
+| `data/coco_val2017_1000_ids.txt` | COCO image IDs of the 1,000 images |
 | `results/benchmark.json` | latency and memory on the Thor (GPU, 120 W mode) |
+| `results/energy.json` | energy per caption on the Thor (tegrastats) |
 
 ## Reproduce the paper numbers (no GPU needed)
 Only the COCO annotation file is needed; all model outputs are in `results/`.
@@ -52,6 +63,9 @@ for m in gemma3n gemma4 llava moondream; do for d in n s m x; do
       --detections results/detections/yolov8$d.jsonl --out runs/judged/${m}__yolov8$d.jsonl
 done; done
 python evaluate.py --coco_ann annotations/instances_val2017.json --files runs/judged/*.jsonl --out runs/eval_summary.csv
+
+# 1b. Paired CHAIR-i differences between captioners
+python captioner_pairs.py --coco_ann annotations/instances_val2017.json
 
 # 2. YOLO judge vs Qwen3-VL-32B judge on the same claims (100 images x 4 captioners)
 python compare_judges.py --coco_ann annotations/instances_val2017.json
@@ -72,6 +86,7 @@ with `ollama pull moondream llava gemma4:e2b qwen3-vl:32b`.
 | Detections (YOLOv8 n/s/m/x, boxes >= 0.05) | `python run_detector_ablation.py --list data/coco_1000.txt --out runs/detections` |
 | Qwen3-VL-32B judge | `python run_vlm_judge.py --judge qwen3-vl:32b --captions runs/llava.jsonl --images data/human_validation_100.txt --out runs/judge_qwen_llava.jsonl` |
 | Latency benchmark (run alone, record `sudo nvpmodel -q`) | `python benchmark_latency.py --list data/human_validation_100.txt --captions runs/llava.jsonl --vlm_n 20 --out runs/benchmark.json` |
+| Energy per caption (run alone; tegrastats) | `python energy_bench.py --list data/human_validation_100.txt --captions results/llava.jsonl --out runs/energy.json` |
 | Human labeling page (offline HTML) | `python make_labeling_page.py --pairs data/human_v2_pairs_100.csv --images val2017 --out label_tool.html` |
 
 All model scripts are resumable: re-running the same command continues where it stopped.
@@ -82,7 +97,7 @@ Ollama models ignore `seed` on some backends, so new captions can differ slightl
 - `judge_v3/rule_judge_v3.py`: a COCO-class claim is *supported* if YOLO detected that class (confidence >= `min_conf`, 0.25 in the paper). Captions with no checkable claim are *unverifiable* (`None`), not scored as 0.
 - `judge.py`: the judge itself (YOLO + parser + rule), for new images and captions.
 - `evaluate.py`: CHAIR-i/-s for captioners; precision, recall, F1 and Cohen's kappa for judges (flag = hallucination) vs COCO GT, with bootstrap CIs.
-- `compare_judges.py`, `analyze_human.py`: the judge comparison and the human study.
+- `captioner_pairs.py`, `compare_judges.py`, `analyze_human.py`: captioner comparison, judge comparison and human study.
 
 ## Notes
 - The earlier pipeline (`../judge/`, v1/v2 with FAISS retrieval) is kept only to reproduce preliminary results; retrieval added no signal (Spearman 0.06-0.22 with GT) and is not part of v3.

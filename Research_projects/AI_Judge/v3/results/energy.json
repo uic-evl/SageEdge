@@ -1,0 +1,94 @@
+{
+  "tegrastats_example": "10-15-2026 20:37:08 RAM 7521/125772MB (lfb 10x4MB) CPU [0%@972,5%@972,0%@972,0%@972,9%@972,0%@972,0%@1620,0%@1620,0%@972,14%@972,0%@972,0%@972,0%@972,0%@972] cpu@35.781C tj@37.062C soc012@35.875C gpu@37.062C soc345@35.937C VDD_GPU 5548mW/5548mW VDD_CPU_SOC_MSS 7130mW/7130mW VIN_SYS_5V0 6430mW/6430mW VIN 25550mW/12775mW",
+  "idle_mW": {
+    "VDD_CPU_SOC_MSS": 5685.9,
+    "VDD_GPU": 2691.6,
+    "VIN": 19823.5,
+    "VIN_SYS_5V0": 5606.5
+  },
+  "phases": {
+    "idle": {
+      "seconds": 30.0,
+      "captions": 0,
+      "samples": 147,
+      "mean_mW": {
+        "VDD_CPU_SOC_MSS": 5685.9,
+        "VDD_GPU": 2691.6,
+        "VIN": 19823.5,
+        "VIN_SYS_5V0": 5606.5
+      }
+    },
+    "yolov8n": {
+      "seconds": 60.0,
+      "captions": 6413,
+      "samples": 296,
+      "mean_mW": {
+        "VDD_CPU_SOC_MSS": 9874.0,
+        "VDD_GPU": 13671.0,
+        "VIN": 38299.3,
+        "VIN_SYS_5V0": 7348.4
+      },
+      "seconds_per_caption": 0.0094,
+      "energy_J_per_caption_total": {
+        "VDD_CPU_SOC_MSS": 0.0924,
+        "VDD_GPU": 0.1279,
+        "VIN": 0.3584,
+        "VIN_SYS_5V0": 0.0688
+      },
+      "energy_J_per_caption_active": {
+        "VDD_CPU_SOC_MSS": 0.0392,
+        "VDD_GPU": 0.1027,
+        "VIN": 0.1729,
+        "VIN_SYS_5V0": 0.0163
+      }
+    },
+    "yolov8x": {
+      "seconds": 60.0,
+      "captions": 1871,
+      "samples": 295,
+      "mean_mW": {
+        "VDD_CPU_SOC_MSS": 10222.2,
+        "VDD_GPU": 27557.7,
+        "VIN": 54984.1,
+        "VIN_SYS_5V0": 9092.5
+      },
+      "seconds_per_caption": 0.0321,
+      "energy_J_per_caption_total": {
+        "VDD_CPU_SOC_MSS": 0.3279,
+        "VDD_GPU": 0.8839,
+        "VIN": 1.7636,
+        "VIN_SYS_5V0": 0.2916
+      },
+      "energy_J_per_caption_active": {
+        "VDD_CPU_SOC_MSS": 0.1455,
+        "VDD_GPU": 0.7976,
+        "VIN": 1.1278,
+        "VIN_SYS_5V0": 0.1118
+      }
+    },
+    "qwen3-vl-32b": {
+      "seconds": 749.9,
+      "captions": 10,
+      "samples": 3696,
+      "mean_mW": {
+        "VDD_CPU_SOC_MSS": 30594.9,
+        "VDD_GPU": 8987.3,
+        "VIN": 55252.0,
+        "VIN_SYS_5V0": 7551.6
+      },
+      "seconds_per_caption": 74.9896,
+      "energy_J_per_caption_total": {
+        "VDD_CPU_SOC_MSS": 2294.3004,
+        "VDD_GPU": 673.9544,
+        "VIN": 4143.3274,
+        "VIN_SYS_5V0": 566.2917
+      },
+      "energy_J_per_caption_active": {
+        "VDD_CPU_SOC_MSS": 1867.9168,
+        "VDD_GPU": 472.1123,
+        "VIN": 2656.7703,
+        "VIN_SYS_5V0": 145.8623
+      }
+    }
+  }
+}
