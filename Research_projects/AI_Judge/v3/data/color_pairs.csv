@@ -1,0 +1,203 @@
+pair_id,image,object,color,coco_class,captioners,in_human100
+1,000000481413.jpg,pink frisbee,pink,frisbee,llava,0
+2,000000013546.jpg,red car,red,car,gemma3n,1
+3,000000007511.jpg,blue and white kite,blue and white,kite,moondream,1
+4,000000446522.jpg,white refrigerator,white,refrigerator,moondream,1
+5,000000491366.jpg,black dining table,black,dining table,gemma3n,0
+6,000000004495.jpg,blue couch,blue,couch,llava,0
+7,000000052413.jpg,white cup,white,cup,gemma3n,0
+8,000000025394.jpg,red bottle,red,bottle,gemma3n,1
+9,000000048564.jpg,black cell phone,black,cell phone,gemma3n,0
+10,000000415536.jpg,red and white bus,red and white,bus,moondream,0
+11,000000038829.jpg,green bicycle,green,bicycle,gemma3n,1
+12,000000508370.jpg,black person,black,person,gemma3n,0
+13,000000027768.jpg,white and red bus,white and red,bus,gemma4;moondream,1
+14,000000048924.jpg,white and black motorcycle,white and black,motorcycle,gemma3n;moondream,0
+15,000000065288.jpg,yellow chair,yellow,chair,moondream,0
+16,000000263463.jpg,orange bench,orange,bench,moondream,1
+17,000000038048.jpg,red fire hydrant,red,fire hydrant,gemma3n;gemma4;llava;moondream,0
+18,000000336265.jpg,blue frisbee,blue,frisbee,moondream,1
+19,000000508730.jpg,blue chair,blue,chair,gemma3n,0
+20,000000052007.jpg,yellow bus,yellow,bus,gemma3n;llava;moondream,0
+21,000000015956.jpg,brown horse,brown,horse,gemma3n;gemma4;llava;moondream,0
+22,000000054164.jpg,white surfboard,white,surfboard,gemma3n,0
+23,000000025424.jpg,yellow sports ball,yellow,sports ball,moondream,0
+24,000000491683.jpg,yellow and blue person,yellow and blue,person,gemma3n,1
+25,000000398438.jpg,white cake,white,cake,gemma3n;gemma4,1
+26,000000187055.jpg,orange sports ball,orange,sports ball,moondream,0
+27,000000037670.jpg,white toilet,white,toilet,gemma4,0
+28,000000056127.jpg,white oven,white,oven,gemma3n,1
+29,000000048504.jpg,white chair,white,chair,gemma3n,1
+30,000000011813.jpg,gray chair,gray,chair,moondream,0
+31,000000289516.jpg,white clock,white,clock,llava,0
+32,000000202339.jpg,white bus,white,bus,gemma4;moondream,1
+33,000000048504.jpg,gray elephant,gray,elephant,gemma3n,1
+34,000000491366.jpg,white remote,white,remote,gemma3n,0
+35,000000446522.jpg,black dog,black,dog,llava,1
+36,000000024919.jpg,brown elephant,brown,elephant,gemma4,0
+37,000000508370.jpg,white cup,white,cup,gemma3n,0
+38,000000018837.jpg,green truck,green,truck,gemma3n;gemma4;llava;moondream,0
+39,000000047585.jpg,black umbrella,black,umbrella,gemma4;moondream,0
+40,000000325031.jpg,white elephant,white,elephant,gemma3n;llava;moondream,0
+41,000000187055.jpg,yellow tennis racket,yellow,tennis racket,moondream,0
+42,000000062554.jpg,white bowl,white,bowl,gemma3n,1
+43,000000245651.jpg,white cake,white,cake,moondream,0
+44,000000452321.jpg,red bus,red,bus,gemma3n;gemma4;llava;moondream,1
+45,000000062554.jpg,white spoon,white,spoon,gemma3n,1
+46,000000192670.jpg,white truck,white,truck,moondream,1
+47,000000004134.jpg,white dining table,white,dining table,moondream,0
+48,000000051598.jpg,white sink,white,sink,gemma3n,0
+49,000000027768.jpg,white bus,white,bus,llava,1
+50,000000315450.jpg,black car,black,car,moondream,0
+51,000000491366.jpg,black couch,black,couch,llava,0
+52,000000042070.jpg,white and blue bus,white and blue,bus,gemma3n,0
+53,000000338625.jpg,white car,white,car,gemma3n,0
+54,000000038829.jpg,black motorcycle,black,motorcycle,gemma3n,1
+55,000000362434.jpg,blue book,blue,book,moondream,1
+56,000000542625.jpg,red car,red,car,gemma3n,0
+57,000000409358.jpg,white toilet,white,toilet,gemma3n;gemma4;llava;moondream,0
+58,000000572678.jpg,gray couch,gray,couch,moondream,1
+59,000000003501.jpg,green broccoli,green,broccoli,gemma3n,0
+60,000000413247.jpg,white teddy bear,white,teddy bear,gemma3n,0
+61,000000004765.jpg,white surfboard,white,surfboard,gemma3n,1
+62,000000034071.jpg,black parking meter,black,parking meter,moondream,0
+63,000000542625.jpg,yellow truck,yellow,truck,gemma3n;gemma4,0
+64,000000043581.jpg,blue dining table,blue,dining table,gemma3n,0
+65,000000042070.jpg,white bus,white,bus,gemma4;moondream,0
+66,000000038070.jpg,white toilet,white,toilet,gemma3n,0
+67,000000413247.jpg,black laptop,black,laptop,gemma3n,0
+68,000000491683.jpg,brown and white cow,brown and white,cow,gemma4,1
+69,000000023899.jpg,white remote,white,remote,gemma3n,1
+70,000000020107.jpg,green potted plant,green,potted plant,moondream,1
+71,000000476704.jpg,white and orange bus,white and orange,bus,gemma4,1
+72,000000263463.jpg,black car,black,car,moondream,1
+73,000000025560.jpg,orange cat,orange,cat,llava,1
+74,000000068765.jpg,black mouse,black,mouse,gemma3n;gemma4;moondream,0
+75,000000053909.jpg,black cell phone,black,cell phone,gemma4;moondream,1
+76,000000004495.jpg,blue and red couch,blue and red,couch,gemma3n,0
+77,000000263463.jpg,gray dog,gray,dog,gemma3n,1
+78,000000042070.jpg,yellow and white bus,yellow and white,bus,gemma4,0
+79,000000410878.jpg,black motorcycle,black,motorcycle,gemma3n;moondream,1
+80,000000020553.jpg,yellow teddy bear,yellow,teddy bear,gemma3n,1
+81,000000036936.jpg,green and red cup,green and red,cup,gemma3n,1
+82,000000034452.jpg,orange frisbee,orange,frisbee,gemma3n,1
+83,000000068765.jpg,white mouse,white,mouse,llava,0
+84,000000476704.jpg,white and red bus,white and red,bus,llava,1
+85,000000234607.jpg,white remote,white,remote,llava,0
+86,000000008844.jpg,yellow banana,yellow,banana,gemma3n,1
+87,000000442836.jpg,white frisbee,white,frisbee,gemma3n,0
+88,000000371472.jpg,yellow banana,yellow,banana,gemma3n,1
+89,000000289516.jpg,black clock,black,clock,moondream,0
+90,000000029984.jpg,green umbrella,green,umbrella,llava;moondream,0
+91,000000281414.jpg,purple backpack,purple,backpack,gemma3n;moondream,0
+92,000000065288.jpg,brown bird,brown,bird,gemma3n,0
+93,000000105912.jpg,red fire hydrant,red,fire hydrant,gemma3n;llava;moondream,1
+94,000000350148.jpg,pink dining table,pink,dining table,gemma3n,1
+95,000000052007.jpg,yellow and black bus,yellow and black,bus,gemma4,0
+96,000000191288.jpg,brown horse,brown,horse,gemma4;llava;moondream,1
+97,000000328337.jpg,white frisbee,white,frisbee,moondream,1
+98,000000202339.jpg,white and blue bus,white and blue,bus,gemma3n,1
+99,000000011051.jpg,brown tie,brown,tie,gemma3n,1
+100,000000033109.jpg,blue truck,blue,truck,gemma3n;gemma4;llava;moondream,1
+101,000000017182.jpg,blue book,blue,book,gemma3n,0
+102,000000416451.jpg,brown couch,brown,couch,moondream,1
+103,000000017905.jpg,red traffic light,red,traffic light,llava,0
+104,000000024567.jpg,white chair,white,chair,gemma3n;moondream,0
+105,000000187055.jpg,blue tennis racket,blue,tennis racket,moondream,0
+106,000000355240.jpg,red bench,red,bench,gemma3n;moondream,0
+107,000000028452.jpg,white refrigerator,white,refrigerator,gemma3n;moondream,0
+108,000000500663.jpg,black cow,black,cow,gemma3n,0
+109,000000315450.jpg,blue and yellow bus,blue and yellow,bus,gemma4,0
+110,000000355240.jpg,brown and white dog,brown and white,dog,moondream,0
+111,000000007386.jpg,blue truck,blue,truck,gemma3n,0
+112,000000026465.jpg,black chair,black,chair,gemma3n,0
+113,000000050326.jpg,blue chair,blue,chair,llava,1
+114,000000527427.jpg,white dining table,white,dining table,gemma3n;moondream,1
+115,000000410880.jpg,black bench,black,bench,gemma3n,0
+116,000000481413.jpg,purple frisbee,purple,frisbee,moondream,0
+117,000000057149.jpg,yellow bus,yellow,bus,gemma3n;moondream,0
+118,000000009914.jpg,blue bowl,blue,bowl,gemma4,0
+119,000000062554.jpg,green broccoli,green,broccoli,gemma3n,1
+120,000000025057.jpg,white frisbee,white,frisbee,gemma3n;moondream,0
+121,000000572678.jpg,white chair,white,chair,gemma3n,1
+122,000000030675.jpg,orange and black train,orange and black,train,gemma3n,0
+123,000000025424.jpg,blue and white tennis racket,blue and white,tennis racket,moondream,0
+124,000000018833.jpg,gray cat,gray,cat,gemma3n,0
+125,000000527427.jpg,white chair,white,chair,gemma3n;gemma4,1
+126,000000015597.jpg,orange skateboard,orange,skateboard,moondream,1
+127,000000017182.jpg,red apple,red,apple,gemma3n;moondream,0
+128,000000036936.jpg,red potted plant,red,potted plant,gemma3n;llava,1
+129,000000338625.jpg,white and blue bus,white and blue,bus,gemma4,0
+130,000000013348.jpg,white airplane,white,airplane,moondream,0
+131,000000202339.jpg,gray tie,gray,tie,gemma3n,1
+132,000000002431.jpg,white bowl,white,bowl,gemma3n,0
+133,000000033854.jpg,red bus,red,bus,moondream,1
+134,000000384666.jpg,pink and brown skis,pink and brown,skis,gemma3n,0
+135,000000045472.jpg,red bowl,red,bowl,llava,1
+136,000000004134.jpg,yellow tie,yellow,tie,gemma3n;gemma4,0
+137,000000580418.jpg,white cow,white,cow,moondream,0
+138,000000214200.jpg,black car,black,car,moondream,0
+139,000000530470.jpg,orange truck,orange,truck,gemma3n,0
+140,000000033854.jpg,black car,black,car,moondream,1
+141,000000022935.jpg,white and blue sports ball,white and blue,sports ball,gemma4;moondream,1
+142,000000355240.jpg,brown dog,brown,dog,gemma4,0
+143,000000454661.jpg,red bus,red,bus,gemma3n,0
+144,000000223747.jpg,black cat,black,cat,llava;moondream,0
+145,000000046252.jpg,black baseball bat,black,baseball bat,gemma3n,0
+146,000000037740.jpg,white couch,white,couch,moondream,0
+147,000000018833.jpg,gray and white cat,gray and white,cat,moondream,0
+148,000000050326.jpg,green chair,green,chair,moondream,1
+149,000000025986.jpg,green broccoli,green,broccoli,gemma3n,1
+150,000000030675.jpg,orange and yellow train,orange and yellow,train,moondream,0
+151,000000050149.jpg,yellow banana,yellow,banana,gemma4;moondream,1
+152,000000097679.jpg,white car,white,car,moondream,0
+153,000000010977.jpg,white toilet,white,toilet,gemma3n;llava;moondream,0
+154,000000020107.jpg,orange fire hydrant,orange,fire hydrant,gemma3n,1
+155,000000024610.jpg,white bottle,white,bottle,gemma3n,1
+156,000000580418.jpg,black car,black,car,gemma3n,0
+157,000000476704.jpg,white and green bus,white and green,bus,moondream,1
+158,000000368456.jpg,blue and white train,blue and white,train,gemma3n,1
+159,000000044260.jpg,red apple,red,apple,gemma3n;llava;moondream,1
+160,000000059920.jpg,white toilet,white,toilet,gemma3n,1
+161,000000024610.jpg,black mouse,black,mouse,gemma3n,1
+162,000000454661.jpg,white car,white,car,moondream,0
+163,000000026465.jpg,white dining table,white,dining table,gemma3n,0
+164,000000037740.jpg,black chair,black,chair,gemma3n,0
+165,000000438862.jpg,blue and white sports ball,blue and white,sports ball,gemma3n,0
+166,000000439290.jpg,green banana,green,banana,gemma3n;llava;moondream,1
+167,000000003501.jpg,white bowl,white,bowl,gemma3n;moondream,0
+168,000000024610.jpg,blue couch,blue,couch,gemma3n,1
+169,000000038048.jpg,yellow person,yellow,person,llava,0
+170,000000416451.jpg,white remote,white,remote,gemma3n,1
+171,000000214200.jpg,red stop sign,red,stop sign,gemma3n;moondream,0
+172,000000413247.jpg,black mouse,black,mouse,gemma3n,0
+173,000000491683.jpg,white and blue train,white and blue,train,moondream,1
+174,000000105912.jpg,white and red bus,white and red,bus,gemma3n,1
+175,000000002157.jpg,white cake,white,cake,moondream,1
+176,000000505573.jpg,black dog,black,dog,gemma3n;gemma4;llava;moondream,0
+177,000000011051.jpg,yellow tie,yellow,tie,llava,1
+178,000000362434.jpg,brown teddy bear,brown,teddy bear,gemma3n;moondream,1
+179,000000338625.jpg,white bus,white,bus,moondream,0
+180,000000068765.jpg,white apple,white,apple,llava,0
+181,000000026465.jpg,black cell phone,black,cell phone,gemma3n,0
+182,000000450488.jpg,brown bed,brown,bed,gemma3n,0
+183,000000154000.jpg,white truck,white,truck,gemma4;llava;moondream,0
+184,000000542625.jpg,black bird,black,bird,gemma3n;llava;moondream,0
+185,000000029984.jpg,blue chair,blue,chair,llava,0
+186,000000491683.jpg,brown horse,brown,horse,gemma3n;moondream,1
+187,000000223959.jpg,yellow tennis racket,yellow,tennis racket,moondream,1
+188,000000007386.jpg,red and black bicycle,red and black,bicycle,moondream,0
+189,000000025560.jpg,orange and white cat,orange and white,cat,moondream,1
+190,000000068765.jpg,gray apple,gray,apple,gemma3n,0
+191,000000047585.jpg,black and white umbrella,black and white,umbrella,gemma3n,0
+192,000000088970.jpg,yellow sports ball,yellow,sports ball,moondream,0
+193,000000032817.jpg,white toilet,white,toilet,gemma3n;gemma4,1
+194,000000214200.jpg,red car,red,car,moondream,0
+195,000000018193.jpg,blue chair,blue,chair,moondream,1
+196,000000315450.jpg,red bus,red,bus,gemma3n;moondream,0
+197,000000009769.jpg,red truck,red,truck,gemma3n;gemma4;llava;moondream,0
+198,000000026465.jpg,black laptop,black,laptop,gemma3n;moondream,0
+199,000000315450.jpg,blue bus,blue,bus,gemma3n;moondream,0
+200,000000052413.jpg,pink cell phone,pink,cell phone,gemma3n;llava;moondream,0
+201,000000409358.jpg,white sink,white,sink,gemma3n;llava,0
+202,000000028452.jpg,white oven,white,oven,llava,0

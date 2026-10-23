@@ -5,6 +5,24 @@ object claims are extracted from a VLM caption and verified against a YOLO detec
 A large VLM (Qwen3-VL 32B) is used as a reference judge, and everything is scored
 against COCO ground truth and blinded human labels.
 
+Beyond detection, the judge is used to (1) measure grounding as precision + coverage, (2) give feedback
+to the captioner in a rewrite loop, (3) run an edge-cloud cascade with the VLM judge, (4) add a retrieval
+layer (image memory bank, image-text agreement, memory of past judge verdicts) and (5) check color
+attributes. Each part has its own folder below.
+
+## Main results (1,000 COCO val2017 images, 4 captioners, Jetson AGX Thor)
+| Experiment | Result |
+|---|---|
+| Detector size (rule judge, tau 0.25) | mean F1 0.680 (YOLOv8n) -> 0.812 (YOLOv8x); YOLOv8x estimates CHAIR-i within 1.6 pp without labels |
+| YOLOv8x judge vs Qwen3-VL-32B (889 claims) | F1 0.770 vs 0.755 (tied); 27.8 ms vs 72.9 s; 1.8 J vs 4.1 kJ per caption |
+| Blinded human study (909 labels) | F1 vs human: YOLOv8x 0.58, Qwen 0.60, COCO GT 0.62; COCO flags 15.4% of claims, the human 8.0% |
+| Synthetic insertions (YOLOv8x) | caught 99.5% random, 96.4% popular, 92.0% adversarial; parser 100%, negation leak 0% |
+| Grounding (precision + coverage) | Gemma 4 covers 44% of the annotated classes (others 63-69%); judge coverage error <= 2.4 pp |
+| Feedback loop (self vs control vs oracle) | CHAIR-i LLaVA 18.8 -> 8.3, Gemma 4 15.5 -> 6.7, Gemma 3n 15.1 -> 9.8; 78-80% of the oracle gain; Moondream cannot use feedback |
+| Edge-cloud cascade (CV, 30% budget) | F1 0.811 (better than YOLOv8x 0.770 and Qwen 0.755), 26.7% of captions sent to the VLM |
+| Retrieval (SigLIP) | image retrieval improves AUC, not F1; image-text agreement + judge-verdict memory: F1 +0.016 (YOLOv8x), +0.035 (YOLOv8n) |
+| Color attributes | 5.2% of 194 human-labeled color claims wrong; zero-shot color check on YOLO boxes AUC 0.89 |
+
 ## How the judge works
 ```
 caption --> parse_caption_v3 --> object claims (bus, man->person, dog, sky; "no cars" = negated)
@@ -48,6 +66,14 @@ In Python: `from judge import Judge; Judge()("img.jpg", "caption")`.
 | `data/coco_val2017_1000_ids.txt` | COCO image IDs of the 1,000 images |
 | `results/benchmark.json` | latency and memory on the Thor (GPU, 120 W mode) |
 | `results/energy.json` | energy per caption on the Thor (tegrastats) |
+| `synthetic/` | synthetic hallucination stress test (POPE-style insertions + negation check) |
+| `grounding/` | grounding = precision + coverage, label-free estimate by the judge, captioner pairs |
+| `refine/` | judge-feedback rewrite loop (self / control / oracle / Moondream refiner), evaluation, Moondream prompt test |
+| `cascade/` | edge-cloud cascade (YOLOv8x on the edge, Qwen3-VL-32B for uncertain claims), CV thresholds |
+| `retrieval/` | COCO train2017 memory bank, SigLIP/CLIP embeddings, FAISS k-NN, image-text agreement, judge-verdict memory |
+| `attributes/` | color + object claims: blinded labeling page, zero-shot color judge on YOLO boxes, evaluation |
+| `data/color_pairs.csv`, `data/color_labels.csv` | the 202 color claims shown to the annotator and the human labels |
+| `data/color_claims_all.csv` | all 1,357 color claims of the 4 captioners (1,000 images) |
 
 ## Reproduce the paper numbers (no GPU needed)
 Only the COCO annotation file is needed; all model outputs are in `results/`.
@@ -76,6 +102,43 @@ python analyze_human.py --coco_ann annotations/instances_val2017.json
 `evaluate.py` and `compare_judges.py`/`analyze_human.py` use 1,000 and 1,000/2,000
 bootstrap samples with fixed seeds, so the printed numbers are identical on every run.
 
+### Extensions (same COCO file; `ANN=annotations/instances_val2017.json`)
+```bash
+# 4. Synthetic hallucinations (also needs instances_train2017.json for popular/adversarial objects)
+python synthetic/synthetic_test.py --coco_ann $ANN --coco_train annotations/instances_train2017.json
+
+# 5. Grounding: precision + coverage (COCO GT and label-free judge estimate), captioner pairs
+python grounding/grounding_metrics.py --coco_ann $ANN
+python grounding/captioner_pairs_grounding.py
+
+# 6. Edge-cloud cascade (reuses the Qwen verdicts and the clean latency/energy numbers)
+python cascade/cascade_eval.py --coco_ann $ANN
+
+# 7. Feedback loop: evaluate the rewrite runs (runs/refine/<captioner>__<condition>.jsonl)
+python refine/eval_refine.py --coco_ann $ANN
+python refine/eval_refine.py --coco_ann $ANN --subset data/human_validation_100.txt
+```
+
+### Extensions that need the GPU / Ollama (Jetson Thor)
+```bash
+# Feedback loop (resumable; conditions self, control, oracle, moondream; --prompt B = control prompt + "Do not mention X.")
+python refine/run_refine_loop.py --captioner llava --condition self
+python refine/run_refine_loop.py --captioner llava --condition oracle --coco_ann $ANN
+python refine/test_moondream_prompts.py --n 10
+
+# Retrieval: memory bank of 10,000 COCO train2017 images (downloads them once), embeddings + benchmark
+python retrieval/build_bank.py --model siglip        # also --model clip (ViT-B-32-quickgelu)
+python retrieval/eval_retrieval.py    --coco_ann $ANN --model siglip   # image retrieval prior
+python retrieval/eval_retrieval_v2.py --coco_ann $ANN --model siglip   # + image-text agreement, judge-verdict bank
+
+# Color attributes: labeling page -> human labels -> color judge -> evaluation
+python attributes/make_color_labeling.py --images val2017
+python attributes/color_judge.py --model siglip       # also --model clip
+python attributes/eval_color.py --labels data/color_labels.csv --coco_ann $ANN --model siglip
+```
+The feedback loop records the model digest of every rewrite (`run_info`), so runs made with a different model
+version can be detected. Pin the Ollama models while experiments run.
+
 ## Re-run the models (Jetson Thor or any CUDA machine)
 Needs `pip install -r requirements.txt`, COCO val2017 images in `val2017/`, and Ollama
 with `ollama pull moondream llava gemma4:e2b qwen3-vl:32b`.
@@ -98,8 +161,15 @@ Ollama models ignore `seed` on some backends, so new captions can differ slightl
 - `judge.py`: the judge itself (YOLO + parser + rule), for new images and captions.
 - `evaluate.py`: CHAIR-i/-s for captioners; precision, recall, F1 and Cohen's kappa for judges (flag = hallucination) vs COCO GT, with bootstrap CIs.
 - `captioner_pairs.py`, `compare_judges.py`, `analyze_human.py`: captioner comparison, judge comparison and human study.
+- `synthetic/synthetic_test.py`: appends one absent COCO object ("The image also shows a <word>.") chosen at random, by frequency or by co-occurrence; also tests negated sentences.
+- `grounding/grounding_metrics.py`: precision (= 1 - CHAIR-i), coverage (share of present classes the caption names), salient coverage, grounded F1; COCO GT, label-free judge estimate and human labels.
+- `refine/run_refine_loop.py`: rewrite loop driven by judge flags (feedback names the caption's own words, max 3 rounds); `refine/eval_refine.py`: per-round CHAIR, coverage, human-labeled rate and paired condition comparisons.
+- `cascade/cascade_eval.py`: thresholds (lo, hi) on the YOLO confidence; claims in between go to the VLM judge; 5-fold CV grouped by image under a budget.
+- `retrieval/build_bank.py`, `eval_retrieval.py`, `eval_retrieval_v2.py`: FAISS (exact inner product) over SigLIP/CLIP image embeddings; retrieval prior from a COCO-labeled or a judge-labeled bank; image-text agreement with "a photo of a <class>."; logistic regression with 5-fold CV grouped by image.
+- `attributes/`: color claims (color words before a COCO object), blinded labeling page, SigLIP/CLIP zero-shot color check on YOLOv8x box crops.
 
 ## Notes
-- The earlier pipeline (`../judge/`, v1/v2 with FAISS retrieval) is kept only to reproduce preliminary results; retrieval added no signal (Spearman 0.06-0.22 with GT) and is not part of v3.
+- The earlier pipeline (`../judge/`, v1/v2 with caption-text FAISS retrieval) is kept only to reproduce preliminary results; that retrieval added no signal (Spearman 0.06-0.22 with GT). The new retrieval layer in `retrieval/` uses image embeddings instead.
+- Moondream's feedback rewrites were broken (84% empty or < 10 words), so its feedback conditions are reported as a negative result; `gemma4__selfB` was excluded because the Gemma 4 model tag changed during the run.
 - Timing numbers inside the batch result files are not used; speed comes only from `benchmark_latency.py` with a fixed power mode.
 - Image paths inside `results/*.jsonl` are absolute paths from the Thor; the scripts use only the file name.

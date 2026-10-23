@@ -1,0 +1,203 @@
+pair_id,image,object,label,annotator
+86,000000008844.jpg,"yellow banana",present,Mahsa
+145,000000046252.jpg,"black baseball bat",present,Mahsa
+103,000000017905.jpg,"red traffic light",present,Mahsa
+93,000000105912.jpg,"red fire hydrant",present,Mahsa
+174,000000105912.jpg,"white and red bus",present,Mahsa
+50,000000315450.jpg,"black car",present,Mahsa
+109,000000315450.jpg,"blue and yellow bus",present,Mahsa
+196,000000315450.jpg,"red bus",present,Mahsa
+199,000000315450.jpg,"blue bus",present,Mahsa
+115,000000410880.jpg,"black bench",present,Mahsa
+144,000000223747.jpg,"black cat",unsure,Mahsa
+114,000000527427.jpg,"white dining table",present,Mahsa
+125,000000527427.jpg,"white chair",present,Mahsa
+5,000000491366.jpg,"black dining table",present,Mahsa
+34,000000491366.jpg,"white remote",present,Mahsa
+51,000000491366.jpg,"black couch",present,Mahsa
+182,000000450488.jpg,"brown bed",unsure,Mahsa
+122,000000030675.jpg,"orange and black train",present,Mahsa
+150,000000030675.jpg,"orange and yellow train",present,Mahsa
+7,000000052413.jpg,"white cup",present,Mahsa
+200,000000052413.jpg,"pink cell phone",present,Mahsa
+73,000000025560.jpg,"orange cat",present,Mahsa
+189,000000025560.jpg,"orange and white cat",present,Mahsa
+107,000000028452.jpg,"white refrigerator",present,Mahsa
+202,000000028452.jpg,"white oven",absent,Mahsa
+137,000000580418.jpg,"white cow",present,Mahsa
+156,000000580418.jpg,"black car",present,Mahsa
+26,000000187055.jpg,"orange sports ball",present,Mahsa
+41,000000187055.jpg,"yellow tennis racket",present,Mahsa
+105,000000187055.jpg,"blue tennis racket",present,Mahsa
+42,000000062554.jpg,"white bowl",present,Mahsa
+45,000000062554.jpg,"white spoon",unsure,Mahsa
+119,000000062554.jpg,"green broccoli",present,Mahsa
+36,000000024919.jpg,"brown elephant",present,Mahsa
+102,000000416451.jpg,"brown couch",present,Mahsa
+170,000000416451.jpg,"white remote",present,Mahsa
+90,000000029984.jpg,"green umbrella",present,Mahsa
+185,000000029984.jpg,"blue chair",present,Mahsa
+4,000000446522.jpg,"white refrigerator",present,Mahsa
+35,000000446522.jpg,"black dog",present,Mahsa
+79,000000410878.jpg,"black motorcycle",present,Mahsa
+197,000000009769.jpg,"red truck",present,Mahsa
+9,000000048564.jpg,"black cell phone",present,Mahsa
+13,000000027768.jpg,"white and red bus",present,Mahsa
+49,000000027768.jpg,"white bus",present,Mahsa
+52,000000042070.jpg,"white and blue bus",present,Mahsa
+65,000000042070.jpg,"white bus",present,Mahsa
+78,000000042070.jpg,"yellow and white bus",absent,Mahsa
+18,000000336265.jpg,"blue frisbee",present,Mahsa
+94,000000350148.jpg,"pink dining table",present,Mahsa
+25,000000398438.jpg,"white cake",present,Mahsa
+82,000000034452.jpg,"orange frisbee",present,Mahsa
+69,000000023899.jpg,"white remote",present,Mahsa
+112,000000026465.jpg,"black chair",present,Mahsa
+163,000000026465.jpg,"white dining table",present,Mahsa
+181,000000026465.jpg,"black cell phone",present,Mahsa
+198,000000026465.jpg,"black laptop",present,Mahsa
+96,000000191288.jpg,"brown horse",present,Mahsa
+74,000000068765.jpg,"black mouse",present,Mahsa
+83,000000068765.jpg,"white mouse",absent,Mahsa
+180,000000068765.jpg,"white apple",absent,Mahsa
+190,000000068765.jpg,"gray apple",absent,Mahsa
+101,000000017182.jpg,"blue book",present,Mahsa
+127,000000017182.jpg,"red apple",present,Mahsa
+39,000000047585.jpg,"black umbrella",present,Mahsa
+191,000000047585.jpg,"black and white umbrella",present,Mahsa
+120,000000025057.jpg,"white frisbee",present,Mahsa
+108,000000500663.jpg,"black cow",present,Mahsa
+166,000000439290.jpg,"green banana",present,Mahsa
+56,000000542625.jpg,"red car",present,Mahsa
+63,000000542625.jpg,"yellow truck",present,Mahsa
+184,000000542625.jpg,"black bird",present,Mahsa
+53,000000338625.jpg,"white car",present,Mahsa
+129,000000338625.jpg,"white and blue bus",present,Mahsa
+179,000000338625.jpg,"white bus",present,Mahsa
+81,000000036936.jpg,"green and red cup",present,Mahsa
+128,000000036936.jpg,"red potted plant",present,Mahsa
+46,000000192670.jpg,"white truck",present,Mahsa
+176,000000505573.jpg,"black dog",present,Mahsa
+1,000000481413.jpg,"pink frisbee",present,Mahsa
+116,000000481413.jpg,"purple frisbee",present,Mahsa
+130,000000013348.jpg,"white airplane",present,Mahsa
+88,000000371472.jpg,"yellow banana",present,Mahsa
+160,000000059920.jpg,"white toilet",present,Mahsa
+149,000000025986.jpg,"green broccoli",present,Mahsa
+143,000000454661.jpg,"red bus",present,Mahsa
+162,000000454661.jpg,"white car",present,Mahsa
+175,000000002157.jpg,"white cake",present,Mahsa
+124,000000018833.jpg,"gray cat",present,Mahsa
+147,000000018833.jpg,"gray and white cat",present,Mahsa
+23,000000025424.jpg,"yellow sports ball",present,Mahsa
+123,000000025424.jpg,"blue and white tennis racket",present,Mahsa
+138,000000214200.jpg,"black car",present,Mahsa
+171,000000214200.jpg,"red stop sign",present,Mahsa
+194,000000214200.jpg,"red car",present,Mahsa
+38,000000018837.jpg,"green truck",present,Mahsa
+22,000000054164.jpg,"white surfboard",unsure,Mahsa
+30,000000011813.jpg,"gray chair",present,Mahsa
+16,000000263463.jpg,"orange bench",present,Mahsa
+72,000000263463.jpg,"black car",present,Mahsa
+77,000000263463.jpg,"gray dog",present,Mahsa
+80,000000020553.jpg,"yellow teddy bear",present,Mahsa
+28,000000056127.jpg,"white oven",present,Mahsa
+97,000000328337.jpg,"white frisbee",present,Mahsa
+59,000000003501.jpg,"green broccoli",present,Mahsa
+167,000000003501.jpg,"white bowl",present,Mahsa
+133,000000033854.jpg,"red bus",present,Mahsa
+140,000000033854.jpg,"black car",present,Mahsa
+61,000000004765.jpg,"white surfboard",present,Mahsa
+71,000000476704.jpg,"white and orange bus",present,Mahsa
+84,000000476704.jpg,"white and red bus",present,Mahsa
+157,000000476704.jpg,"white and green bus",present,Mahsa
+20,000000052007.jpg,"yellow bus",present,Mahsa
+95,000000052007.jpg,"yellow and black bus",present,Mahsa
+15,000000065288.jpg,"yellow chair",present,Mahsa
+92,000000065288.jpg,"brown bird",present,Mahsa
+40,000000325031.jpg,"white elephant",present,Mahsa
+14,000000048924.jpg,"white and black motorcycle",present,Mahsa
+158,000000368456.jpg,"blue and white train",present,Mahsa
+12,000000508370.jpg,"black person",present,Mahsa
+37,000000508370.jpg,"white cup",unsure,Mahsa
+75,000000053909.jpg,"black cell phone",present,Mahsa
+155,000000024610.jpg,"white bottle",present,Mahsa
+161,000000024610.jpg,"black mouse",unsure,Mahsa
+168,000000024610.jpg,"blue couch",present,Mahsa
+151,000000050149.jpg,"yellow banana",present,Mahsa
+27,000000037670.jpg,"white toilet",present,Mahsa
+113,000000050326.jpg,"blue chair",absent,Mahsa
+148,000000050326.jpg,"green chair",present,Mahsa
+48,000000051598.jpg,"white sink",present,Mahsa
+193,000000032817.jpg,"white toilet",present,Mahsa
+2,000000013546.jpg,"red car",present,Mahsa
+62,000000034071.jpg,"black parking meter",present,Mahsa
+195,000000018193.jpg,"blue chair",present,Mahsa
+8,000000025394.jpg,"red bottle",present,Mahsa
+87,000000442836.jpg,"white frisbee",present,Mahsa
+118,000000009914.jpg,"blue bowl",present,Mahsa
+153,000000010977.jpg,"white toilet",present,Mahsa
+104,000000024567.jpg,"white chair",present,Mahsa
+70,000000020107.jpg,"green potted plant",present,Mahsa
+154,000000020107.jpg,"orange fire hydrant",present,Mahsa
+165,000000438862.jpg,"blue and white sports ball",present,Mahsa
+11,000000038829.jpg,"green bicycle",present,Mahsa
+54,000000038829.jpg,"black motorcycle",present,Mahsa
+55,000000362434.jpg,"blue book",absent,Mahsa
+178,000000362434.jpg,"brown teddy bear",present,Mahsa
+106,000000355240.jpg,"red bench",present,Mahsa
+110,000000355240.jpg,"brown and white dog",present,Mahsa
+142,000000355240.jpg,"brown dog",present,Mahsa
+134,000000384666.jpg,"pink and brown skis",present,Mahsa
+66,000000038070.jpg,"white toilet",present,Mahsa
+99,000000011051.jpg,"brown tie",present,Mahsa
+177,000000011051.jpg,"yellow tie",absent,Mahsa
+192,000000088970.jpg,"yellow sports ball",present,Mahsa
+126,000000015597.jpg,"orange skateboard",present,Mahsa
+135,000000045472.jpg,"red bowl",present,Mahsa
+91,000000281414.jpg,"purple backpack",present,Mahsa
+44,000000452321.jpg,"red bus",present,Mahsa
+152,000000097679.jpg,"white car",present,Mahsa
+146,000000037740.jpg,"white couch",present,Mahsa
+164,000000037740.jpg,"black chair",present,Mahsa
+141,000000022935.jpg,"white and blue sports ball",present,Mahsa
+117,000000057149.jpg,"yellow bus",present,Mahsa
+10,000000415536.jpg,"red and white bus",present,Mahsa
+60,000000413247.jpg,"white teddy bear",present,Mahsa
+67,000000413247.jpg,"black laptop",present,Mahsa
+172,000000413247.jpg,"black mouse",present,Mahsa
+3,000000007511.jpg,"blue and white kite",present,Mahsa
+100,000000033109.jpg,"blue truck",present,Mahsa
+187,000000223959.jpg,"yellow tennis racket",present,Mahsa
+6,000000004495.jpg,"blue couch",present,Mahsa
+76,000000004495.jpg,"blue and red couch",present,Mahsa
+111,000000007386.jpg,"blue truck",absent,Mahsa
+188,000000007386.jpg,"red and black bicycle",unsure,Mahsa
+64,000000043581.jpg,"blue dining table",present,Mahsa
+57,000000409358.jpg,"white toilet",present,Mahsa
+201,000000409358.jpg,"white sink",present,Mahsa
+43,000000245651.jpg,"white cake",present,Mahsa
+24,000000491683.jpg,"yellow and blue person",absent,Mahsa
+68,000000491683.jpg,"brown and white cow",unsure,Mahsa
+173,000000491683.jpg,"white and blue train",present,Mahsa
+186,000000491683.jpg,"brown horse",present,Mahsa
+132,000000002431.jpg,"white bowl",present,Mahsa
+31,000000289516.jpg,"white clock",present,Mahsa
+89,000000289516.jpg,"black clock",present,Mahsa
+32,000000202339.jpg,"white bus",present,Mahsa
+98,000000202339.jpg,"white and blue bus",present,Mahsa
+131,000000202339.jpg,"gray tie",present,Mahsa
+85,000000234607.jpg,"white remote",present,Mahsa
+47,000000004134.jpg,"white dining table",present,Mahsa
+136,000000004134.jpg,"yellow tie",present,Mahsa
+29,000000048504.jpg,"white chair",present,Mahsa
+33,000000048504.jpg,"gray elephant",present,Mahsa
+139,000000530470.jpg,"orange truck",present,Mahsa
+17,000000038048.jpg,"red fire hydrant",present,Mahsa
+169,000000038048.jpg,"yellow person",present,Mahsa
+183,000000154000.jpg,"white truck",present,Mahsa
+19,000000508730.jpg,"blue chair",present,Mahsa
+159,000000044260.jpg,"red apple",present,Mahsa
+58,000000572678.jpg,"gray couch",present,Mahsa
+121,000000572678.jpg,"white chair",present,Mahsa
+21,000000015956.jpg,"brown horse",present,Mahsa
