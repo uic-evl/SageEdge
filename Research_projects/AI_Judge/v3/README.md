@@ -21,6 +21,7 @@ attributes. Each part has its own folder below.
 | Feedback loop (self vs control vs oracle) | CHAIR-i LLaVA 18.8 -> 8.3, Gemma 4 15.5 -> 6.7, Gemma 3n 15.1 -> 9.8; 78-80% of the oracle gain; Moondream cannot use feedback |
 | Edge-cloud cascade (CV, 30% budget) | F1 0.811 (better than YOLOv8x 0.770 and Qwen 0.755), 26.7% of captions sent to the VLM |
 | Retrieval (SigLIP) | image retrieval improves AUC, not F1; image-text agreement + judge-verdict memory: F1 +0.016 (YOLOv8x), +0.035 (YOLOv8n) |
+| Judge memory (captions, claims, verdicts, feedback) | caption-side features add no F1 over that judge with SigLIP (+0.003 YOLOv8x, -0.002 YOLOv8n, n.s.); a judge-labeled memory works as well as a GT-labeled one (AUC 0.823 vs 0.822) |
 | Color attributes | 5.2% of 194 human-labeled color claims wrong; zero-shot color check on YOLO boxes AUC 0.89 |
 
 ## How the judge works
@@ -130,6 +131,10 @@ python refine/test_moondream_prompts.py --n 10
 python retrieval/build_bank.py --model siglip        # also --model clip (ViT-B-32-quickgelu)
 python retrieval/eval_retrieval.py    --coco_ann $ANN --model siglip   # image retrieval prior
 python retrieval/eval_retrieval_v2.py --coco_ann $ANN --model siglip   # + image-text agreement, judge-verdict bank
+# Judge memory: captions, claims, judge verdicts, loop feedback, metadata + joint FAISS indices (schema: retrieval/MEMORY_SCHEMA.md)
+python retrieval/build_memory.py --model siglip     # GPU, after build_bank.py; also --model clip
+python retrieval/eval_memory.py  --coco_ann $ANN --model siglip   # CPU; image-sentence agreement, k-NN prior over past claims
+python retrieval/query_memory.py --image ../val2017/000000387387.jpg --caption "A yellow school bus parked on gravel next to a dog."
 
 # Color attributes: labeling page -> human labels -> color judge -> evaluation
 python attributes/make_color_labeling.py --images val2017
@@ -166,6 +171,7 @@ Ollama models ignore `seed` on some backends, so new captions can differ slightl
 - `refine/run_refine_loop.py`: rewrite loop driven by judge flags (feedback names the caption's own words, max 3 rounds); `refine/eval_refine.py`: per-round CHAIR, coverage, human-labeled rate and paired condition comparisons.
 - `cascade/cascade_eval.py`: thresholds (lo, hi) on the YOLO confidence; claims in between go to the VLM judge; 5-fold CV grouped by image under a budget.
 - `retrieval/build_bank.py`, `eval_retrieval.py`, `eval_retrieval_v2.py`: FAISS (exact inner product) over SigLIP/CLIP image embeddings; retrieval prior from a COCO-labeled or a judge-labeled bank; image-text agreement with "a photo of a <class>."; logistic regression with 5-fold CV grouped by image.
+- `retrieval/build_memory.py`, `eval_memory.py`, `query_memory.py`: the Judge memory (sqlite + .npy + FAISS joint [image, text] indices) with judge verdicts, feedback and metadata; k-NN over past claims of the same class and past captions; `query_memory.py` judges one new image + caption end to end and can add it to a copy of the memory (`--add --memdir`). Schema in `retrieval/MEMORY_SCHEMA.md`.
 - `attributes/`: color claims (color words before a COCO object), blinded labeling page, SigLIP/CLIP zero-shot color check on YOLOv8x box crops.
 
 ## Notes
