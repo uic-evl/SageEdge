@@ -23,6 +23,7 @@ attributes. Each part has its own folder below.
 | Retrieval (SigLIP) | image retrieval improves AUC, not F1; image-text agreement + judge-verdict memory: F1 +0.016 (YOLOv8x), +0.035 (YOLOv8n) |
 | Judge memory (captions, claims, verdicts, feedback) | caption-side features add no F1 over that judge with SigLIP (+0.003 YOLOv8x, -0.002 YOLOv8n, n.s.); a judge-labeled memory works as well as a GT-labeled one (AUC 0.823 vs 0.822) |
 | Color attributes | 5.2% of 194 human-labeled color claims wrong; zero-shot color check on YOLO boxes AUC 0.89 |
+| Count claims ("two dogs") | 19.2% of 895 count claims say more objects than COCO annotates; YOLOv8x box count finds them with F1 0.866 |
 
 ## How the judge works
 ```
@@ -72,7 +73,7 @@ In Python: `from judge import Judge; Judge()("img.jpg", "caption")`.
 | `refine/` | judge-feedback rewrite loop (self / control / oracle / Moondream refiner), evaluation, Moondream prompt test |
 | `cascade/` | edge-cloud cascade (YOLOv8x on the edge, Qwen3-VL-32B for uncertain claims), CV thresholds |
 | `retrieval/` | COCO train2017 memory bank, SigLIP/CLIP embeddings, FAISS k-NN, image-text agreement, judge-verdict memory |
-| `attributes/` | color + object claims: blinded labeling page, zero-shot color judge on YOLO boxes, evaluation |
+| `attributes/` | color + object claims: blinded labeling page, zero-shot color judge on YOLO boxes, evaluation; count claims vs COCO instance counts |
 | `data/color_pairs.csv`, `data/color_labels.csv` | the 202 color claims shown to the annotator and the human labels |
 | `data/color_claims_all.csv` | all 1,357 color claims of the 4 captioners (1,000 images) |
 
@@ -134,12 +135,15 @@ python retrieval/eval_retrieval_v2.py --coco_ann $ANN --model siglip   # + image
 # Judge memory: captions, claims, judge verdicts, loop feedback, metadata + joint FAISS indices (schema: retrieval/MEMORY_SCHEMA.md)
 python retrieval/build_memory.py --model siglip     # GPU, after build_bank.py; also --model clip
 python retrieval/eval_memory.py  --coco_ann $ANN --model siglip   # CPU; image-sentence agreement, k-NN prior over past claims
+python retrieval/eval_memory_grounding.py --coco_ann $ANN --model siglip   # CPU; k-NN estimate of precision and coverage
 python retrieval/query_memory.py --image ../val2017/000000387387.jpg --caption "A yellow school bus parked on gravel next to a dog."
 
 # Color attributes: labeling page -> human labels -> color judge -> evaluation
 python attributes/make_color_labeling.py --images val2017
 python attributes/color_judge.py --model siglip       # also --model clip
 python attributes/eval_color.py --labels data/color_labels.csv --coco_ann $ANN --model siglip
+# Count claims ("two dogs") vs COCO instance counts; judge = YOLO box count (CPU, stored detections)
+python attributes/count_eval.py --coco_ann $ANN
 ```
 The feedback loop records the model digest of every rewrite (`run_info`), so runs made with a different model
 version can be detected. Pin the Ollama models while experiments run.
@@ -172,7 +176,7 @@ Ollama models ignore `seed` on some backends, so new captions can differ slightl
 - `cascade/cascade_eval.py`: thresholds (lo, hi) on the YOLO confidence; claims in between go to the VLM judge; 5-fold CV grouped by image under a budget.
 - `retrieval/build_bank.py`, `eval_retrieval.py`, `eval_retrieval_v2.py`: FAISS (exact inner product) over SigLIP/CLIP image embeddings; retrieval prior from a COCO-labeled or a judge-labeled bank; image-text agreement with "a photo of a <class>."; logistic regression with 5-fold CV grouped by image.
 - `retrieval/build_memory.py`, `eval_memory.py`, `query_memory.py`: the Judge memory (sqlite + .npy + FAISS joint [image, text] indices) with judge verdicts, feedback and metadata; k-NN over past claims of the same class and past captions; `query_memory.py` judges one new image + caption end to end and can add it to a copy of the memory (`--add --memdir`). Schema in `retrieval/MEMORY_SCHEMA.md`.
-- `attributes/`: color claims (color words before a COCO object), blinded labeling page, SigLIP/CLIP zero-shot color check on YOLOv8x box crops.
+- `attributes/`: color claims (color words before a COCO object), blinded labeling page, SigLIP/CLIP zero-shot color check on YOLOv8x box crops; `count_eval.py`: number words (two..ten) before a COCO object, checked against COCO instance counts and the number of YOLO boxes.
 
 ## Notes
 - The earlier pipeline (`../judge/`, v1/v2 with caption-text FAISS retrieval) is kept only to reproduce preliminary results; that retrieval added no signal (Spearman 0.06-0.22 with GT). The new retrieval layer in `retrieval/` uses image embeddings instead.
